@@ -1,0 +1,84 @@
+﻿UserContext context = new UserContext();
+            List<User> users = context.Users.ToList();
+            if (users.Count==1)
+            {
+                context.Users.Add(
+                    new User("geochacher2",
+                    "meatballs",
+                    UserRoles.USER, false, 0, DateTime.Now,
+                    "Petko", "Petkov",
+                    "bulgaria", "sofia", "studentksi Grad"
+                    ));
+                
+                context.SaveChanges();
+            }
+            List<Treasure> treasures = context.Treasures.ToList();
+            if (treasures.Count==1)
+            {
+                context.Treasures.Add(
+                    new Treasure("big gold pile2",
+                    TreasureType.NORMAL,
+                    TreasureSizes.MEDIUM,
+                    "i hid it well :)",
+                    3.5,
+                    3.5,
+                    3,
+                    false
+                    ));
+                context.SaveChanges();
+            }
+            List<Treasures_Comments> comments = context.Treasures_comments.ToList();
+            if (comments.Count==1)
+            {
+                context.Treasures_comments.Add(
+                    new Treasures_Comments(
+                        3,
+                        3,
+                        "oh well someone will find it soon",
+                        DateTime.Now,
+                        CommentType.COMMENT,
+                        5)
+                    );
+                context.SaveChanges();
+            }
+            List<MarkerInfo> markerInfos = context.MarkerInfos.ToList();
+            if (!markerInfos.Any())
+            {
+                context.MarkerInfos.Add(
+                    new MarkerInfo(
+                        3,
+                        25.23,
+                        -1230.2,
+                        "sofia",
+                        "bulgaria",
+                        "studentski grad"
+                    ));
+                context.SaveChanges();
+            }
+
+            List<Found_Treasures> found_Treasures = context.Found_Treasures.ToList();
+            if (!found_Treasures.Any())
+            {
+                context.Found_Treasures.Add(
+                    new Found_Treasures(
+                        4,
+                        3,
+                        20,
+                        DateTime.Now
+                    ));
+                context.SaveChanges();
+            }
+
+            List<Chained_Treasures> chained_Treasures = context.Chained_Treasures.ToList();
+            if (!chained_Treasures.Any())
+            {
+                Treasure trs = (from treas in treasures where treas.ID == 3 select treas).First();
+                trs.isChained = true;
+                Treasure trs1 = (from treas in treasures where treas.ID == 4 select treas).First();
+
+                context.Chained_Treasures.Add(
+                    new Chained_Treasures(
+                        trs, trs1
+                    ));
+                context.SaveChanges();
+            }

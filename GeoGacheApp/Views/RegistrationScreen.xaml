@@ -1,0 +1,54 @@
+﻿<Page x:Class="GeoGacheApp.Views.RegistrationScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GeoGacheApp.Views"
+        mc:Ignorable="d"
+        Title="RegistrationScreen" Height="450" Width="800">
+    <Grid>
+       
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock>Sign up</TextBlock>
+        <TextBlock Grid.Row="1">First name</TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="1">Last name</TextBlock>
+        <TextBox Name="firstNameTxtBox" Grid.Row="2"></TextBox>
+        <TextBox Name="lastNameTxtBox" Grid.Column="1" Grid.Row="2"></TextBox>
+        <TextBlock Grid.Row="3">Username</TextBlock>
+        <TextBox Name="userNameTxtBox" Grid.Row="4"></TextBox>
+        <TextBlock Grid.Row="5">Password</TextBlock>
+        <PasswordBox Name="passWordBox" Grid.Row="6"></PasswordBox>
+        <TextBlock Grid.Row="7">Confirm Password</TextBlock>
+        <PasswordBox Name="confirmPassWordBox" Grid.Row="8"></PasswordBox>
+
+        <TextBlock Grid.Row="7" Grid.Column="2">Adress</TextBlock>
+        <TextBox Name="adressTxtBox" Grid.Row="8" Grid.Column="2"></TextBox>
+        
+        <TextBlock Grid.Row="5" Grid.Column="2">City</TextBlock>
+        <TextBox Name="cityTxtBox" Grid.Row="6" Grid.Column="2"></TextBox>
+
+        <TextBlock Grid.Row="3" Grid.Column="2">Country</TextBlock>
+        <TextBox Name="countryTxtBox"  Grid.Row="4" Grid.Column="2"></TextBox>
+
+        <Button Grid.Row="1" Grid.Column="2" Click="ReturnToLoginViewBttn">Go back</Button>
+        <Button Grid.Row="2" Grid.Column="2" Click="RegisterBttn">Register</Button>
+    </Grid>
+</Page>
