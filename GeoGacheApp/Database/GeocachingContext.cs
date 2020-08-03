@@ -1,4 +1,4 @@
-﻿using GeoGacheApp.Models;
+﻿using Geocache.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeoGacheApp
+namespace Geocache
 {
-    public class UserContext:DbContext
+    public class GeocachingContext:DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Treasure> Treasures { get; set; }
@@ -18,7 +18,8 @@ namespace GeoGacheApp
         public DbSet<Chained_Treasures> Chained_Treasures { get; set; }
         public DbSet<MarkerInfo> MarkerInfos { get; set; }
 
-        public UserContext() : base(Properties.Settings.Default.DbTest1)
+        // DbTest1 is the connection string
+        public GeocachingContext() : base(Properties.Settings.Default.DbTest1)
         {
 
         }
@@ -74,9 +75,7 @@ namespace GeoGacheApp
         //    modelBuilder.Entity<Chained_Treasures>()
         //        .HasIndex(ct => ct.Treasure_1)
         //        .IsUnique();
-
-
-
+        
         //}
     }
 }

@@ -1,16 +1,15 @@
-﻿<Page x:Class="GeoGacheApp.Views.HomePage"
-      xmlns:MyNamespace="clr-namespace:GeoGacheApp"
+﻿<UserControl x:Class="Geocache.Views.HomePageView"
+      xmlns:MyNamespace="clr-namespace:Geocache"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:GeoGacheApp.Views"
-      
+      xmlns:local="clr-namespace:Geocache.Views"
+           
       xmlns:cefsharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
       
       mc:Ignorable="d" 
-      MinWidth="800" MinHeight="650"
-      Title="HomePage">
+      MinWidth="800" MinHeight="650">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.4*">
@@ -22,16 +21,16 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Name="buttonPanel">
-            <TextBlock Name="greetingTxtBlock" Text="{Binding FirstName}"></TextBlock>
+            <TextBlock Text="{Binding Welcome}"></TextBlock>
             <Label HorizontalAlignment="Center">User only:</Label>
-            <Button Name="findTreasureBttn" Click="FindTreasureBttn_Click" Height="30" Width="150">Find Treasure</Button>
-            <Button Name="hideTreasureBttn" Click="HideTreasureBttn_Click" Height="30" Width="150">Hide a Treasure</Button>
-            <Button Name="myTreasuresBttn" Height="30" Width="150">My Treasures</Button>
-            <Button Name="leaderboardsBttn" Height="30" Width="150">Leaderboards</Button>
+            <Button Command="{Binding FindTreasure}" Name="findTreasureBttn" Height="30" Width="150">Find Treasure</Button>
+            <Button Command="{Binding HideTreasure}" Height="30" Width="150">Hide a Treasure</Button>
+            <Button Command="{Binding ShowUserTreasures}" Name="myTreasuresBttn" Height="30" Width="150">My Treasures</Button>
+            <Button Command="{Binding ShowLeaderBoards}" Name="leaderboardsBttn" Height="30" Width="150">Leaderboards</Button>
 
             <Label Height="30"></Label>
             <Label HorizontalAlignment="Center">Mod only</Label>
-            <Button Name="moderateBttn" Height="30" Width="150">Moderate Treasures</Button>
+            <Button Height="30" Width="150">Moderate Treasures</Button>
 
 
             <Label Height="30"></Label>
@@ -47,17 +46,17 @@
                 <RowDefinition Height="0.4*"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <Button Width="50" Height="30" Click="SetDefaultLocation">set defaul location</Button>
+            <Button Width="100" Height="30" >Set default location</Button>
 
             <StackPanel Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                    <TextBlock VerticalAlignment="Center" Margin="0,0,10,0"><Hyperlink Click="ManageAccountClick" Foreground="Gray">Manage account info...</Hyperlink></TextBlock>
-                    <TextBlock VerticalAlignment="Center" Margin="0,0,10,0"><Hyperlink Click="ManageAccountClick" Foreground="Gray">Log out</Hyperlink></TextBlock>
+                    <TextBlock VerticalAlignment="Center" Margin="0,0,10,0"><Hyperlink  Foreground="Gray">Manage account info...</Hyperlink></TextBlock>
+                    <TextBlock VerticalAlignment="Center" Margin="0,0,10,0"><Hyperlink  Foreground="Gray">Log out</Hyperlink></TextBlock>
                 </StackPanel>
 
-                <Image MouseDown="Image_MouseDown"  Width="50" Height="50" Margin="0,10,10,0" >
+                <Image Width="50" Height="50" Margin="0,10,10,0" >
                     <Image.Source >
-                        <BitmapImage UriSource="/Images/icon.png"></BitmapImage>
+                        <BitmapImage UriSource="/res/Images/icon.png"></BitmapImage>
                     </Image.Source>
                 </Image>
             </StackPanel>
@@ -82,7 +81,7 @@
                     <Label Grid.Column="0" Grid.Row="2">Difficulty</Label>
 
 
-                    <ComboBox Grid.Column="1" Grid.Row="0"></ComboBox>
+                    <ComboBox ItemsSource="{Binding TreasureTypes}" SelectedItem="{Binding SelectedTreasureType}" Grid.Column="1" Grid.Row="0"></ComboBox>
                     <ComboBox Grid.Column="1" Grid.Row="1"></ComboBox>
                     <Grid Grid.Column="1" Grid.Row="2">
                         <Grid.ColumnDefinitions>
@@ -122,19 +121,9 @@
 
 
                     <Label Grid.Column="2" Grid.Row="0">Rating</Label>
-                    <Button Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,0" >Filter</Button>
+                    <Button Command="{Binding FilterTreasures}" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,0" >Filter</Button>
                 </Grid>
-
-
-
-
             </StackPanel>
-            <WebBrowser  Loaded="SetupObjectForScripting" Grid.Row="2" Name="browser"></WebBrowser>
-           
         </Grid>
-
-
-
-
     </Grid>
-</Page>
+</UserControl>

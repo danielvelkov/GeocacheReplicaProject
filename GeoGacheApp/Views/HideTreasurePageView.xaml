@@ -1,13 +1,11 @@
-﻿<Page x:Class="GeoGacheApp.Views.HideTreasure"
+﻿<UserControl x:Class="Geocache.Views.HideTreasurePageView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:GeoGacheApp.Views"
+      xmlns:local="clr-namespace:Geocache.Views"
       mc:Ignorable="d" 
-      MinWidth="800" MinHeight="500"
-      
-      Title="HideTreasure">
+      MinWidth="800" MinHeight="500">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -58,7 +56,7 @@
                     <TextBlock Height="30">Is connected to other treasure</TextBlock>
                     <CheckBox Name="isChainedCheckBox"></CheckBox>
                 </StackPanel>
-                <Button Click="EnableMarkerInfo">Set marker info about the location</Button>
+                <Button >Set marker info about the location</Button>
 
             </StackPanel>
 
@@ -70,7 +68,7 @@
                 <TextBox Text="{Binding City}"></TextBox>
                 <TextBlock>Adress:</TextBlock>
                 <TextBox Text="{Binding Adress}"></TextBox>
-                <Button Name="dropMarkerBttn" Click="DropMarker">Drop marker</Button>
+                <Button Name="dropMarkerBttn">Drop marker</Button>
                 <GroupBox Header="Coordinates:">
                     <StackPanel>
                         <TextBlock>Latitude:</TextBlock>
@@ -79,13 +77,13 @@
                         <TextBlock Name="long" x:FieldModifier="public"></TextBlock>
                     </StackPanel>   
                 </GroupBox>
-                <Button Click="SaveTreasure">Save Treasure</Button>
+                <Button>Save Treasure</Button>
             </StackPanel>
         </Grid>
         
 
         <Grid Grid.Column="1">
-            <WebBrowser Loaded="SetupObjectForScripting" Name="browser"></WebBrowser>
+            <WebBrowser Name="browser"></WebBrowser>
         </Grid>
     </Grid>
-</Page>
+</UserControl>

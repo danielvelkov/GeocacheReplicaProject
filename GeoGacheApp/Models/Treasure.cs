@@ -1,5 +1,6 @@
 ﻿
-using GeoGacheApp.Models;
+using Geocache.Enums;
+using Geocache.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,11 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeoGacheApp
+namespace Geocache
 {
-    public enum TreasureSizes { SMALL = 1, MEDIUM = 2, LARGE = 3 }
-    public enum TreasureType { NORMAL = 1, HIDDEN=2, SURPRISE=3 }
-
+    
     public class Treasure
     {
         public Treasure(string name, 

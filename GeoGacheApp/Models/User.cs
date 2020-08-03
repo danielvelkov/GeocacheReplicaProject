@@ -1,15 +1,15 @@
-﻿using GeoGacheApp.Models;
+﻿using Geocache.Models;
+using Geocache.Enums;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeoGacheApp
+namespace Geocache
 {
-    public enum UserRoles { ADMIN = 1, MOD = 2, USER = 3 }
-
     public class User
     {
         public string Username { get; set; }
@@ -36,9 +36,9 @@ namespace GeoGacheApp
 
         public User()
         {
-            Treasures = new HashSet<Treasure>();
-            Treasures_Comments = new HashSet<Treasures_Comments>();
-            Found_Treasures = new HashSet<Found_Treasures>();
+            Treasures = new ObservableCollection<Treasure>();
+            Treasures_Comments = new ObservableCollection<Treasures_Comments>();
+            Found_Treasures = new ObservableCollection<Found_Treasures>();
         }
 
         public User(string username, string password, UserRoles role, bool isBanned, int points, DateTime createdAt, string firstName, string lastName, string country, string city, string adress)
@@ -54,10 +54,6 @@ namespace GeoGacheApp
             Country = country;
             City = city;
             Adress = adress;
-            Treasures = new HashSet<Treasure>();
-
-            Treasures_Comments = new HashSet<Treasures_Comments>();
-            Found_Treasures = new HashSet<Found_Treasures>();
         }
     }
 }

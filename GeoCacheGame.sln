@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.438
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoGacheApp", "GeoGacheApp\GeoGacheApp.csproj", "{9D814B2D-2568-43FB-A56A-B440D6D48E9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geocache", "GeoGacheApp\Geocache.csproj", "{9D814B2D-2568-43FB-A56A-B440D6D48E9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

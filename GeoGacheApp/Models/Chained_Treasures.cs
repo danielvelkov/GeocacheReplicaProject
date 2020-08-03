@@ -6,8 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeoGacheApp.Models
+namespace Geocache.Models
 {
+
+    // this is not FINE. check the inversion property in my comments class in previous project
+
     public class Chained_Treasures
     {
         public Chained_Treasures(Treasure treasure_1, Treasure treasure_2)

@@ -1,5 +1,5 @@
-﻿<StackPanel xmlns:MyNamespace="clr-namespace:GeoGacheApp"
-            x:Class="GeoGacheApp.RatingCell"
+﻿<StackPanel xmlns:MyNamespace="clr-namespace:Geocache"
+            x:Class="Geocache.RatingCell"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Orientation="Horizontal" HorizontalAlignment="Center"><StackPanel.Resources>
     <Style x:Key="ratingButton" TargetType="{x:Type ToggleButton}">

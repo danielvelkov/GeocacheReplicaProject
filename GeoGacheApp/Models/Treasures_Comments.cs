@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Geocache.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,10 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeoGacheApp.Models
+namespace Geocache.Models
 {
-    public enum CommentType { COMMENT=1, REPORT=2}
-
     public class Treasures_Comments
     {
         public Treasures_Comments(

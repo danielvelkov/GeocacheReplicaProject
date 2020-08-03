@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeoGacheApp
+namespace Geocache
 {
     class RegisterValidation
     {
@@ -12,6 +12,17 @@ namespace GeoGacheApp
         private string username;
         private string password;
         private string confirmPass;
+        private string firstName;
+        private string lastName;
+        private string country;
+        private string city;
+        private string address;
+        const int PASSWORDMAXCHAR = 11;
+        const int PASSWORDMINCHAR = 8;
+
+        const int USERNAMEMAXCHAR = 14;
+        const int USERNAMEMINCHAR = 8;
+
 
         public string errMsg
         {
@@ -23,39 +34,42 @@ namespace GeoGacheApp
         private ActionOnError act;
 
         public RegisterValidation(
-            string username,
-            string password,
-            string confirmPassword,
-            ActionOnError act
-            )
+            User user,
+            ActionOnError act,
+            string Password,
+            string ConfirmPassword)
         {
-            this.username = username;
-            this.password = password;
-            this.confirmPass = confirmPassword;
+            this.username = user.Username;
+            this.password = user.Password;
+            this.firstName = user.FirstName;
+            this.lastName = user.LastName;
+            this.country = user.Country;
+            this.city = user.City;
+            this.address = user.Adress;
             this.act = act;
+            this.password = Password;
+            this.confirmPass = ConfirmPassword;
+
         }
 
         public bool ValidateRegisterData()
         {
-            Boolean emptyUsername;
-            emptyUsername = username.Equals(String.Empty);
-            if (emptyUsername)
+            
+            if (String.IsNullOrEmpty(username))
             {
                 errMsg = "username is empty";
                 act(errMsg);
 
                 return false;
             }
-            if (username.Length < 5 || password.Length < 5)
+            if (username.Length < USERNAMEMINCHAR || password.Length < PASSWORDMINCHAR)
             {
                 errMsg = "username or password is too short";
                 act(errMsg);
 
                 return false;
             }
-            Boolean emptyPassword;
-            emptyPassword = password.Equals(String.Empty);
-            if (emptyPassword)
+            if (String.IsNullOrEmpty(password))
             {
                 errMsg = "no password";
                 act(errMsg);
@@ -70,11 +84,10 @@ namespace GeoGacheApp
                     act(errMsg);
                 return false;
             }
-            UserContext context = new UserContext();
-            User usr = (from user in context.Users where user.Username == username select user).FirstOrDefault();
-            if (usr!=null)
+            
+            if (String.IsNullOrEmpty(firstName) || String.IsNullOrEmpty(lastName))
             {
-                errMsg = "username taken";
+                errMsg = "First or last name empty";
                 act(errMsg);
                 return false;
             }

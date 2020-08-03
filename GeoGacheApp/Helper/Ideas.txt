@@ -1,0 +1,16 @@
+﻿
+
+
+
+
+
+- add a dialog window poppu for leaderboards and 
+mytreasures button
+https://github.com/imnbwd/FriendEditor/blob/master/FriendEditor/ViewModels/MainViewModel.cs
+
+- set default location on another screen or
+a popup window
+
+- filtering the treasures + the cefsharp browser into another control
+
+- add a profile pic to user

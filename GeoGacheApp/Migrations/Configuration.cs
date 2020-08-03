@@ -1,11 +1,11 @@
-namespace GeoGacheApp.Migrations
+namespace Geocache.Migrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<GeoGacheApp.UserContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Geocache.GeocachingContext>
     {
         public Configuration()
         {
@@ -13,7 +13,7 @@ namespace GeoGacheApp.Migrations
             ContextKey = "GeoGacheApp.UserContext";
         }
 
-        protected override void Seed(GeoGacheApp.UserContext context)
+        protected override void Seed(Geocache.GeocachingContext context)
         {
             //  This method will be called after migrating to the latest version.
 

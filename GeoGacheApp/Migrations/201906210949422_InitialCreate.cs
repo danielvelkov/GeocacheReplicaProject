@@ -1,4 +1,4 @@
-namespace GeoGacheApp.Migrations
+namespace Geocache.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

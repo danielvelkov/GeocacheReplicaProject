@@ -1,57 +1,28 @@
-﻿<Page x:Class="GeoGacheApp.MainWindow"
+﻿<Window x:Class="Geocache.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GeoGacheApp"
+        xmlns:local="clr-namespace:Geocache.Views"
+        xmlns:vm="clr-namespace:Geocache.ViewModel"
         mc:Ignorable="d"
         Title="Geocaching" Height="auto" Width="auto"
-        WindowHeight="600" WindowWidth="950"
-       
-        >
-    
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Image  Grid.Row="0" VerticalAlignment="Center" Width="400" >
-                <Image.Source >
-                    <BitmapImage UriSource="/Images/Geocaching-Icon.jpg"></BitmapImage>
-                </Image.Source>
-            </Image>
-            <GroupBox Grid.Row="1" Header="Login" Width="300" Height="100">
-                <Grid Margin="10,0,10,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.5*">
-
-                        </ColumnDefinition>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Label>UserName:</Label>
-                    <Label Grid.Row="1">PassWord:</Label>
-                    <TextBox Name="userNametxtBox" Grid.Column="1" HorizontalAlignment="Stretch" ></TextBox>
-                    <PasswordBox Name="passWordBox" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" PasswordChar="*"  ></PasswordBox>
-                    <TextBlock Name="errLabel" Grid.Column="1" Grid.Row="1" Foreground="Red" HorizontalAlignment="Stretch" Height="23" Margin="0.2,23.8,0.2,0" Grid.RowSpan="2" VerticalAlignment="Top" ></TextBlock>
-                </Grid>
-
-            </GroupBox>
-            <Grid Grid.Row="2" Width="350">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Button  Content="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Height="30" Click="LoginBtnClick"/>
-                <TextBlock VerticalAlignment="top" HorizontalAlignment="Center"  Grid.Column="1" FontSize="18"><Hyperlink Click="RegisterOptionClick">New to the app?</Hyperlink></TextBlock>
-            </Grid>
-
-        </Grid>
-    
-   
-</Page>
+        DataContext="{Binding MainViewModel, Source={StaticResource Locator} }">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:LoginPageVM}">
+            <local:LoginPageView></local:LoginPageView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HomePageVM}">
+            <local:HomePageView></local:HomePageView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UserPageVM}">
+            <local:UserPageView></local:UserPageView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RegisterPageVM}">
+            <local:RegisterPageView></local:RegisterPageView>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <ContentControl Content="{Binding CurrentContent}" ></ContentControl>
+    </Grid>
+</Window>
