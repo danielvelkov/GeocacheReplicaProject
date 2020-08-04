@@ -40,7 +40,7 @@ namespace Geocache.Database.Repositories
         public User ValidateLogin(string Username, string Password)
         {
             Password = Regex.Replace(Password, @"\s+", "");
-            User user = UserContext.Users.First(a => a.Username == Username && a.Password==Password);
+            User user = UserContext.Users.FirstOrDefault(a => a.Username == Username && a.Password==Password);
             return user;
         }
     }

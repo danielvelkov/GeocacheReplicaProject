@@ -17,8 +17,7 @@ namespace Geocache.ViewModel
         }
 
         #region fields
-        private TreasureType selectedTreasureType;
-        private TreasureSizes selectedTreasureSize;
+
         #endregion
 
         #region Parameters
@@ -33,43 +32,7 @@ namespace Geocache.ViewModel
             }
         }
 
-        public TreasureType SelectedTreasureType
-        {
-            get { return selectedTreasureType; }
-            set
-            {
-                selectedTreasureType = value;
-                RaisePropertyChanged("SelectedTreasureType");
-            }
-        }
-
-        public IEnumerable<TreasureType> TreasureTypes
-        {
-            get
-            {
-                return Enum.GetValues(typeof(TreasureType))
-                    .Cast<TreasureType>();
-            }
-        }
-
-        public TreasureSizes SelectedTreasureSize
-        {
-            get { return selectedTreasureSize; }
-            set
-            {
-                selectedTreasureSize = value;
-                RaisePropertyChanged("SelectedTreasureSize");
-            }
-        }
-
-        public IEnumerable<TreasureSizes> TreasureSizes
-        {
-            get
-            {
-                return Enum.GetValues(typeof(TreasureSizes))
-                    .Cast<TreasureSizes>();
-            }
-        }
+        
 
         #endregion
 

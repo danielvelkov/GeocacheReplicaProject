@@ -16,6 +16,7 @@ using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Geocache.ViewModel;
+using Geocache.ViewModel.BrowserVM;
 
 namespace Geocache.ViewModel
 {
@@ -38,6 +39,7 @@ namespace Geocache.ViewModel
             SimpleIoc.Default.Register<RegisterPageVM>();
             SimpleIoc.Default.Register<UserPageVM>();
             SimpleIoc.Default.Register<HideTreasurePageVM>();
+            SimpleIoc.Default.Register<HomePageBrowserVM>();
         }
         
         public static void Cleanup()
@@ -81,7 +83,13 @@ namespace Geocache.ViewModel
                 return ServiceLocator.Current.GetInstance<RegisterPageVM>();
             }
         }
-
+        public static HomePageBrowserVM HomePageBrowserVM
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<HomePageBrowserVM>();
+            }
+        }
         // learn about the messenger. its like the mediator class in my previous project
         // https://docs.microsoft.com/en-us/archive/msdn-magazine/2013/march/mvvm-messenger-and-view-services-in-mvvm
 

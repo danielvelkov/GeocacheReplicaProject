@@ -143,6 +143,7 @@
     <Compile Include="Validation\RegisterValidation.cs" />
     <Compile Include="Database\GeocachingContext.cs" />
     <Compile Include="Validation\TextValidation.cs" />
+    <Compile Include="ViewModel\BrowserVM\HomePageBrowserVM.cs" />
     <Compile Include="ViewModel\HideTreasurePageVM.cs" />
     <Compile Include="ViewModel\HomePageVM.cs" />
     <Compile Include="ViewModel\LoginPageVM.cs" />
@@ -150,6 +151,9 @@
     <Compile Include="ViewModel\RegisterPageVM.cs" />
     <Compile Include="ViewModel\UserPageVM.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Views\BrowsersViews\HomePageBrowserView.xaml.cs">
+      <DependentUpon>HomePageBrowserView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HideTreasurePageView.xaml.cs">
       <DependentUpon>HideTreasurePageView.xaml</DependentUpon>
     </Compile>
@@ -172,6 +176,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BrowsersViews\HomePageBrowserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HideTreasurePageView.xaml">
       <SubType>Designer</SubType>
