@@ -90,6 +90,13 @@ namespace Geocache.ViewModel
                 return ServiceLocator.Current.GetInstance<HomePageBrowserVM>();
             }
         }
+        public static UserPageVM UserPageVM
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<UserPageVM>();
+            }
+        }
         // learn about the messenger. its like the mediator class in my previous project
         // https://docs.microsoft.com/en-us/archive/msdn-magazine/2013/march/mvvm-messenger-and-view-services-in-mvvm
 

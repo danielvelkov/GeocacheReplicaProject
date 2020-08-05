@@ -28,6 +28,19 @@
 
         <StackPanel Name="buttonPanel">
             <TextBlock Text="{Binding Welcome}"></TextBlock>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock VerticalAlignment="Center" Margin="0,0,10,0"><Hyperlink Command="{Binding GoToUserPage}"  Foreground="Gray">Manage account info...</Hyperlink></TextBlock>
+                    <TextBlock VerticalAlignment="Center" Margin="0,0,10,0"><Hyperlink Command="{Binding LogOut}"  Foreground="Gray">Log out</Hyperlink></TextBlock>
+                </StackPanel>
+
+                <Image Width="50" Height="50" Margin="0,10,10,0" >
+                    <Image.Source >
+                        <BitmapImage UriSource="/res/Images/icon.png"></BitmapImage>
+                    </Image.Source>
+                </Image>
+            </StackPanel>
+
             <Label HorizontalAlignment="Center">User only:</Label>
             <!--this shows all the markers around your starting location-->
             <Button Command="{Binding FindTreasure}" Name="findTreasureBttn" Height="30" Width="150">Find Treasure</Button>
@@ -48,23 +61,10 @@
         </StackPanel>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.1*"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0"  HorizontalAlignment="Right" Orientation="Horizontal">
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                    <TextBlock VerticalAlignment="Center" Margin="0,0,10,0"><Hyperlink  Foreground="Gray">Manage account info...</Hyperlink></TextBlock>
-                    <TextBlock VerticalAlignment="Center" Margin="0,0,10,0"><Hyperlink  Foreground="Gray">Log out</Hyperlink></TextBlock>
-                </StackPanel>
-
-                <Image Width="50" Height="50" Margin="0,10,10,0" >
-                    <Image.Source >
-                        <BitmapImage UriSource="/res/Images/icon.png"></BitmapImage>
-                    </Image.Source>
-                </Image>
-            </StackPanel>
-
-            <ContentControl Content="{Binding HomePageBrowserVM, Source={StaticResource Locator} }"  Grid.Row="1" ></ContentControl>
+            
+            <ContentControl Content="{Binding HomePageBrowserVM, Source={StaticResource Locator} }" ></ContentControl>
         </Grid>
     </Grid>
 </UserControl>

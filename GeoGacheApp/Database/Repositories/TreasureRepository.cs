@@ -19,5 +19,10 @@ namespace Geocache.Database.Repositories
         {
             get { return Context as GeocachingContext; }
         }
+
+        public List<Treasure> GetTreasures(int UserID)
+        {
+            return TreasureContext.Treasures.Where(t => t.UserId != UserID).ToList();
+        }
     }
 }

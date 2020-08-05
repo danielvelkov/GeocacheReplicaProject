@@ -28,5 +28,13 @@ namespace Geocache.Helper
         {
             currentUser = user;
         }
+        public string GetUserAddress()
+        {
+            StringBuilder address = new StringBuilder();
+            address.Append(currentUser.Adress + ", ");
+            address.Append(currentUser.City + ", ");
+            address.Append(currentUser.Country);
+            return address.ToString();
+        }
     }
 }

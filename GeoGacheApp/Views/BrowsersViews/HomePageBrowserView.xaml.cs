@@ -1,6 +1,7 @@
 ﻿using CefSharp;
 using CefSharp.SchemeHandler;
 using CefSharp.Wpf;
+using Geocache.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,35 +26,35 @@ namespace Geocache.Views.BrowsersViews
     {
         public HomePageBrowserView()
         {
-            
-            InitializeComponent();
             InitBrowser();
+            InitializeComponent();
+            
         }
-
+        // should be done only once. See cefsharp general usage
+        // i think cef has a default shutdown method that runs when exiting
+        // i think... :)
         public void InitBrowser()
         {
-            var settings = new CefSettings();
-
-            settings.BrowserSubprocessPath = System.IO.Path.GetFullPath("CefSharp.BrowserSubprocess.exe");
-
-            settings.RegisterScheme(new CefCustomScheme
+            if (!Cef.IsInitialized)
             {
-                SchemeName = "localfolder",
-                DomainName = "cefsharp",
-                SchemeHandlerFactory = new FolderSchemeHandlerFactory(
-            rootFolder: @"D:\PS kursov proekt\kursov proekt-2019_04_24\kursov proekt\Geocaching\GeoCacheGame\GeoGacheApp\html",
-            hostName: "cefsharp",
-            defaultPage: "map.html" // will default to map.html
-        )
-            });
+                var settings = new CefSettings();
 
-            Cef.Initialize(settings);
+                settings.BrowserSubprocessPath = System.IO.Path.GetFullPath("CefSharp.BrowserSubprocess.exe");
 
-            //goes to the particular scheme
-            var browser = new ChromiumWebBrowser("localfolder://cefsharp/");
-            mainGrid.Children.Add(browser);
-            Grid.SetRow(browser, 2);
+                settings.RegisterScheme(new CefCustomScheme
+                {
+                    SchemeName = "localfolder",
+                    DomainName = "cefsharp",
+                    SchemeHandlerFactory = new FolderSchemeHandlerFactory(
+                //rootFolder: @"D:\PS kursov proekt\kursov proekt-2019_04_24\kursov proekt\Geocaching\GeoCacheGame\GeoGacheApp\html",
+                rootFolder: string.Format(@"{0}\html", System.AppDomain.CurrentDomain.BaseDirectory),
+                hostName: "cefsharp",
+                defaultPage: "map.html" // will default to map.html
+                )
+                });
 
+                Cef.Initialize(settings);
+            }
         }
     }
 }

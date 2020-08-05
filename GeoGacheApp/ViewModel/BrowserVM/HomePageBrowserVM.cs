@@ -3,9 +3,13 @@ using CefSharp.SchemeHandler;
 using CefSharp.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Geocache.Database;
 using Geocache.Enums;
+using Geocache.Helper;
+using Geocache.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,10 +20,12 @@ namespace Geocache.ViewModel.BrowserVM
 {
     public class HomePageBrowserVM : ViewModelBase
     {
-        
-        private TreasureType selectedTreasureType;
-        private TreasureSizes selectedTreasureSize;
+        public UserDataService UserData { get; }
 
+        private TreasureType selectedTreasureType= TreasureType.ANY;
+        private TreasureSizes selectedTreasureSize= Enums.TreasureSizes.ANY;
+
+        // good idea to bind it 
         private string address;
         public string Address
         {
@@ -47,19 +53,39 @@ namespace Geocache.ViewModel.BrowserVM
             get { return statusMessage; }
             set { Set(ref statusMessage, value); }
         }
+        
 
-        private string title;
-        public string Title
+        private ChromiumWebBrowser webBrowser;
+        /// <summary>
+            /// The <see cref="WebBrowser" /> property's name.
+            /// </summary>
+        public const string WebBrowserPropertyName = "WebBrowser";
+        
+        /// <summary>
+        /// Sets and gets the WebBrowser property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public ChromiumWebBrowser WebBrowser
         {
-            get { return title; }
-            set { Set(ref title, value); }
-        }
+            get
+            {
+                return webBrowser;
+            }
 
-        private IWpfWebBrowser webBrowser;
-        public IWpfWebBrowser WebBrowser
-        {
-            get { return webBrowser; }
-            set { Set(ref webBrowser, value); }
+            set
+            {
+                if (webBrowser == value)
+                {
+                    return;
+                }
+
+                webBrowser = value;
+                // second check is when the destruction is called
+                if (webBrowser != null && webBrowser.Address ==null)
+                    webBrowser.Address="localfolder://cefsharp/";
+
+                RaisePropertyChanged(WebBrowserPropertyName);
+            }
         }
 
         private object evaluateJavaScriptResult;
@@ -98,6 +124,8 @@ namespace Geocache.ViewModel.BrowserVM
         }
 
         private bool legacyBindingEnabled;
+        
+
         public bool LegacyBindingEnabled
         {
             get { return legacyBindingEnabled; }
@@ -112,13 +140,19 @@ namespace Geocache.ViewModel.BrowserVM
         public ICommand CloseDevToolsCommand { get; private set; }
         public ICommand JavascriptBindingStressTest { get; private set; }
 
-        public HomePageBrowserVM()
+        public HomePageBrowserVM(UserDataService userData)
         {
+            Markers = new List<MarkerInfo>();
+            UserData = userData;
         }
+        
 
         public TreasureType SelectedTreasureType
         {
-            get { return selectedTreasureType; }
+            get
+            {
+                return selectedTreasureType;
+            }
             set
             {
                 selectedTreasureType = value;
@@ -153,8 +187,54 @@ namespace Geocache.ViewModel.BrowserVM
                     .Cast<TreasureSizes>();
             }
         }
+        List<MarkerInfo> markers;
+        public List<MarkerInfo> Markers { get => markers; set => markers = value; }
 
+        private ICommand filterTreasures;
+        private ICommand goToHomeLocation;
+        public ICommand FilterTreasures
+        {
+            get
+            {
+                if (filterTreasures == null)
+                    filterTreasures = new RelayCommand(() =>
+                    {
+                        using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
+                        {
+                            foreach (var treas in UnitofWork.Treasures.GetTreasures(UserData.GetUser().ID))
+                            {
+                                if((treas.TreasureSize==Enums.TreasureSizes.ANY || treas.TreasureSize==SelectedTreasureSize) &&
+                                (treas.TreasureType==TreasureType.ANY || treas.TreasureType==SelectedTreasureType))
+                                Markers.Add(treas.MarkerInfo);
+                            }
 
+                            foreach (MarkerInfo marker in Markers)
+                            {
+                                Treasure treasr = UnitofWork.Treasures.Get(marker.TreasureId);
+                                WebBrowser.ExecuteScriptAsync("showTreasures", marker.Latitude, marker.Longtitude,
+                                treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
+                                treasr.TreasureSize.ToString(), treasr.Description,
+                                treasr.Rating, treasr.isChained.ToString());
+                            }
+                        }
+                    });
+                return filterTreasures;
+            }
+        }
+
+        public ICommand GoToHomeLocation
+        {
+            get
+            {
+                if (goToHomeLocation == null)
+                    goToHomeLocation = new RelayCommand(() =>
+                      {
+                          string address = UserData.GetUserAddress();
+                          WebBrowser.ExecuteScriptAsync("codeAdress", address);
+                      });
+                return goToHomeLocation;
+            }
+        }
         //public BrowserTabViewModel(string address)
         //{
         //    Address = address;
@@ -270,11 +350,11 @@ namespace Geocache.ViewModel.BrowserVM
             Keyboard.ClearFocus();
         }
 
-        public void LoadCustomRequestExample()
-        {
-            var postData = System.Text.Encoding.Default.GetBytes("test=123&data=456");
+        //public void LoadCustomRequestExample()
+        //{
+        //    var postData = System.Text.Encoding.Default.GetBytes("test=123&data=456");
 
-            WebBrowser.LoadUrlWithPostData("https://cefsharp.com/PostDataTest.html", postData);
-        }
+        //    WebBrowser.LoadUrlWithPostData("https://cefsharp.com/PostDataTest.html", postData);
+        //}
     }
 }

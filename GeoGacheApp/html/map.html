@@ -111,6 +111,7 @@
       var geocoder;
       var map;
       var markers = [];
+      var homeMarker;
       function initMap() {
         geocoder = new google.maps.Geocoder();
         map = new google.maps.Map(document.getElementById('map'), {
@@ -187,7 +188,7 @@
                   var image='https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
                   map.setCenter(results[0].geometry.location);
                   map.setZoom(15);
-                  var marker = new google.maps.Marker({
+                  homeMarker = new google.maps.Marker({
                       map: map,
                       animation: google.maps.Animation.DROP,
                       position: results[0].geometry.location,
@@ -195,14 +196,14 @@
                       
                   });
               } else {
-                  alert('Adress not found ');
+                  alert(status);
               }
           });
       }
       function showTreasures(latitude,longtitude,id,
           name,type,size,description,rating,isChained) {
           
-           
+          //check if marker is already on the map
               var myLatLng = {lat:latitude, lng:longtitude} ;
               var marker=new google.maps.Marker({
                   map: map,
@@ -224,9 +225,9 @@
                   infoWindow.open(map, marker);
               });
 
-                 marker.addListener('dblclick', function(){
-                      startHunt(latitude,longtitude,name);
-              });
+                 //marker.addListener('dblclick', function(){
+                 //     startHunt(latitude,longtitude,name);
+              //});
               map.setZoom(14);
               markers.push(marker);
       }

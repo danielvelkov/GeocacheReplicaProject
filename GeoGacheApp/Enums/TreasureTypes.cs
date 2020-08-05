@@ -10,6 +10,7 @@ namespace Geocache.Enums
     {
         NORMAL = 1,
         HIDDEN = 2,
-        SURPRISE = 3
+        SURPRISE = 3,
+        ANY=4
     }
 }

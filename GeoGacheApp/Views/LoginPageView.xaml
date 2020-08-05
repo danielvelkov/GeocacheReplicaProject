@@ -6,13 +6,16 @@
         xmlns:local="clr-namespace:Geocache"
         mc:Ignorable="d"
          Height="auto" Width="auto">
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding Login}" Key="Enter"></KeyBinding>
+    </UserControl.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Image  Grid.Row="0" VerticalAlignment="Center" Width="400" >
+        <Image  Grid.Row="0" VerticalAlignment="Center" Width="400" Margin="20">
             <Image.Source >
                 <BitmapImage UriSource="/res/Images/Geocaching-Icon.jpg"></BitmapImage>
             </Image.Source>
@@ -30,11 +33,11 @@
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                <Label>UserName:</Label>
-                <Label Grid.Row="1">Password:</Label>
-                <TextBox Text="{Binding Username}" Grid.Column="1" HorizontalAlignment="Stretch" ></TextBox>
-                <PasswordBox PasswordChanged="PasswordBox_PasswordChanged" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" PasswordChar="*"  ></PasswordBox>
-                <TextBlock Text="{Binding ErrorMsg}" Grid.Column="1" Grid.Row="1" Foreground="Red" HorizontalAlignment="Stretch" Height="23" Margin="0.2,23.8,0.2,0" Grid.RowSpan="2" VerticalAlignment="Top" ></TextBlock>
+                <Label Content="_Username:" Target="{Binding ElementName=username}" HorizontalAlignment="Center"></Label>
+                <Label  Content="_Password:" Target="{Binding ElementName=password}" Grid.Row="1" HorizontalAlignment="Center"></Label>
+                <TextBox x:Name="username" Text="{Binding Username}" Grid.Column="1" HorizontalAlignment="Stretch" ></TextBox>
+                <PasswordBox x:Name="password" PasswordChanged="PasswordBox_PasswordChanged" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" PasswordChar="*"  ></PasswordBox>
+                <TextBlock Text="{Binding ErrorMsg}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Foreground="Red" HorizontalAlignment="Stretch" Height="23" VerticalAlignment="Center" ></TextBlock>
             </Grid>
 
         </GroupBox>
@@ -43,7 +46,7 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Command="{Binding Login}"  Content="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Height="30" />
+            <Button Command="{Binding Login}" FontSize="16" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Height="30" />
             <TextBlock VerticalAlignment="top" HorizontalAlignment="Center"  Grid.Column="1" FontSize="18"><Hyperlink Command="{Binding Register}">New to the app?</Hyperlink></TextBlock>
         </Grid>
     </Grid>

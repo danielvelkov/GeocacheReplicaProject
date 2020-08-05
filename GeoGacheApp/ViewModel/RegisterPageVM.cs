@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Geocache.Database;
+using Geocache.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

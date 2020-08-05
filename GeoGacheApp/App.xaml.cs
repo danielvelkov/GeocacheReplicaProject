@@ -1,4 +1,7 @@
-﻿using GalaSoft.MvvmLight.Threading;
+﻿using CefSharp;
+using CefSharp.SchemeHandler;
+using CefSharp.Wpf;
+using GalaSoft.MvvmLight.Threading;
 using Geocache.ViewModel;
 using Geocache.Views;
 using System;
@@ -16,21 +19,11 @@ namespace Geocache
     /// </summary>
     public partial class App : Application
     {
-        //protected override void OnStartup(StartupEventArgs e)
-        //{
-
-        //    // set it to the main window
-        //    MainWindow view = new Views.MainWindow();
-        //    //MainViewModel viewModel = new MainViewModel();
-        //    //view.DataContext = viewModel;
-        //    //view.Show();
-        //    App.Current.MainWindow = view;
-        //    view.Show();
-        //    base.OnStartup(e);
-        //}
         static App()
         {
             DispatcherHelper.Initialize();
+            
         }
+        
     }
 }

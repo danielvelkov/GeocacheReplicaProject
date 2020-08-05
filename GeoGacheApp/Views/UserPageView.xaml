@@ -4,26 +4,34 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Geocache.Views"
+      xmlns:models="clr-namespace:Geocache.Models"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel>
+        <StackPanel.Resources>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="10"></Setter>
+            </Style>
+        </StackPanel.Resources>
+        <StackPanel VerticalAlignment="Stretch">
+            <TextBlock Grid.Row="1">First name</TextBlock>
+            <TextBox Text="{Binding CurrentUser.FirstName ,Mode=TwoWay}" Grid.Row="2"></TextBox>
+            <TextBlock Grid.Column="1" Grid.Row="1">Last name</TextBlock>
+            <TextBox Text="{Binding CurrentUser.LastName,Mode=TwoWay}" Grid.Column="1" Grid.Row="2"></TextBox>
 
-    <StackPanel VerticalAlignment="Stretch">
-        <TextBlock Grid.Row="1">First name</TextBlock>
-        <TextBox Name="firstNameTxtBox" Text="{Binding FirstName,Mode=TwoWay}" Grid.Row="2"></TextBox>
-        <TextBlock Grid.Column="1" Grid.Row="1">Last name</TextBlock>
-        <TextBox Name="lastNameTxtBox" Text="{Binding LastName,Mode=TwoWay}" Grid.Column="1" Grid.Row="2"></TextBox>
+            <TextBlock >Adress</TextBlock>
+            <TextBox Text="{Binding CurrentUser.Adress,Mode=TwoWay}"></TextBox>
 
-        <TextBlock >Adress</TextBlock>
-        <TextBox Text="{Binding Adress,Mode=TwoWay}" Name="adressTxtBox"></TextBox>
+            <TextBlock >City</TextBlock>
+            <TextBox Text="{Binding CurrentUser.City,Mode=TwoWay}"></TextBox>
 
-        <TextBlock >City</TextBlock>
-        <TextBox Text="{Binding City,Mode=TwoWay}" Name="cityTxtBox" ></TextBox>
+            <TextBlock >Country</TextBlock>
+            <TextBox Text="{Binding CurrentUser.Country,Mode=TwoWay}"></TextBox>
+            <TextBlock >Created at</TextBlock>
+            <TextBlock Text="{Binding CurrentUser.createdAt,Mode=TwoWay}"></TextBlock>
 
-        <TextBlock >Country</TextBlock>
-        <TextBox Text="{Binding Country,Mode=TwoWay}" Name="countryTxtBox"  ></TextBox>
-        <TextBlock >Created at</TextBlock>
-        <TextBlock Text="{Binding createdAt,Mode=TwoWay}"></TextBlock>
-
-        <Button Command="{Binding SaveChanges}">Save changes</Button>
+            <Button Width="150" FontSize="18"  Command="{Binding SaveChanges}">Save changes</Button>
+            <Button Width="150" FontSize="18"  Command="{Binding GoBack}">GoBack</Button>
+        </StackPanel>
     </StackPanel>
 </UserControl>

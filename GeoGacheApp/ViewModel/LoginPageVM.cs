@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Geocache;
 using Geocache.Database;
 using Geocache.Helper;
+using Geocache.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,24 +98,30 @@ namespace Geocache.ViewModel
                   {
                       using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
                       {
-                          User user = unitOfWork.Users.ValidateLogin(Username, Password);
-
-                          if (user != null)
+                          if(!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
                           {
-                              //login the user
-                              SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
-                              //change to homepage
-                              MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
-                              
+                              User user = unitOfWork.Users.ValidateLogin(Username, Password);
+
+                              if (user != null)
+                              {
+                                  //login the user
+                                  SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
+                                  //change to homepage
+                                  MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
+
+                              }
+                              else
+                              ErrorMsg = "Password is wrong or no such user exists";
+                              return;
                           }
-                          ErrorMsg = "Password is wrong or no such user exists";
-                          return;
-
+                          else
+                          {
+                              ErrorMsg = " Password or Username is empty";
+                          }
+                          
                       }
-
                   })
                 ));
-
             }
         }
 

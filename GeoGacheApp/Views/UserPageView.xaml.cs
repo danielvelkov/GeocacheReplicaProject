@@ -24,32 +24,5 @@ namespace Geocache.Views
         {
             InitializeComponent();
         }
-
-        //private User currentuser;
-
-        //public UserPageView(Object usr)
-        //{
-        //    this.DataContext = usr;
-        //    InitializeComponent();
-        //}
-
-        //public User Currentuser { get => currentuser; set => currentuser = value; }
-
-
-        //private void SaveChanges(object sender, RoutedEventArgs e)
-        //{
-        //    Currentuser = this.DataContext as User;
-        //    GeocachingContext context = new GeocachingContext();
-        //    User usr = (from user in context.Users where user.ID == currentuser.ID select user).First();
-        //    usr.FirstName = firstNameTxtBox.Text;
-        //    usr.LastName = lastNameTxtBox.Text;
-        //    usr.Adress = adressTxtBox.Text;
-        //    usr.City = cityTxtBox.Text;
-        //    usr.Country = countryTxtBox.Text;
-        //    context.SaveChanges();
-        //    //this.NavigationService.Navigate(new HomePageView(usr));
-
-        //}
-
     }
 }
