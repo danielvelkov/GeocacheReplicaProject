@@ -21,6 +21,10 @@ namespace Geocache.Views
     /// </summary>
     public partial class HideTreasurePageView : UserControl
     { 
+        public HideTreasurePageView()
+        {
+            InitializeComponent();
+        }
     //{
     //    private double difficultyRating;
     //    private string difficulties;

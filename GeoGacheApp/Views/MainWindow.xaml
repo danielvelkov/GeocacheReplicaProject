@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Geocache.Views"
         xmlns:vm="clr-namespace:Geocache.ViewModel"
         mc:Ignorable="d"
-        Title="Geocaching" Height="auto" Width="auto"
+        Title="Geocaching" SizeToContent="WidthAndHeight"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator} }">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:LoginPageVM}">
@@ -21,8 +21,11 @@
         <DataTemplate DataType="{x:Type vm:RegisterPageVM}">
             <local:RegisterPageView></local:RegisterPageView>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HideTreasurePageVM}">
+            <local:HideTreasurePageView></local:HideTreasurePageView>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
-        <ContentControl Content="{Binding CurrentContent}" ></ContentControl>
+        <ContentControl Name="content" Content="{Binding CurrentContent}" ></ContentControl>
     </Grid>
 </Window>

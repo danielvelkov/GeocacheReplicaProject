@@ -23,7 +23,7 @@ namespace Geocache.Database.Repositories
         // implement the methods from the used interface
         public bool DoesUserExist(string Username)
         {
-            User user = UserContext.Users.First(u=>u.Username==Username);
+            User user = UserContext.Users.FirstOrDefault(u=>u.Username==Username);
             if (user == null)
             {
                 return false;

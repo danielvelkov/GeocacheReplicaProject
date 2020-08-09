@@ -5,6 +5,7 @@ using Geocache;
 using Geocache.Database;
 using Geocache.Helper;
 using Geocache.Models;
+using Geocache.ViewModel.BrowserVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,6 @@ namespace Geocache.ViewModel
         }
 
         #region fields
-        ICommand loginCommand;
-        ICommand registerCommand;
         #endregion
 
         #region Parameters
@@ -89,6 +88,10 @@ namespace Geocache.ViewModel
         #endregion
 
         #region commands
+
+        ICommand loginCommand;
+        ICommand registerCommand;
+
         public ICommand Login
         {
             get
@@ -98,27 +101,45 @@ namespace Geocache.ViewModel
                   {
                       using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
                       {
-                          if(!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
-                          {
-                              User user = unitOfWork.Users.ValidateLogin(Username, Password);
+                          //if(!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+                          //{
+                          //    User user = unitOfWork.Users.ValidateLogin(Username, Password);
 
-                              if (user != null)
-                              {
-                                  //login the user
-                                  SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
-                                  //change to homepage
-                                  MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
+                          //    if (user != null)
+                          //    {
+                          //        //create the instances of the pages connected to the user
+                          //        SimpleIoc.Default.Register<HomePageVM>();
+                          //        SimpleIoc.Default.Register<HomePageBrowserVM>();
+                          //        SimpleIoc.Default.Register<UserPageVM>();
 
-                              }
-                              else
-                              ErrorMsg = "Password is wrong or no such user exists";
-                              return;
-                          }
-                          else
-                          {
-                              ErrorMsg = " Password or Username is empty";
-                          }
-                          
+                          //        //login the user
+                          //        SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
+
+                          //        //change to homepage
+                          //        MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
+
+                          //    }
+                          //    else
+                          //    ErrorMsg = "Password is wrong or no such user exists";
+                          //    return;
+                          //}
+                          //else
+                          //{
+                          //    ErrorMsg = " Password or Username is empty";
+                          //}
+
+                          User user = unitOfWork.Users.ValidateLogin("geochacher2", "meatballs");
+                          //        //create the instances of the pages connected to the user
+                          SimpleIoc.Default.Register<HomePageVM>();
+                          SimpleIoc.Default.Register<HomePageBrowserVM>();
+                          SimpleIoc.Default.Register<UserPageVM>();
+
+                          //login the user
+                          SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
+
+                          //change to homepage
+                          MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
+
                       }
                   })
                 ));

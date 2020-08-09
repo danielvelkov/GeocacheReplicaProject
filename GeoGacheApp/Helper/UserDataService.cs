@@ -31,9 +31,13 @@ namespace Geocache.Helper
         public string GetUserAddress()
         {
             StringBuilder address = new StringBuilder();
-            address.Append(currentUser.Adress + ", ");
-            address.Append(currentUser.City + ", ");
-            address.Append(currentUser.Country);
+            if(!string.IsNullOrEmpty(currentUser.Adress))
+            address.Append(currentUser.Adress + ",");
+            if (!string.IsNullOrEmpty(currentUser.City))
+                address.Append(currentUser.City + ",");
+            if (!string.IsNullOrEmpty(currentUser.Country))
+                address.Append(currentUser.Country);
+            else address.Length--;
             return address.ToString();
         }
     }

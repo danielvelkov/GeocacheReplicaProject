@@ -8,9 +8,12 @@
              
              xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              xmlns:MyNamespace="clr-namespace:Geocache"
-             
-             d:DesignHeight="450" d:DesignWidth="800"
-             >
+             xmlns:convert="clr-namespace:Geocache.Converters"
+             MinHeight="500" MinWidth="800"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <convert:RngTxtBlockConverter x:Key="DifficultyConverter"></convert:RngTxtBlockConverter>
+    </UserControl.Resources>
     <Grid Name="mainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"></RowDefinition>
@@ -20,7 +23,8 @@
         <StackPanel Orientation="Horizontal">
             <TextBlock VerticalAlignment="Center" FontSize="14">Current location:</TextBlock>
             <!--display your current starting location here?-->
-            <TextBlock Text="{Binding CurrentLocation}"  Width="200" FontSize="18"></TextBlock>
+            <TextBlock VerticalAlignment="Center" Text="{Binding CurrentLocation}" Width="250" FontSize="16">
+            </TextBlock>
             <!--make it a popup window with a little address search map that saves your adress-->
             <Button Width="120" Height="30" >Set starting location</Button>
             <Button Margin="10" MaxHeight="30" Command="{Binding GoToHomeLocation}">
@@ -55,8 +59,10 @@
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding ElementName=scrollBar, Path=Value}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
-                        <ScrollBar Grid.Column="1" Name="scrollBar" Minimum="1" Value="0" SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
+                        <TextBlock Grid.Column="0" Text="{Binding ElementName=scrollBar, Path=Value,Converter={StaticResource DifficultyConverter}}" 
+                                   FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        </TextBlock>
+                        <ScrollBar Grid.Column="1" Name="scrollBar" Minimum="0" Value="{Binding Difficulty}"  SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
                             <ScrollBar.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -81,9 +87,13 @@
                     <MyNamespace:RatingCell x:Name="rating" Grid.Column="2" Grid.Row="1" ></MyNamespace:RatingCell>
                     <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="2" >
                         <Label >Radius</Label>
-                        <Slider Orientation="Horizontal" VerticalAlignment="Center" Width="60"></Slider>
-                        <TextBlock Name="radius"></TextBlock>
-                        <TextBlock VerticalAlignment="Center">miles.</TextBlock>
+                        <Slider Name="slider" Orientation="Horizontal" IsSnapToTickEnabled="True" Value="{Binding Radius}"
+                                Ticks="" Minimum="0" Maximum="10" TickPlacement="BottomRight" VerticalAlignment="Center" Width="100"></Slider>
+                        <TextBlock Grid.Column="0" Text="{Binding ElementName=slider, Path=Value}" 
+                                   FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        </TextBlock>
+                        <TextBlock VerticalAlignment="Center">km.</TextBlock>
+                        <TextBlock ></TextBlock>
                     </StackPanel>
                     <Label Grid.Column="2" Grid.Row="0">Rating:</Label>
                     <Button Command="{Binding FilterTreasures}" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,0" >Filter</Button>

@@ -11,7 +11,7 @@ namespace Geocache.Interfaces
     {
         //methods concerning treasures
 
-            //get all treasures that user hasnt found
+        //get all treasures that user hasnt found
         List<Treasure> GetTreasures(int UserID);
     }
 }

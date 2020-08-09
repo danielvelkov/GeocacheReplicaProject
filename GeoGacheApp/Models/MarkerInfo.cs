@@ -37,5 +37,26 @@ namespace Geocache.Models
         public string Adress { get; set; }
 
         public virtual Treasure Treasure { get; set; }
+
+        // this gets the distance between this marker and the lat n lon and checks if its lower than the range
+        public bool IsInRadius(double lat,double lon,double RangeInKm)
+        {
+            double R = 6371000; //earths radius in m
+            double F1 = lat * Math.PI / 180; // φ, λ in radians
+            double F2 = Latitude * Math.PI / 180;
+            double Δφ = (Latitude - lat) * Math.PI / 180;
+            double Δλ = (Longtitude - lon) * Math.PI / 180;
+
+            double a = Math.Sin(Δφ / 2) * Math.Sin(Δφ / 2) +
+                      Math.Cos(F1) * Math.Cos(F2) *
+                      Math.Sin(Δλ / 2) * Math.Sin(Δλ / 2);
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+            double d = R * c; // in metres
+
+            if ((d / 1000) < RangeInKm)
+                return true;
+            return false;
+        }
     }
 }

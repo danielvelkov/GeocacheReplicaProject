@@ -4,86 +4,122 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Geocache.Views"
-      mc:Ignorable="d" 
-      MinWidth="800" MinHeight="500">
+             
+        xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+             xmlns:converter="clr-namespace:Geocache.Converters"
+        mc:Ignorable="d" 
+             
+     MinHeight="700" MinWidth="800">
 
     <Grid>
         <Grid.ColumnDefinitions>
-
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid>
+            <Grid.Resources>
+                <converter:DiffTxtBlockConverter x:Key="diffTxtBlockConverter"></converter:DiffTxtBlockConverter>
+                <Style x:Name="LabelStyle" TargetType="{x:Type Label}">
+                    <Setter Property="FontSize" Value="18"></Setter>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                </Style>
+                <Style x:Name="TxtBoxStyle" TargetType="{x:Type TextBox}">
+                    <Setter Property="FontSize" Value="14"></Setter>
+                    <Setter Property="Height" Value="20"></Setter>
+                    <Setter Property="Background" Value="WhiteSmoke"></Setter>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                    <Setter Property="Margin" Value="10,0,10,0"></Setter>
+                </Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="FontSize" Value="20"></Setter>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
             <StackPanel Name="treasureInfo" Orientation="Vertical">
-                <TextBlock>Name of the treasure:</TextBlock>
+                <Label>Name of the treasure:</Label>
                 <TextBox Name="treasureNameTxtBox"></TextBox>
 
-                <TextBlock>Description:</TextBlock>
-                <RichTextBox Name="descriptionTxtBox" Height="30" ></RichTextBox>
+                <Label>Description:</Label>
+                <TextBox Height="100"></TextBox>
 
-                <TextBlock>Type:</TextBlock>
-                <ComboBox Name="types" ></ComboBox>
-                <TextBlock>Size:</TextBlock>
-                <ComboBox Name="sizes"></ComboBox>
-                <TextBlock>Difficulty:</TextBlock>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label>Type of treasure:</Label>
+                    <ComboBox ItemsSource="{Binding TreasureTypes}" Margin="10,0,10,0" 
+                     SelectedItem="{Binding SelectedTreasureType}"     Width="100" ></ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label>Size of treasure :</Label>
+                    <ComboBox ItemsSource="{Binding TreasureSizes}" Margin="10,0,10,0" 
+                     SelectedItem="{Binding SelectedTreasureSize}"     Width="100"></ComboBox>
+                </StackPanel>
+
+                <Label>Difficulty:</Label>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="{Binding ElementName=scrollBar, Path=Value}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+                    <Label Grid.Column="0" Content="{Binding ElementName=scrollBar, Path=Value}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></Label>
                     <ScrollBar Grid.Column="1" Name="scrollBar" Minimum="1" Value="{Binding DifficultyRating}" SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
-                    <ScrollBar.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="180"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </ScrollBar.RenderTransform>
-                </ScrollBar>
-                    <TextBlock Grid.Column="2" Text="{Binding Difficulties}"></TextBlock>
-        </Grid>
+                        <ScrollBar.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="180"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ScrollBar.RenderTransform>
+                    </ScrollBar>
+                    <Label Content="{Binding ElementName=scrollBar, Path=Value,Converter={StaticResource diffTxtBlockConverter}}" Grid.Column="2" ></Label>
+                </Grid>
+                <StackPanel Orientation="Horizontal">
 
-        <StackPanel Orientation="Horizontal">
-
-                    <TextBlock Height="30">Is connected to other treasure</TextBlock>
-                    <CheckBox Name="isChainedCheckBox"></CheckBox>
+                    <Label>Is connected to other treasure</Label>
+                    <CheckBox Content="{Binding Treasure.isChained}" VerticalAlignment="Center"></CheckBox>
                 </StackPanel>
                 <Button >Set marker info about the location</Button>
 
             </StackPanel>
-
-
             <StackPanel Name="markerInfo" Orientation="Vertical" Grid.Row="1">
-                <TextBlock>Country(optional):</TextBlock>
+                <Label>Country(optional):</Label>
                 <TextBox Text="{Binding Country}"></TextBox>
-                <TextBlock>City(optional):</TextBlock>
+                <Label>City(optional):</Label>
                 <TextBox Text="{Binding City}"></TextBox>
-                <TextBlock>Adress:</TextBlock>
+                <Label>Adress:</Label>
                 <TextBox Text="{Binding Adress}"></TextBox>
-                <Button Name="dropMarkerBttn">Drop marker</Button>
-                <GroupBox Header="Coordinates:">
-                    <StackPanel>
-                        <TextBlock>Latitude:</TextBlock>
-                        <TextBlock Name="lat" x:FieldModifier="public"></TextBlock>
-                        <TextBlock>Longtitude:</TextBlock>
-                        <TextBlock Name="long" x:FieldModifier="public"></TextBlock>
-                    </StackPanel>   
+                <Button Command="{Binding DropMarker}">Drop marker</Button>
+                <GroupBox FontSize="16" Header="Coordinates:">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0">Latitude:</Label>
+                        <TextBlock Grid.Row="0" Grid.Column="1"></TextBlock>
+                        <Label Grid.Row="1" Grid.Column="0">Longtitude:</Label>
+                        <TextBlock Grid.Row="1" Grid.Column="1"></TextBlock>
+                    </Grid>   
                 </GroupBox>
-                <Button>Save Treasure</Button>
+                <Button Command="{Binding SaveTreasure}">Save Treasure</Button>
+                <Button Command="{Binding GoBack}">Go Back</Button>
             </StackPanel>
         </Grid>
         
 
-        <Grid Grid.Column="1">
-            <WebBrowser Name="browser"></WebBrowser>
-        </Grid>
+        <GroupBox Header="Treasure Location" FontSize="16" Margin="5" Grid.Column="1">
+            <wpf:ChromiumWebBrowser WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}"  ></wpf:ChromiumWebBrowser>
+        </GroupBox>
     </Grid>
 </UserControl>

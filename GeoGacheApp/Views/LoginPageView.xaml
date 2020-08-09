@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Geocache"
         mc:Ignorable="d"
-         Height="auto" Width="auto">
+         MinHeight="400" MinWidth="500">
     <UserControl.InputBindings>
         <KeyBinding Command="{Binding Login}" Key="Enter"></KeyBinding>
     </UserControl.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -23,9 +24,7 @@
         <GroupBox Grid.Row="1" Header="Login" Width="300" Height="100">
             <Grid Margin="10,0,10,10">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*">
-
-                    </ColumnDefinition>
+                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -39,7 +38,6 @@
                 <PasswordBox x:Name="password" PasswordChanged="PasswordBox_PasswordChanged" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" PasswordChar="*"  ></PasswordBox>
                 <TextBlock Text="{Binding ErrorMsg}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Foreground="Red" HorizontalAlignment="Stretch" Height="23" VerticalAlignment="Center" ></TextBlock>
             </Grid>
-
         </GroupBox>
         <Grid Grid.Row="2" Width="350">
             <Grid.ColumnDefinitions>
@@ -47,7 +45,10 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Button Command="{Binding Login}" FontSize="16" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Height="30" />
-            <TextBlock VerticalAlignment="top" HorizontalAlignment="Center"  Grid.Column="1" FontSize="18"><Hyperlink Command="{Binding Register}">New to the app?</Hyperlink></TextBlock>
+            <TextBlock VerticalAlignment="top" HorizontalAlignment="Center"  Grid.Column="1" FontSize="18">
+                <Hyperlink Command="{Binding Register}">New to the app?</Hyperlink>
+            </TextBlock>
         </Grid>
+        <TextBlock Grid.Row="3" HorizontalAlignment="Center" FontSize="16">USER: geochacher2 meatballs <LineBreak></LineBreak> MOD: geochacher3 baloni <LineBreak></LineBreak> ADMIN: adminadmin password</TextBlock>
     </Grid>
 </UserControl>

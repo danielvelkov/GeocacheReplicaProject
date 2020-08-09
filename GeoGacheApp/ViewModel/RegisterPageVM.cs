@@ -116,7 +116,8 @@ namespace Geocache.ViewModel
                                     SetErrorMsg("user already exists");
                                     return;
                                 }
-                                    
+
+                                User.Password = Password;
                                 User.createdAt = DateTime.Now;
                                 User.isBanned = false;
                                 User.Points = 0;

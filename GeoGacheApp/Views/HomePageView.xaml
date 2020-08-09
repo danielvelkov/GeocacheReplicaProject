@@ -8,7 +8,7 @@
       xmlns:browserVM="clr-namespace:Geocache.ViewModel.BrowserVM"
       xmlns:browserViews="clr-namespace:Geocache.Views.BrowsersViews"
       xmlns:cefsharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
-      
+      xmlns:enums="clr-namespace:Geocache.Enums"
       mc:Ignorable="d" 
       MinWidth="800" MinHeight="650">
     <UserControl.Resources>
@@ -18,16 +18,11 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.4*">
-
-            </ColumnDefinition>
-            <ColumnDefinition>
-
-            </ColumnDefinition>
+            <ColumnDefinition Width="0.4*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
-        <StackPanel Name="buttonPanel">
-            <TextBlock Text="{Binding Welcome}"></TextBlock>
+        <StackPanel>
+            <TextBlock  Text="{Binding Welcome}" Margin="10"></TextBlock>
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                     <TextBlock VerticalAlignment="Center" Margin="0,0,10,0"><Hyperlink Command="{Binding GoToUserPage}"  Foreground="Gray">Manage account info...</Hyperlink></TextBlock>
@@ -40,30 +35,64 @@
                     </Image.Source>
                 </Image>
             </StackPanel>
-
-            <Label HorizontalAlignment="Center">User only:</Label>
-            <!--this shows all the markers around your starting location-->
-            <Button Command="{Binding FindTreasure}" Name="findTreasureBttn" Height="30" Width="150">Find Treasure</Button>
+            
+            <!--this shows all the markers around your starting location in a 1km radius-->
+            <Button Command="{Binding FindTreasure}"  Name="findTreasureBttn" Height="30" Width="150">Find Treasure</Button>
             <Button Command="{Binding HideTreasure}" Height="30" Width="150">Hide a Treasure</Button>
             <Button Command="{Binding ShowUserTreasures}" Name="myTreasuresBttn" Height="30" Width="150">My Treasures</Button>
             <Button Command="{Binding ShowLeaderBoards}" Name="leaderboardsBttn" Height="30" Width="150">Leaderboards</Button>
 
             <Label Height="30"></Label>
-            <Label HorizontalAlignment="Center">Mod only</Label>
-            <Button Height="30" Width="150">Moderate Treasures</Button>
-
-
+            <StackPanel >
+                <StackPanel.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <!--could be done with a converter but im laze-->
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.USER}">
+                                <Setter Property="StackPanel.Visibility" Value="Hidden"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.MOD}">
+                                <Setter Property="StackPanel.Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.ADMIN}">
+                                <Setter Property="StackPanel.Visibility" Value="Hidden"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <Label HorizontalAlignment="Center">Mod only</Label>
+                <Button Height="30" Width="150">
+                    <TextBlock>Moderate Treasures</TextBlock>
+                </Button>
+            </StackPanel>
+            
             <Label Height="30"></Label>
-            <Label HorizontalAlignment="Center">Admin only</Label>
-            <Button Name="changeRoleBttn" Height="30" Width="150">Change User Role</Button>
-            <Button Name="deleteBttn" Height="30" Width="156">Delete accounts and Treasures</Button>
-
+            <StackPanel>
+                <StackPanel.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <!--could be done with a converter but im laze-->
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.USER}">
+                                <Setter Property="StackPanel.Visibility" Value="Hidden"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.MOD}">
+                                <Setter Property="StackPanel.Visibility" Value="Hidden"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.ADMIN}">
+                                <Setter Property="StackPanel.Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <Label HorizontalAlignment="Center">Admin only</Label>
+                <Button Name="changeRoleBttn" Height="30" Width="150">Change User Role</Button>
+                <Button Name="deleteBttn" Height="30" Width="156">Delete accounts and Treasures</Button>
+            </StackPanel>
         </StackPanel>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            
             <ContentControl Content="{Binding HomePageBrowserVM, Source={StaticResource Locator} }" ></ContentControl>
         </Grid>
     </Grid>

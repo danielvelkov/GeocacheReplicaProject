@@ -35,11 +35,8 @@ namespace Geocache.ViewModel
             
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LoginPageVM>();
-            SimpleIoc.Default.Register<HomePageVM>();
             SimpleIoc.Default.Register<RegisterPageVM>();
-            SimpleIoc.Default.Register<UserPageVM>();
             SimpleIoc.Default.Register<HideTreasurePageVM>();
-            SimpleIoc.Default.Register<HomePageBrowserVM>();
         }
         
         public static void Cleanup()
@@ -97,8 +94,12 @@ namespace Geocache.ViewModel
                 return ServiceLocator.Current.GetInstance<UserPageVM>();
             }
         }
-        // learn about the messenger. its like the mediator class in my previous project
-        // https://docs.microsoft.com/en-us/archive/msdn-magazine/2013/march/mvvm-messenger-and-view-services-in-mvvm
-
+        public static HideTreasurePageVM HideTreasurePageVM
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<HideTreasurePageVM>();
+            }
+        }
     }
 }

@@ -21,11 +21,12 @@ namespace Geocache.ViewModel
             UserData = userData;
         }
 
+        #region Parameters
         private User currentUser;
         public UserDataService UserData { get; }
-        
+
         public const string CurrentUserPropertyName = "CurrentUser";
-        
+
         /// <summary>
         /// Sets and gets the CurrentUser property.
         /// Changes to that property's value raise the PropertyChanged event. 
@@ -51,6 +52,8 @@ namespace Geocache.ViewModel
             }
         }
 
+        #endregion
+
         #region commands
         private ICommand saveChanges;
         private ICommand goBack;
@@ -74,8 +77,9 @@ namespace Geocache.ViewModel
                               user.City = CurrentUser.City;
                               user.Country = CurrentUser.Country;
                               unitOfWork.Complete();
-                              MessageBox.Show("Changes to account made", "saved", MessageBoxButton.OK);
-
+                              MessageBoxResult result =MessageBox.Show("Changes to account made", "saved", MessageBoxButton.OK);
+                              if (result == MessageBoxResult.OK)
+                                  GoBack.Execute(null);
                           }
 
                       }
@@ -99,7 +103,6 @@ namespace Geocache.ViewModel
 
             }
         }
-
         #endregion
     }
 }

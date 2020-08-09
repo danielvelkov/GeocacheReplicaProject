@@ -184,7 +184,7 @@
       function codeAdress(adress) {
           geocoder.geocode({ 'address': adress }, function (results, status) {
               if (status == 'OK') {
-
+                  homeMarker = null;
                   var image='https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
                   map.setCenter(results[0].geometry.location);
                   map.setZoom(15);

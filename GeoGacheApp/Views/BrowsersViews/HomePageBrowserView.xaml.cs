@@ -46,7 +46,6 @@ namespace Geocache.Views.BrowsersViews
                     SchemeName = "localfolder",
                     DomainName = "cefsharp",
                     SchemeHandlerFactory = new FolderSchemeHandlerFactory(
-                //rootFolder: @"D:\PS kursov proekt\kursov proekt-2019_04_24\kursov proekt\Geocaching\GeoCacheGame\GeoGacheApp\html",
                 rootFolder: string.Format(@"{0}\html", System.AppDomain.CurrentDomain.BaseDirectory),
                 hostName: "cefsharp",
                 defaultPage: "map.html" // will default to map.html
