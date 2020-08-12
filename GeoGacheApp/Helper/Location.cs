@@ -44,6 +44,16 @@ namespace Geocache.Helper
                     }
                 }
             }
+
+            // jeesus christ. i did that cuz json uses weird culture and just .replace doesnt work
+            //StringBuilder sb = new StringBuilder(latitude);
+            //sb[2] = ',';
+            //latitude = sb.ToString();
+
+            //StringBuilder sb2 = new StringBuilder(longtitude);
+            //sb2[2] = ',';
+            //longtitude = sb2.ToString();
+
             FixJobjectString(ref latitude);
             FixJobjectString(ref longtitude);
            

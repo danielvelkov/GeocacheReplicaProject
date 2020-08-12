@@ -1,6 +1,5 @@
 ﻿using Geocache;
 using Geocache.Interfaces;
-using Geocache.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -21,17 +20,9 @@ namespace Geocache.Database.Repositories
             get { return Context as GeocachingContext; }
         }
 
-        public List<Treasure> GetOthersTreasures(int UserID)
+        public List<Treasure> GetTreasures(int UserID)
         {
             return TreasureContext.Treasures.Where(t => t.UserId != UserID).ToList();
-        }
-        public List<Treasure> GetUserTreasures(int UserID)
-        {
-            return TreasureContext.Treasures.Where(t => t.UserId == UserID).ToList();
-        }
-        public List<Treasure> GetUserTreasuresNotChained(int UserID)
-        {
-            return TreasureContext.Treasures.Where(t => (t.UserId == UserID) && t.isChained==false).ToList();
         }
     }
 }

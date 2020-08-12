@@ -58,18 +58,5 @@ namespace Geocache.Models
                 return true;
             return false;
         }
-
-        public string GetMarkerAddress()
-        {
-            StringBuilder address = new StringBuilder();
-            if (!string.IsNullOrEmpty(this.Adress))
-                address.Append(this.Adress + ",");
-            if (!string.IsNullOrEmpty(this.City))
-                address.Append(this.City + ",");
-            if (!string.IsNullOrEmpty(this.Country))
-                address.Append(this.Country);
-            else address.Length--;
-            return address.ToString();
-        }
     }
 }

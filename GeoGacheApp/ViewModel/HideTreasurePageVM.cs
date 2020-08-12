@@ -1,18 +1,13 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CefSharp;
+using CefSharp.Wpf;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
-using Geocache.Database;
 using Geocache.Enums;
-using Geocache.Helper;
-using Geocache.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace Geocache.ViewModel
@@ -32,14 +27,9 @@ namespace Geocache.ViewModel
         #region fields
         private TreasureType selectedTreasureType = TreasureType.NORMAL;
         private TreasureSizes selectedTreasureSize = Enums.TreasureSizes.MEDIUM;
-        private Treasure treasure;
-        private Treasure treasureChain;
-        private MarkerInfo markerInfo;
         #endregion
 
         #region Params
-        public UserDataService UserData { get; }
-
         public TreasureType SelectedTreasureType
         {
             get
@@ -58,8 +48,7 @@ namespace Geocache.ViewModel
             get
             {
                 return Enum.GetValues(typeof(TreasureType))
-                    .Cast<TreasureType>()
-                    .Except(new TreasureType[] { TreasureType.ANY });
+                    .Cast<TreasureType>();
             }
         }
 
@@ -78,8 +67,7 @@ namespace Geocache.ViewModel
             get
             {
                 return Enum.GetValues(typeof(TreasureSizes))
-                    .Cast<TreasureSizes>()
-                    .Except(new TreasureSizes[] { Enums.TreasureSizes.ANY} );
+                    .Cast<TreasureSizes>();
             }
         }
 
@@ -231,8 +219,8 @@ namespace Geocache.ViewModel
             }
         }
 
-        //private ChromiumWebBrowser webBrowser;
-        //public const string WebBrowserPropertyName = "WebBrowser";
+        private ChromiumWebBrowser webBrowser;
+        public const string WebBrowserPropertyName = "WebBrowser";
 
         ///// <summary>
         ///// Sets and gets the WebBrowser property.
@@ -252,23 +240,21 @@ namespace Geocache.ViewModel
         //            return;
         //        }
 
-        //        webBrowser = value;
-        //        // second check is when the destruction is called
-        //        if (webBrowser != null && webBrowser.Address == null)
-        //        {
-        //            webBrowser.Address = "localfolder://cefsharp/map_hiding.html";
-        //            webBrowser.JavascriptObjectRepository.Register("hideTreasureVM",
-        //                this, true,BindingOptions.DefaultBinder);
-        //        }
-        //        RaisePropertyChanged(WebBrowserPropertyName);
-        //    }
-        //}
+                webBrowser = value;
+                // second check is when the destruction is called
+                if (webBrowser != null && webBrowser.Address == null)
+                {
+                    webBrowser.Address = "localfolder://cefsharp/map_hiding.html";
+                    webBrowser.JavascriptObjectRepository.Register("hideTreasureVM",
+                        this, true,BindingOptions.DefaultBinder);
+                }
+                RaisePropertyChanged(WebBrowserPropertyName);
+            }
+        }
         #endregion
 
         #region Commands
         private ICommand goBack;
-        private ICommand dropMarker;
-        private ICommand saveTreasure;
         public ICommand GoBack
         {
             get
@@ -276,7 +262,6 @@ namespace Geocache.ViewModel
                 return goBack ?? (goBack =
                   new RelayCommand((() =>
                   {
-                      SimpleIoc.Default.Unregister<HideTreasurePageVM>();
                       MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
                   })
                 ));
@@ -294,7 +279,7 @@ namespace Geocache.ViewModel
                       MarkerInfo.Adress = Address;
                       MarkerInfo.Country = Country;
                       MarkerInfo.City = City;
-                      //WebBrowser.ExecuteScriptAsync("codeAdress", MarkerInfo.GetMarkerAddress());
+                      WebBrowser.ExecuteScriptAsync("codeAdress", MarkerInfo.GetMarkerAddress());
                   }));
             }
         }

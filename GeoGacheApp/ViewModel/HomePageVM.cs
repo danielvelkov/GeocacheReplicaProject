@@ -100,7 +100,6 @@ namespace Geocache.ViewModel
                 if (goToUserPage == null)
                     goToUserPage = new RelayCommand(() =>
                     {
-                        SimpleIoc.Default.Register<UserPageVM>();
                         MessengerInstance.Send<ViewModelBase>(ViewModelLocator.UserPageVM, "ChangePage");
                     });
                 return goToUserPage;
@@ -127,7 +126,6 @@ namespace Geocache.ViewModel
                 if (hideTreasure == null)
                     hideTreasure = new RelayCommand(() =>
                     {
-                        SimpleIoc.Default.Register<HideTreasurePageVM>();
                         MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HideTreasurePageVM, "ChangePage");
                     });
                 return hideTreasure;

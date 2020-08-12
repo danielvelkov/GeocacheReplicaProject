@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Hide Treasure</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <style>
@@ -70,11 +71,11 @@
             padding: 5px 11px;
         }
 
-        .pac-controls label {
-            font-family: Roboto;
-            font-size: 13px;
-            font-weight: 300;
-        }
+            .pac-controls label {
+                font-family: Roboto;
+                font-size: 13px;
+                font-weight: 300;
+            }
 
         #pac-input {
             background-color: #fff;
@@ -87,9 +88,9 @@
             width: 400px;
         }
 
-        #pac-input:focus {
-            border-color: #4d90fe;
-        }
+            #pac-input:focus {
+                border-color: #4d90fe;
+            }
 
         #title {
             color: #fff;
@@ -108,8 +109,7 @@
     <script type="text/javascript">
       var geocoder;
       var map;
-      var searchMarkers = [];
-      var treasureMarkers= [];  
+      var markers = [];
       function initMap() {
         geocoder = new google.maps.Geocoder();
         map = new google.maps.Map(document.getElementById('map'), {
@@ -124,14 +124,14 @@
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
           // Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed',  ()=> {
+        map.addListener('bounds_changed', function () {
             searchBox.setBounds(map.getBounds());
         });
 
         
           // Listen for the event fired when the user selects a prediction and retrieve
           // more details for that place.
-        searchBox.addListener('places_changed',() => {
+        searchBox.addListener('places_changed', function () {
             var places = searchBox.getPlaces();
 
             if (places.length == 0) {
@@ -139,14 +139,14 @@
             }
 
             // Clear out the old markers.
-            searchMarkers.forEach(marker=> {
+            markers.forEach(function (marker) {
                 marker.setMap(null);
             });
-            searchMarkers = [];
+            markers = [];
 
             // For each place, get the icon, name and location.
             var bounds = new google.maps.LatLngBounds();
-            places.forEach(place => {
+            places.forEach(function (place) {
                 if (!place.geometry) {
                     console.log("Returned place contains no geometry");
                     return;
@@ -160,14 +160,12 @@
                 };
 
                 // Create a marker for each place.
-                searchMarkers.push(new google.maps.Marker({
+                markers.push(new google.maps.Marker({
                     map: map,
                     icon: icon,
                     title: place.name,
                     position: place.geometry.location
-
                 }));
-
 
                 if (place.geometry.viewport) {
                     // Only geocodes have viewport.
@@ -175,8 +173,6 @@
                 } else {
                     bounds.extend(place.geometry.location);
                 }
-
-
             });
             map.fitBounds(bounds);
         });
@@ -185,76 +181,56 @@
 
       function codeAdress(adress) {
           geocoder.geocode({ 'address': adress }, function (results, status) {
-              if (status == 'OK' ) {
-                  if(treasureMarkers[0]!=null &&
-                     parseFloat(treasureMarkers[0].position.lat().toFixed(3))==
-                     parseFloat(results[0].geometry.location.lat().toFixed(3))) {
-                      // do nothing
-                      alert('marker is already dropped \n');
-                  }
-                  else if(treasureMarkers.length !=0)
-                  {
-                      for (var i = 0; i < treasureMarkers.length; i++) {
-                          treasureMarkers[i].setMap(null);
-                      }
-                      treasureMarkers = []; //clear marker(s)
-                  }
-                  else
-                  {
-                      map.setCenter(results[0].geometry.location);
-                      map.setZoom(14);
-                      var marker = new google.maps.Marker({
-                          map:map,
-                          animation: google.maps.Animation.BOUNCE,
-                          position: results[0].geometry.location,
-                          draggable: true,
-                          title: "This is your treasure"
+              if (status == 'OK' && markers.length ==0) {
 
-                      });
-                      treasureMarkers.push(marker);
-                      google.maps.event.addListener(marker, 'dragend', function () {
-                          eventEndDragMarker(marker)
-                      })
+
+                  map.setCenter(results[0].geometry.location);
+                  map.setZoom(15);
+                  var marker = new google.maps.Marker({
+                      map:map,
+                      animation: google.maps.Animation.DROP,
+                      position: results[0].geometry.location,
+                      draggable: true,
+                      title: "this is your treasure"
+
+                  });
+                  markers.push(marker);
+                  eventEndDragMarker(marker);
+                  google.maps.event.addListener(marker, 'dragend', function () {
+                      eventEndDragMarker(marker)
+                  })
+              }
+              else {
+                  for (var i = 0; i < markers.length; i++) {
+                      markers[i].setMap(null);
                   }
+                  markers = [];
+                  alert('Adress not found or marker on map');
               }
-              else if(status='INVALID_REQUEST'){
-                  alert("wrong address or isnt accurate enough");
-              }
-              else alert(status);
           });
       }
       function eventEndDragMarker(marker) {
           var pos = new google.maps.LatLng;
           pos = marker.getPosition();
-          marker.setAnimation(google.maps.Animation.DROP);
-          endDragMarker(pos);
+          endDragMarker(pos.lat(), pos.lng());
       }
-        //this is the binding to the .net object 
-      async function endDragMarker(pos) {
-          await CefSharp.BindObjectAsync("hideTreasureVM");
-          geocoder.geocode({'location': pos}, function(results, status) {
-              if (status === 'OK') {
-                  if (results[0]) {
-                      
-                      hideTreasureVM.endDragMarkerCS(pos.lat(), pos.lng(),results[0].formatted_address);
-                  } 
-                  else {
-                      window.alert('No results found');
-                  }
-              } 
-              else {
-                  window.alert('Geocoder failed due to: ' + status);
-              }
-          });
-        }
+
+      function endDragMarker(lat, long) {
+          window.external.endDragMarkerCS(lat, long);
+      }
     </script>
 
 </head>
 <body onload="initMap()">
-    <input id="pac-input" 
-           class="controls"
-           type="text" 
-           placeholder="Search Box"/>
-    <div id="map"></div>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+
+    <!-- HANDLE THE GEOCODE-->
+    <div id="floating-panel" style="position:relative">
+        <input id="address"  value="sofia">
+        <input type="button" value="encode" onclick="codeaddress()">
+    </div>
+    <div id="map">
+
+    </div>
 </body>
 </html>

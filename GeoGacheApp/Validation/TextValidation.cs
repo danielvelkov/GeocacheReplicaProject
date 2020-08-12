@@ -10,8 +10,10 @@ namespace Geocache.Validation
     class TextValidation : ValidationRule
     {
         public string Type { get; set; }
-        const int MAX_HEADER_LENGHT = 20;
-        const int MAX_CONTENT_LENGHT = 250;
+
+        // TODO validation things
+        // -if another article with the name exists
+        // ...
 
         public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
         {
@@ -21,14 +23,12 @@ namespace Geocache.Validation
                 switch (Type)
                 {
                     case "Header":
-                        if ((value as string).Length > MAX_HEADER_LENGHT)
-                            return new ValidationResult(false, 
-                                String.Format("Header cant be longer than {0} characters",MAX_HEADER_LENGHT));
+                        if ((value as string).Length > 20)
+                            return new ValidationResult(false, "Header cant be longer than 20 characters");
                         break;
-                    case "Content":
-                        if ((value as string).Length > MAX_CONTENT_LENGHT)
-                            return new ValidationResult(false, 
-                                String.Format("Content cant be longer than {0} characters",MAX_CONTENT_LENGHT));
+                    case "Comment":
+                        if ((value as string).Length > 250)
+                            return new ValidationResult(false, "Comment cant be longer than 250 characters");
                         break;
                 }
             return new ValidationResult(true, null);

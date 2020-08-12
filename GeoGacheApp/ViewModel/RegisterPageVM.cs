@@ -1,6 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
 using Geocache.Database;
 using Geocache.Models;
 using System;
@@ -143,7 +142,6 @@ namespace Geocache.ViewModel
                 if (goToLoginPage == null)
                     goToLoginPage = new RelayCommand(() =>
                      {
-                         SimpleIoc.Default.Unregister<RegisterPageVM>();
                          MessengerInstance.Send<ViewModelBase>(ViewModelLocator.LoginPageVM, "ChangePage");
                      });
                 return goToLoginPage;

@@ -132,9 +132,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\DiffTxtBlockConverter.cs" />
-    <Compile Include="Converters\IsNullOrWhiteSpaceConverter.cs" />
     <Compile Include="Converters\RngTxtBlockConverter.cs" />
-    <Compile Include="Database\Repositories\ChainedTreasureRepository.cs" />
     <Compile Include="Database\Repositories\Repository.cs" />
     <Compile Include="Database\Repositories\TreasureRepository.cs" />
     <Compile Include="Database\Repositories\UserRepository.cs" />
@@ -143,11 +141,9 @@
     <Compile Include="Enums\TreasureSizes.cs" />
     <Compile Include="Enums\TreasureTypes.cs" />
     <Compile Include="Enums\UserRoles.cs" />
-    <Compile Include="Helper\JavascriptEventHandler.cs" />
     <Compile Include="Helper\Location.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Helper\UserDataService.cs" />
-    <Compile Include="Interfaces\IChainedTreasuresRepository.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
     <Compile Include="Interfaces\IFoundTreasuresRepository.cs" />
     <Compile Include="Interfaces\IMarkerRepository.cs" />
@@ -155,6 +151,19 @@
     <Compile Include="Interfaces\ITreasureRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
+    <Compile Include="Migrations\201906210949422_InitialCreate.cs" />
+    <Compile Include="Migrations\201906210949422_InitialCreate.Designer.cs">
+      <DependentUpon>201906210949422_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906211021444_InitialCreate1.cs" />
+    <Compile Include="Migrations\201906211021444_InitialCreate1.Designer.cs">
+      <DependentUpon>201906211021444_InitialCreate1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906211040429_InitilCra1.cs" />
+    <Compile Include="Migrations\201906211040429_InitilCra1.Designer.cs">
+      <DependentUpon>201906211040429_InitilCra1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Chained_Treasures.cs" />
     <Compile Include="Models\MarkerInfo.cs" />
     <Compile Include="Validation\LoginValidation.cs" />
@@ -251,6 +260,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201906210949422_InitialCreate.resx">
+      <DependentUpon>201906210949422_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906211021444_InitialCreate1.resx">
+      <DependentUpon>201906211021444_InitialCreate1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906211040429_InitilCra1.resx">
+      <DependentUpon>201906211040429_InitilCra1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

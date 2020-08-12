@@ -1,5 +1,4 @@
 ﻿using Geocache;
-using Geocache.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +12,6 @@ namespace Geocache.Interfaces
         //methods concerning treasures
 
         //get all treasures that user hasnt found
-        List<Treasure> GetOthersTreasures(int UserID);
-        List<Treasure> GetUserTreasures(int UserID);
-        List<Treasure> GetUserTreasuresNotChained(int UserID);
+        List<Treasure> GetTreasures(int UserID);
     }
 }
