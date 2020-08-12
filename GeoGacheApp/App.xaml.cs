@@ -1,4 +1,7 @@
-﻿using GalaSoft.MvvmLight.Threading;
+﻿using CefSharp;
+using CefSharp.SchemeHandler;
+using CefSharp.Wpf;
+using GalaSoft.MvvmLight.Threading;
 using Geocache.ViewModel;
 using Geocache.Views;
 using System;

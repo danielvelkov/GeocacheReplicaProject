@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.Ioc;
 
 namespace Geocache.ViewModel
 {
@@ -21,8 +22,8 @@ namespace Geocache.ViewModel
         public HideTreasurePageVM(UserDataService userdata)
         {
             UserData = userdata;
-            //CefSharpSettings.LegacyJavascriptBindingEnabled = true;
-            //CefSharpSettings.WcfEnabled = true;
+            CefSharpSettings.LegacyJavascriptBindingEnabled = true;
+            CefSharpSettings.WcfEnabled = true;
             Treasure = new Treasure();
             MarkerInfo = new MarkerInfo();
             TreasureChain = new Treasure();
@@ -57,7 +58,7 @@ namespace Geocache.ViewModel
             get
             {
                 return Enum.GetValues(typeof(TreasureType))
-                    .Cast<TreasureType>();
+                    .Cast<TreasureType>().Except(new TreasureType[] { TreasureType.ANY });
             }
         }
 
@@ -76,7 +77,7 @@ namespace Geocache.ViewModel
             get
             {
                 return Enum.GetValues(typeof(TreasureSizes))
-                    .Cast<TreasureSizes>();
+                    .Cast<TreasureSizes>().Except(new TreasureSizes[] { Enums.TreasureSizes.ANY});
             }
         }
 
@@ -271,6 +272,7 @@ namespace Geocache.ViewModel
                 return goBack ?? (goBack =
                   new RelayCommand((() =>
                   {
+                      SimpleIoc.Default.Unregister<HideTreasurePageVM>();
                       MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
                   })
                 ));
@@ -317,20 +319,27 @@ namespace Geocache.ViewModel
                                 MarkerInfo.Country = Country;
                                 MarkerInfo.Latitude = Latitude;
                                 MarkerInfo.Longtitude = Longtitude;
-
+                                
                                 UnitOfWork.Treasures.Add(Treasure);
                                 Treasure.MarkerInfo = MarkerInfo;
                                 // add a messagebox for if you want to change your key if you already have one
                                 UnitOfWork.Complete();
 
-                                if (Treasure.IsChained)
+                                if (Treasure.IsChained && TreasureChain.ID!=0)
                                 {
                                     UnitOfWork.ChainedTreasures.Add(
                                         new Chained_Treasures(TreasureChain.ID, Treasure.ID));
-                                    //TreasureChain.isChained = true;
+                                    UnitOfWork.Complete();
+                                    // set the previous treasure to chained=>meaning it cant be chained to anymore
+                                    Treasure updatedTreasure = UnitOfWork.Treasures.Get(TreasureChain.ID);
+                                    updatedTreasure.IsChained = true;
                                     UnitOfWork.Complete();
                                 }
-
+                                // always set the new treasure to ischained=false so you can chain it
+                                Treasure updatedTreasure2 = UnitOfWork.Treasures.Get(Treasure.ID);
+                                updatedTreasure2.IsChained = false;
+                                UnitOfWork.Complete();
+                                
                                 MessageBoxResult result=MessageBox.Show("Treasure added succesfully", "Treasure added", MessageBoxButton.OK);
                                 if (result == MessageBoxResult.OK)
                                     MessageBox.Show(string.Format("The key:{0} was generated.if you have your own key for the treasure go to MyTreasures and change it!", Treasure.Key), "Key generated", MessageBoxButton.OK);

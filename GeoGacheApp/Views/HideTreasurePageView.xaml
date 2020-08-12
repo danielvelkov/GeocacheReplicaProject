@@ -11,23 +11,23 @@
         mc:Ignorable="d" 
              
      MinHeight="700" MinWidth="800">
-
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition MaxWidth="400"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid>
             <Grid.Resources>
                 <converter:DiffTxtBlockConverter x:Key="diffTxtBlockConverter"></converter:DiffTxtBlockConverter>
+                <converter:IsNullOrWhiteSpaceConverter x:Key="IsNullOrWhiteSpaceConverter"></converter:IsNullOrWhiteSpaceConverter>
                 <Style x:Name="LabelStyle" TargetType="{x:Type Label}">
-                    <Setter Property="FontSize" Value="18"></Setter>
+                    <Setter Property="FontSize" Value="16"></Setter>
                     <Setter Property="VerticalAlignment" Value="Center"></Setter>
                     <Setter Property="HorizontalAlignment" Value="Center"></Setter>
                 </Style>
                 <Style x:Name="TxtBoxStyle" TargetType="{x:Type TextBox}">
                     <Setter Property="FontSize" Value="14"></Setter>
-                    <Setter Property="Height" Value="20"></Setter>
+                    <Setter Property="Height" Value="24"></Setter>
                     <Setter Property="Background" Value="WhiteSmoke"></Setter>
                     <Setter Property="VerticalAlignment" Value="Center"></Setter>
                     <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -42,22 +42,37 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <StackPanel Name="treasureInfo" Orientation="Vertical">
+            <StackPanel Orientation="Vertical">
                 <Label>Name of the treasure:</Label>
-                <TextBox Name="treasureNameTxtBox"></TextBox>
+                <TextBox Name="nameTxtBox" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+                    <TextBox.Text>
+                        <Binding Path="Treasure.Name">
+                            <Binding.ValidationRules>
+                                <validate:TextValidation Type="Header"></validate:TextValidation>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
 
                 <Label>Description:</Label>
-                <TextBox Height="100"></TextBox>
-
+                <TextBox Name="descriptionTxtBox" TextWrapping="Wrap" Height="100" VerticalScrollBarVisibility="Auto">
+                    <TextBox.Text>
+                        <Binding Path="Treasure.Description">
+                            <Binding.ValidationRules>
+                                <validate:TextValidation Type="Content"></validate:TextValidation>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
 
                 <StackPanel Orientation="Horizontal">
                     <Label>Type of treasure:</Label>
-                    <ComboBox ItemsSource="{Binding TreasureTypes}" Margin="10,0,10,0" 
-                     SelectedItem="{Binding SelectedTreasureType}"     Width="100" ></ComboBox>
+                    <ComboBox ItemsSource="{Binding TreasureTypes}" Name="typeCmboBox" Margin="10,0,10,0" 
+                     SelectedItem="{Binding SelectedTreasureType}" Width="100" ></ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label>Size of treasure :</Label>
-                    <ComboBox ItemsSource="{Binding TreasureSizes}" Margin="10,0,10,0" 
+                    <ComboBox ItemsSource="{Binding TreasureSizes}" Name="sizeCmboBox" Margin="10,0,10,0" 
                      SelectedItem="{Binding SelectedTreasureSize}"     Width="100"></ComboBox>
                 </StackPanel>
 
@@ -69,7 +84,7 @@
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Content="{Binding ElementName=scrollBar, Path=Value}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></Label>
-                    <ScrollBar Grid.Column="1" Name="scrollBar" Minimum="1" Value="{Binding DifficultyRating}" SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
+                    <ScrollBar Grid.Column="1" Name="scrollBar" Minimum="1" Value="{Binding Treasure.Difficulty}" SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
                         <ScrollBar.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -82,21 +97,40 @@
                     <Label Content="{Binding ElementName=scrollBar, Path=Value,Converter={StaticResource diffTxtBlockConverter}}" Grid.Column="2" ></Label>
                 </Grid>
                 <StackPanel Orientation="Horizontal">
-
                     <Label>Is connected to other treasure</Label>
-                    <CheckBox Content="{Binding Treasure.isChained}" VerticalAlignment="Center"></CheckBox>
+                    <CheckBox Name="chainedTrsChckBox" IsChecked="{Binding Treasure.IsChained}" VerticalAlignment="Center"></CheckBox>
+                    <ComboBox Width="150" ItemsSource="{Binding UserTreasures}"
+                              IsEnabled="{Binding ElementName=chainedTrsChckBox,Path=IsChecked}"
+                              SelectedItem="{Binding TreasureChain}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:Treasure}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding ID}"></TextBlock>
+                                    <TextBlock Text=". "></TextBlock>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
-                <Button >Set marker info about the location</Button>
-
             </StackPanel>
             <StackPanel Name="markerInfo" Orientation="Vertical" Grid.Row="1">
-                <Label>Country(optional):</Label>
-                <TextBox Text="{Binding Country}"></TextBox>
-                <Label>City(optional):</Label>
-                <TextBox Text="{Binding City}"></TextBox>
-                <Label>Adress:</Label>
-                <TextBox Text="{Binding Adress}"></TextBox>
-                <Button Command="{Binding DropMarker}">Drop marker</Button>
+                <Label>Country:</Label>
+                <TextBox Text="{Binding Country}" Name="countryTxtBox"></TextBox>
+                <Label>City:</Label>
+                <TextBox Text="{Binding City}" Name="cityTxtBox"></TextBox>
+                <Label>Address(approximately):</Label>
+                <TextBox Text="{Binding Address}" Name="addressTxtBox"></TextBox>
+                <Button Command="{Binding DropMarker}" Content="Drop marker">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource IsNullOrWhiteSpaceConverter }"
+                                      ConverterParameter="AtLeastOneNecessary">
+                            <Binding Path="Text" ElementName="countryTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="cityTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="addressTxtBox"></Binding>
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
                 <GroupBox FontSize="16" Header="Coordinates:">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -108,16 +142,27 @@
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">Latitude:</Label>
-                        <TextBlock Grid.Row="0" Grid.Column="1"></TextBlock>
+                        <TextBlock Text="{Binding Latitude}" Grid.Row="0" Grid.Column="1"></TextBlock>
                         <Label Grid.Row="1" Grid.Column="0">Longtitude:</Label>
-                        <TextBlock Grid.Row="1" Grid.Column="1"></TextBlock>
-                    </Grid>   
+                        <TextBlock Text="{Binding Longtitude}" Grid.Row="1" Grid.Column="1"></TextBlock>
+                    </Grid>
                 </GroupBox>
-                <Button Command="{Binding SaveTreasure}">Save Treasure</Button>
+                <Button Command="{Binding SaveTreasure}" Content="Save Treasure">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource IsNullOrWhiteSpaceConverter }" 
+                                      ConverterParameter="AllNecessary">
+                            <Binding Path="Text" ElementName="countryTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="cityTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="addressTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="nameTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="descriptionTxtBox"></Binding>
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
                 <Button Command="{Binding GoBack}">Go Back</Button>
             </StackPanel>
         </Grid>
-        
+
 
         <GroupBox Header="Treasure Location" FontSize="16" Margin="5" Grid.Column="1">
             <Grid>

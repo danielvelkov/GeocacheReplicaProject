@@ -52,7 +52,7 @@ namespace Geocache.Views.BrowsersViews
                 )
                 });
 
-                Cef.Initialize(settings);
+                Cef.Initialize(settings,performDependencyCheck: true, browserProcessHandler: null);
             }
         }
     }

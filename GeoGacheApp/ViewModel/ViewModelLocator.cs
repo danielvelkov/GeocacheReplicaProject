@@ -35,8 +35,8 @@ namespace Geocache.ViewModel
             
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LoginPageVM>();
-            SimpleIoc.Default.Register<RegisterPageVM>();
-            SimpleIoc.Default.Register<HideTreasurePageVM>();
+            
+            //SimpleIoc.Default.Register<HideTreasurePageVM>();
         }
         
         public static void Cleanup()

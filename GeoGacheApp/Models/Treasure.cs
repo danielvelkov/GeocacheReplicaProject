@@ -1,6 +1,5 @@
 ﻿
 using Geocache.Enums;
-using Geocache.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Geocache
+namespace Geocache.Models
 {
     public class Treasure
     {

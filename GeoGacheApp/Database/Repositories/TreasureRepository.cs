@@ -1,5 +1,6 @@
 ﻿using Geocache;
 using Geocache.Interfaces;
+using Geocache.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

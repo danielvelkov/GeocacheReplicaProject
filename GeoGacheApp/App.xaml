@@ -9,5 +9,19 @@
              xmlns:vm="clr-namespace:Geocache.ViewModel">
     <Application.Resources>
         <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True"></vm:ViewModelLocator>
+
+        <ControlTemplate x:Key="validationTemplate">
+            <StackPanel>
+                <!-- Placeholder for the TextBox itself -->
+                <AdornedElementPlaceholder />
+                <ItemsControl ItemsSource="{Binding}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ControlTemplate>
     </Application.Resources>
 </Application>
