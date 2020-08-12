@@ -1,7 +1,4 @@
-﻿using CefSharp;
-using CefSharp.SchemeHandler;
-using CefSharp.Wpf;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Geocache.Database;
 using Geocache.Enums;
@@ -34,35 +31,35 @@ namespace Geocache.ViewModel.BrowserVM
             set { Set(ref address, value); }
         }
 
-        private ChromiumWebBrowser webBrowser;
-        public const string WebBrowserPropertyName = "WebBrowser";
+        //private ChromiumWebBrowser webBrowser;
+        //public const string WebBrowserPropertyName = "WebBrowser";
         
-        /// <summary>
-        /// Sets and gets the WebBrowser property.
-        /// Changes to that property's value raise the PropertyChanged event. 
-        /// </summary>
-        public ChromiumWebBrowser WebBrowser
-        {
-            get
-            {
-                return webBrowser;
-            }
+        ///// <summary>
+        ///// Sets and gets the WebBrowser property.
+        ///// Changes to that property's value raise the PropertyChanged event. 
+        ///// </summary>
+        //public ChromiumWebBrowser WebBrowser
+        //{
+        //    get
+        //    {
+        //        return webBrowser;
+        //    }
 
-            set
-            {
-                if (webBrowser == value)
-                {
-                    return;
-                }
+        //    set
+        //    {
+        //        if (webBrowser == value)
+        //        {
+        //            return;
+        //        }
 
-                webBrowser = value;
-                // second check is when the destruction is called
-                if (webBrowser != null && webBrowser.Address ==null)
-                    //webBrowser.Address="localfolder://cefsharp/";
+        //        webBrowser = value;
+        //        // second check is when the destruction is called
+        //        if (webBrowser != null && webBrowser.Address ==null)
+        //            //webBrowser.Address="localfolder://cefsharp/";
 
-                RaisePropertyChanged(WebBrowserPropertyName);
-            }
-        }
+        //        RaisePropertyChanged(WebBrowserPropertyName);
+        //    }
+        //}
 
         private object evaluateJavaScriptResult;
         public object EvaluateJavaScriptResult
@@ -241,10 +238,10 @@ namespace Geocache.ViewModel.BrowserVM
                             foreach (MarkerInfo marker in Markers)
                             {
                                 Treasure treasr = UnitofWork.Treasures.Get(marker.TreasureId);
-                                WebBrowser.ExecuteScriptAsync("showTreasures", marker.Latitude, marker.Longtitude,
-                                treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
-                                treasr.TreasureSize.ToString(), treasr.Description,
-                                treasr.Rating, treasr.isChained.ToString());
+                                //WebBrowser.ExecuteScriptAsync("showTreasures", marker.Latitude, marker.Longtitude,
+                                //treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
+                                //treasr.TreasureSize.ToString(), treasr.Description,
+                                //treasr.Rating, treasr.isChained.ToString());
                             }
                         }
                     });
@@ -260,40 +257,40 @@ namespace Geocache.ViewModel.BrowserVM
                     goToHomeLocation = new RelayCommand(() =>
                       {
                           string address = UserData.GetUserAddress();
-                          WebBrowser.ExecuteScriptAsync("codeAdress", address);
+                          //WebBrowser.ExecuteScriptAsync("codeAdress", address);
                       });
                 return goToHomeLocation;
             }
         }
 
-        private async void EvaluateJavaScript(string s)
-        {
-            try
-            {
-                var response = await webBrowser.EvaluateScriptAsync(s);
-                if (response.Success && response.Result is IJavascriptCallback)
-                {
-                    response = await ((IJavascriptCallback)response.Result).ExecuteAsync("This is a callback from EvaluateJavaScript");
-                }
+        //private async void EvaluateJavaScript(string s)
+        //{
+        //    try
+        //    {
+        //        var response = await webBrowser.EvaluateScriptAsync(s);
+        //        if (response.Success && response.Result is IJavascriptCallback)
+        //        {
+        //            response = await ((IJavascriptCallback)response.Result).ExecuteAsync("This is a callback from EvaluateJavaScript");
+        //        }
 
-                EvaluateJavaScriptResult = response.Success ? (response.Result ?? "null") : response.Message;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error while evaluating Javascript: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+        //        EvaluateJavaScriptResult = response.Success ? (response.Result ?? "null") : response.Message;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        MessageBox.Show("Error while evaluating Javascript: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
 
-        private void ExecuteJavaScript(string s)
-        {
-            try
-            {
-                webBrowser.ExecuteScriptAsync(s);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error while executing Javascript: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+        //private void ExecuteJavaScript(string s)
+        //{
+        //    try
+        //    {
+        //        webBrowser.ExecuteScriptAsync(s);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        MessageBox.Show("Error while executing Javascript: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
     }
 }

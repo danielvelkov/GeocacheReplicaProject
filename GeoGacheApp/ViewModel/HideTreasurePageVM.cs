@@ -1,6 +1,4 @@
-﻿using CefSharp;
-using CefSharp.Wpf;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using Geocache.Database;
@@ -24,8 +22,8 @@ namespace Geocache.ViewModel
         public HideTreasurePageVM(UserDataService userdata)
         {
             UserData = userdata;
-            CefSharpSettings.LegacyJavascriptBindingEnabled = true;
-            CefSharpSettings.WcfEnabled = true;
+            //CefSharpSettings.LegacyJavascriptBindingEnabled = true;
+            //CefSharpSettings.WcfEnabled = true;
             Treasure = new Treasure();
             MarkerInfo = new MarkerInfo();
             TreasureChain = new Treasure();
@@ -233,38 +231,38 @@ namespace Geocache.ViewModel
             }
         }
 
-        private ChromiumWebBrowser webBrowser;
-        public const string WebBrowserPropertyName = "WebBrowser";
+        //private ChromiumWebBrowser webBrowser;
+        //public const string WebBrowserPropertyName = "WebBrowser";
 
-        /// <summary>
-        /// Sets and gets the WebBrowser property.
-        /// Changes to that property's value raise the PropertyChanged event. 
-        /// </summary>
-        public ChromiumWebBrowser WebBrowser
-        {
-            get
-            {
-                return webBrowser;
-            }
+        ///// <summary>
+        ///// Sets and gets the WebBrowser property.
+        ///// Changes to that property's value raise the PropertyChanged event. 
+        ///// </summary>
+        //public ChromiumWebBrowser WebBrowser
+        //{
+        //    get
+        //    {
+        //        return webBrowser;
+        //    }
 
-            set
-            {
-                if (webBrowser == value)
-                {
-                    return;
-                }
+        //    set
+        //    {
+        //        if (webBrowser == value)
+        //        {
+        //            return;
+        //        }
 
-                webBrowser = value;
-                // second check is when the destruction is called
-                if (webBrowser != null && webBrowser.Address == null)
-                {
-                    webBrowser.Address = "localfolder://cefsharp/map_hiding.html";
-                    webBrowser.JavascriptObjectRepository.Register("hideTreasureVM",
-                        this, true,BindingOptions.DefaultBinder);
-                }
-                RaisePropertyChanged(WebBrowserPropertyName);
-            }
-        }
+        //        webBrowser = value;
+        //        // second check is when the destruction is called
+        //        if (webBrowser != null && webBrowser.Address == null)
+        //        {
+        //            webBrowser.Address = "localfolder://cefsharp/map_hiding.html";
+        //            webBrowser.JavascriptObjectRepository.Register("hideTreasureVM",
+        //                this, true,BindingOptions.DefaultBinder);
+        //        }
+        //        RaisePropertyChanged(WebBrowserPropertyName);
+        //    }
+        //}
         #endregion
 
         #region Commands
@@ -296,7 +294,7 @@ namespace Geocache.ViewModel
                       MarkerInfo.Adress = Address;
                       MarkerInfo.Country = Country;
                       MarkerInfo.City = City;
-                      WebBrowser.ExecuteScriptAsync("codeAdress", MarkerInfo.GetMarkerAddress());
+                      //WebBrowser.ExecuteScriptAsync("codeAdress", MarkerInfo.GetMarkerAddress());
                   }));
             }
         }
