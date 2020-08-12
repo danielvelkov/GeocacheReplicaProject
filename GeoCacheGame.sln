@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28307.438
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geocache", "GeoGacheApp\Geocache.csproj", "{9D814B2D-2568-43FB-A56A-B440D6D48E9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeocacheV2", "GeocacheV2\GeocacheV2.csproj", "{2D3FE8AA-9721-4343-A187-915B33EDF9C1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,14 +21,6 @@ Global
 		{9D814B2D-2568-43FB-A56A-B440D6D48E9C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9D814B2D-2568-43FB-A56A-B440D6D48E9C}.Release|x64.ActiveCfg = Release|x64
 		{9D814B2D-2568-43FB-A56A-B440D6D48E9C}.Release|x64.Build.0 = Release|x64
-		{2D3FE8AA-9721-4343-A187-915B33EDF9C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D3FE8AA-9721-4343-A187-915B33EDF9C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D3FE8AA-9721-4343-A187-915B33EDF9C1}.Debug|x64.ActiveCfg = Debug|x64
-		{2D3FE8AA-9721-4343-A187-915B33EDF9C1}.Debug|x64.Build.0 = Debug|x64
-		{2D3FE8AA-9721-4343-A187-915B33EDF9C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D3FE8AA-9721-4343-A187-915B33EDF9C1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D3FE8AA-9721-4343-A187-915B33EDF9C1}.Release|x64.ActiveCfg = Release|Any CPU
-		{2D3FE8AA-9721-4343-A187-915B33EDF9C1}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
