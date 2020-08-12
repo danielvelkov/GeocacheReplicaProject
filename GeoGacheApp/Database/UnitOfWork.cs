@@ -23,10 +23,12 @@ namespace Geocache.Database
             _context = context;
             Users = new UserRepository(_context);
             Treasures = new TreasureRepository(_context);
+            ChainedTreasures = new ChainedTreasureRepository(_context);
         }
 
         public IUserRepository Users { get; private set; }
         public ITreasureRepository Treasures { get; private set; }
+        public IChainedTreasureRepository ChainedTreasures { get; private set; }
 
         // basically save changes for the actions
         public int Complete()

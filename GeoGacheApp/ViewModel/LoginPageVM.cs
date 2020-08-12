@@ -101,45 +101,32 @@ namespace Geocache.ViewModel
                   {
                       using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
                       {
-                          //if(!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
-                          //{
-                          //    User user = unitOfWork.Users.ValidateLogin(Username, Password);
+                          if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+                          {
+                              User user = unitOfWork.Users.ValidateLogin(Username, Password);
 
-                          //    if (user != null)
-                          //    {
-                          //        //create the instances of the pages connected to the user
-                          //        SimpleIoc.Default.Register<HomePageVM>();
-                          //        SimpleIoc.Default.Register<HomePageBrowserVM>();
-                          //        SimpleIoc.Default.Register<UserPageVM>();
+                              if (user != null)
+                              {
+                                  //create the instances of the pages connected to the user
+                                  SimpleIoc.Default.Register<HomePageVM>();
+                                  SimpleIoc.Default.Register<HomePageBrowserVM>();
+                                  SimpleIoc.Default.Register<UserPageVM>();
 
-                          //        //login the user
-                          //        SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
+                                  //login the user
+                                  SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
 
-                          //        //change to homepage
-                          //        MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
+                                  //change to homepage
+                                  MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
 
-                          //    }
-                          //    else
-                          //    ErrorMsg = "Password is wrong or no such user exists";
-                          //    return;
-                          //}
-                          //else
-                          //{
-                          //    ErrorMsg = " Password or Username is empty";
-                          //}
-
-                          User user = unitOfWork.Users.ValidateLogin("geochacher2", "meatballs");
-                          //        //create the instances of the pages connected to the user
-                          SimpleIoc.Default.Register<HomePageVM>();
-                          SimpleIoc.Default.Register<HomePageBrowserVM>();
-                          SimpleIoc.Default.Register<UserPageVM>();
-
-                          //login the user
-                          SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
-
-                          //change to homepage
-                          MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
-
+                              }
+                              else
+                                  ErrorMsg = "Password is wrong or no such user exists";
+                              return;
+                          }
+                          else
+                          {
+                              ErrorMsg = " Password or Username is empty";
+                          }
                       }
                   })
                 ));

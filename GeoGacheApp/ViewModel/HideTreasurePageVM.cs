@@ -3,11 +3,15 @@ using CefSharp.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Geocache.Enums;
+using Geocache.Helper;
+using Geocache.Models;
+using Geocache.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Geocache.ViewModel
@@ -27,9 +31,14 @@ namespace Geocache.ViewModel
         #region fields
         private TreasureType selectedTreasureType = TreasureType.NORMAL;
         private TreasureSizes selectedTreasureSize = Enums.TreasureSizes.MEDIUM;
+        private Treasure treasure;
+        private MarkerInfo markerInfo;
+        private Treasure treasureChain;
         #endregion
 
         #region Params
+        public UserDataService UserData { get; set; }
+
         public TreasureType SelectedTreasureType
         {
             get
@@ -226,19 +235,19 @@ namespace Geocache.ViewModel
         ///// Sets and gets the WebBrowser property.
         ///// Changes to that property's value raise the PropertyChanged event. 
         ///// </summary>
-        //public ChromiumWebBrowser WebBrowser
-        //{
-        //    get
-        //    {
-        //        return webBrowser;
-        //    }
+        public ChromiumWebBrowser WebBrowser
+        {
+            get
+            {
+                return webBrowser;
+            }
 
-        //    set
-        //    {
-        //        if (webBrowser == value)
-        //        {
-        //            return;
-        //        }
+            set
+            {
+                if (webBrowser == value)
+                {
+                    return;
+                }
 
                 webBrowser = value;
                 // second check is when the destruction is called
@@ -268,7 +277,7 @@ namespace Geocache.ViewModel
 
             }
         }
-
+        ICommand dropMarker;
         public ICommand DropMarker
         {
             get
@@ -276,14 +285,14 @@ namespace Geocache.ViewModel
                 return dropMarker ?? (dropMarker =
                   new RelayCommand(() =>
                   {
-                      MarkerInfo.Adress = Address;
+                      MarkerInfo.Address = Address;
                       MarkerInfo.Country = Country;
                       MarkerInfo.City = City;
                       WebBrowser.ExecuteScriptAsync("codeAdress", MarkerInfo.GetMarkerAddress());
                   }));
             }
         }
-
+        ICommand saveTreasure;
         public ICommand SaveTreasure
         {
             get
@@ -303,7 +312,7 @@ namespace Geocache.ViewModel
                                 Treasure.TreasureSize = SelectedTreasureSize;
                                 Treasure.TreasureType = SelectedTreasureType;
 
-                                MarkerInfo.Adress = Address;
+                                MarkerInfo.Address = Address;
                                 MarkerInfo.City = City;
                                 MarkerInfo.Country = Country;
                                 MarkerInfo.Latitude = Latitude;
@@ -314,10 +323,10 @@ namespace Geocache.ViewModel
                                 // add a messagebox for if you want to change your key if you already have one
                                 UnitOfWork.Complete();
 
-                                if (Treasure.isChained)
+                                if (Treasure.IsChained)
                                 {
                                     UnitOfWork.ChainedTreasures.Add(
-                                        new Chained_Treasures(TreasureChain, Treasure));
+                                        new Chained_Treasures(TreasureChain.ID, Treasure.ID));
                                     //TreasureChain.isChained = true;
                                     UnitOfWork.Complete();
                                 }

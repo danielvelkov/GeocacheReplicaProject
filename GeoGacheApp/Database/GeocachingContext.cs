@@ -29,53 +29,5 @@ namespace Geocache
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
         }
-        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        //{
-        //    //modelBuilder.Entity<User>()
-        //    //    .HasMany<Treasure>(u => u.Treasures)
-        //    //    .WithRequired(t => t.User)
-        //    //   //.HasForeignKey(t=>t.UserId)
-        //    //   ;
-
-        //    //modelBuilder.Entity<User>()
-        //    //    .HasMany<Found_Treasures>(u => u.Found_Treasures)
-        //    //    .WithRequired(t => t.User);
-        //    //// .HasForeignKey(t => t.UserID);
-
-        //    //modelBuilder.Entity<User>()
-        //    //    .HasMany<Treasures_Comments>(u => u.Treasures_Comments)
-        //    //    .WithRequired(t => t.User);
-        //    //// .HasForeignKey(t => t.UserID);
-
-
-
-        //    modelBuilder.Entity<Treasure>()
-        //        .HasOptional(t => t.MarkerInfo)
-        //        .WithOptionalPrincipal(mi => mi.Treasure);
-
-        //    //modelBuilder.Entity<Treasure>()
-        //    //    .HasMany<Treasures_Comments>(u => u.Treasures_Comments)
-        //    //    .WithRequired(t => t.Treasure)
-        //    //    .HasForeignKey(t => t.TreasureID);
-
-        //    //modelBuilder.Entity<Treasure>()
-        //    //    .HasMany<Found_Treasures>(u => u.Found_Treasures)
-        //    //    .WithRequired(t => t.Treasure)
-        //    //    .HasForeignKey(t => t.TreasureID);
-
-        //    //modelBuilder.Entity<Treasure>()
-        //    //    .HasOptional(t => t.Chained_Treasures)
-        //    //    .WithRequired(ct => ct.Treasure_1);
-
-
-        //    //modelBuilder.Entity<Treasure>()
-        //    //    .HasOptional(t => t.Chained_Treasures)
-        //    //    .WithRequired(ct => ct.Treasure_2);
-
-        //    modelBuilder.Entity<Chained_Treasures>()
-        //        .HasIndex(ct => ct.Treasure_1)
-        //        .IsUnique();
-        
-        //}
     }
 }

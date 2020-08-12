@@ -1,4 +1,7 @@
-﻿using Geocache.Helper;
+﻿using CefSharp;
+using CefSharp.SchemeHandler;
+using CefSharp.Wpf;
+using Geocache.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,19 +26,13 @@ namespace Geocache.Views.BrowsersViews
     {
         public HomePageBrowserView()
         {
-            //InitBrowser();
+            InitBrowser();
             InitializeComponent();
-            
         }
         // should be done only once. See cefsharp general usage
         // i think cef has a default shutdown method that runs when exiting
         // i think... :)
-        //public void InitBrowser()
-        //{
-        //    if (!Cef.IsInitialized)
-        //    {
-        //        var settings = new CefSettings();
-        //        settings.BrowserSubprocessPath = System.IO.Path.GetFullPath("CefSharp.BrowserSubprocess.exe");
+        
         public void InitBrowser()
         {
             if (!Cef.IsInitialized)
@@ -43,20 +40,20 @@ namespace Geocache.Views.BrowsersViews
                 var settings = new CefSettings();
 
                 settings.BrowserSubprocessPath = System.IO.Path.GetFullPath("CefSharp.BrowserSubprocess.exe");
+                
+                settings.RegisterScheme(new CefCustomScheme
+                {
+                    SchemeName = "localfolder",
+                    DomainName = "cefsharp",
+                    SchemeHandlerFactory = new FolderSchemeHandlerFactory(
+                rootFolder: string.Format(@"{0}\html", System.AppDomain.CurrentDomain.BaseDirectory),
+                hostName: "cefsharp",
+                defaultPage: "map.html" // will default to map.html
+                )
+                });
 
-        //        settings.RegisterScheme(new CefCustomScheme
-        //        {
-        //            SchemeName = "localfolder",
-        //            DomainName = "cefsharp",
-        //            SchemeHandlerFactory = new FolderSchemeHandlerFactory(
-        //        rootFolder: string.Format(@"{0}\html", System.AppDomain.CurrentDomain.BaseDirectory),
-        //        hostName: "cefsharp",
-        //        defaultPage: "map.html" // will default to map.html
-        //        )
-        //        });
-
-        //        Cef.Initialize(settings);
-        //    }
-        //}
+                Cef.Initialize(settings);
+            }
+        }
     }
 }

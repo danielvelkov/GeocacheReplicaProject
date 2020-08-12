@@ -21,7 +21,7 @@ namespace Geocache.Models
             Longtitude = longtitude;
             City = city;
             Country = country;
-            Adress = adress;
+            Address = adress;
         }
 
         public MarkerInfo() { }
@@ -34,7 +34,7 @@ namespace Geocache.Models
 
         public string City { get; set; }
         public string Country { get; set; }
-        public string Adress { get; set; }
+        public string Address { get; set; }
 
         public virtual Treasure Treasure { get; set; }
 
@@ -57,6 +57,19 @@ namespace Geocache.Models
             if ((d / 1000) < RangeInKm)
                 return true;
             return false;
+        }
+
+        public string GetMarkerAddress()
+        {
+            StringBuilder address = new StringBuilder();
+            if (!string.IsNullOrEmpty(this.Address))
+                address.Append(this.Address + ",");
+            if (!string.IsNullOrEmpty(this.City))
+                address.Append(this.City + ",");
+            if (!string.IsNullOrEmpty(this.Country))
+                address.Append(this.Country);
+            else address.Length--;
+            return address.ToString();
         }
     }
 }

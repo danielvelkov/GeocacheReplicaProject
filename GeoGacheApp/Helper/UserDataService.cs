@@ -1,4 +1,5 @@
-﻿using Geocache.Interfaces;
+﻿using Geocache.Database;
+using Geocache.Interfaces;
 using Geocache.Models;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Geocache.Helper
     public class UserDataService:IDataService
     {
         User currentUser;
-        //ICollection<Treasure> userTreasures;
+        List<Treasure> userTreasures;
         //ICollection<Treasures_Comments> userComments;
 
         public UserDataService(User LoggedUser)
@@ -40,5 +41,25 @@ namespace Geocache.Helper
             else address.Length--;
             return address.ToString();
         }
+        public List<Treasure> GetUserTreasures()
+        {
+            userTreasures = new List<Treasure>();
+            using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
+            {
+                userTreasures = UnitofWork.Treasures.GetUserTreasures(currentUser.ID);
+            }
+            return userTreasures;
+        }
+
+        public List<Treasure> GetUnchainedUserTreasures()
+        {
+            userTreasures = new List<Treasure>();
+            using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
+            {
+                userTreasures = UnitofWork.Treasures.GetUserTreasuresNotChained(currentUser.ID);
+            }
+            return userTreasures;
+        }
+
     }
 }

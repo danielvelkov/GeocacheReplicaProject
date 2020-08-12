@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Geocache.Views"
       xmlns:models="clr-namespace:Geocache.Models"    
+            xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         xmlns:converter="clr-namespace:Geocache.Converters"
         xmlns:validate="clr-namespace:Geocache.Validation"
         mc:Ignorable="d" 

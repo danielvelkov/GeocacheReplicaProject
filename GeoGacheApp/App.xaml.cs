@@ -19,7 +19,6 @@ namespace Geocache
         static App()
         {
             DispatcherHelper.Initialize();
-            
         }
         
     }

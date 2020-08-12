@@ -20,9 +20,17 @@ namespace Geocache.Database.Repositories
             get { return Context as GeocachingContext; }
         }
 
-        public List<Treasure> GetTreasures(int UserID)
+        public List<Treasure> GetOthersTreasures(int UserID)
         {
             return TreasureContext.Treasures.Where(t => t.UserId != UserID).ToList();
+        }
+        public List<Treasure> GetUserTreasures(int UserID)
+        {
+            return TreasureContext.Treasures.Where(t => t.UserId == UserID).ToList();
+        }
+        public List<Treasure> GetUserTreasuresNotChained(int UserID)
+        {
+            return TreasureContext.Treasures.Where(t => (t.UserId == UserID) && t.IsChained == false).ToList();
         }
     }
 }

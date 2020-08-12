@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 namespace Geocache.Models
 {
 
-    // this is not FINE. check the inversion property in my comments class in previous project
-
     public class Chained_Treasures
     {
-        public Chained_Treasures(Treasure treasure_1, Treasure treasure_2)
+        public Chained_Treasures(int treasure1Id, int treasure2Id)
         {
-            Treasure_1 = treasure_1;
-            Treasure_2 = treasure_2;
+            Treasure1_ID = treasure1Id;
+            Treasure2_ID = treasure2Id;
         }
 
         public Chained_Treasures() { }
@@ -24,7 +22,13 @@ namespace Geocache.Models
         [Key]
         public int Id { get; set; }
 
-        public virtual Treasure Treasure_1{ get; set; }
+        [ForeignKey("Treasure_1")]
+        public int Treasure1_ID { get; set; }
+
+        [ForeignKey("Treasure_2")]
+        public int Treasure2_ID { get; set; }
+
+        public virtual Treasure Treasure_1 { get; set; }
         public virtual Treasure Treasure_2 { get; set; }
     }
 }

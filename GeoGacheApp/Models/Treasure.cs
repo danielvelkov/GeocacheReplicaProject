@@ -11,14 +11,13 @@ using System.Threading.Tasks;
 
 namespace Geocache
 {
-    
     public class Treasure
     {
-        public Treasure(string name, 
-            TreasureType treasureType, 
+        public Treasure(string name,
+            TreasureType treasureType,
             TreasureSizes treasureSize,
             string description,
-            double difficulty, 
+            double difficulty,
             double rating,
             int userId,
             bool isChained)
@@ -31,7 +30,7 @@ namespace Geocache
             Rating = rating;
             Key = GenerateKey();
             UserId = userId;
-            this.isChained = isChained;
+            this.IsChained = isChained;
         }
 
         public Treasure()
@@ -48,22 +47,22 @@ namespace Geocache
         public double Difficulty { get; set; }
         public double Rating { get; set; }
         public string Key { get; set; }
-        public bool isChained { get; set; }
+        public bool IsChained { get; set; }
 
         /* a way to get a random key with a defined lenght */
         // this case its 8 
         public static string GenerateKey()
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                return new string(Enumerable.Repeat(chars, 8)
-                  .Select(s => s[random.Next(s.Length)]).ToArray());
+            return new string(Enumerable.Repeat(chars, 8)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
         private static Random random = new Random();
-       
+
 
         [Key]
         public int ID { get; set; }
-        
+
         [ForeignKey("User")]
         public int UserId { get; set; }
         public virtual User User { get; set; }
@@ -71,6 +70,10 @@ namespace Geocache
         public virtual MarkerInfo MarkerInfo { get; set; }
         public virtual ICollection<Treasures_Comments> Treasures_Comments { get; set; }
         public virtual ICollection<Found_Treasures> Found_Treasures { get; set; }
-        public virtual Chained_Treasures Chained_Treasures { get; set; }
+
+        [InverseProperty("Treasure_1")]
+        public virtual ICollection<Chained_Treasures> Chained_Treasure1 { get; set; }
+        [InverseProperty("Treasure_2")]
+        public virtual ICollection<Chained_Treasures> Chained_Treasure2 { get; set; }
     }
 }

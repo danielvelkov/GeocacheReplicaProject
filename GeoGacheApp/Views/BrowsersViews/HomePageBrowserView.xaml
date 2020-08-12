@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Geocache.Views.BrowsersViews"
              mc:Ignorable="d" 
-           
+             xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              xmlns:MyNamespace="clr-namespace:Geocache"
              xmlns:convert="clr-namespace:Geocache.Converters"
              MinHeight="500" MinWidth="800"
@@ -106,7 +106,7 @@
                              Height="16"/>
         </StackPanel>
         <GroupBox Grid.Row="2" Margin="8" Header="Map">
-            <!--<wpf:ChromiumWebBrowser WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}"  ></wpf:ChromiumWebBrowser>-->
+            <wpf:ChromiumWebBrowser WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}"  ></wpf:ChromiumWebBrowser>
         </GroupBox>
        
     </Grid>
