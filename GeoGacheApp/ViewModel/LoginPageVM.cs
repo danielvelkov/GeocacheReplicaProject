@@ -132,7 +132,7 @@ namespace Geocache.ViewModel
                           //        //create the instances of the pages connected to the user
                           SimpleIoc.Default.Register<HomePageVM>();
                           SimpleIoc.Default.Register<HomePageBrowserVM>();
-                          SimpleIoc.Default.Register<UserPageVM>();
+                          //SimpleIoc.Default.Register<UserPageVM>();
 
                           //login the user
                           SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
@@ -153,6 +153,7 @@ namespace Geocache.ViewModel
                 return registerCommand ?? (registerCommand =
                  new RelayCommand<Object>(x =>
                  {
+                     SimpleIoc.Default.Register<RegisterPageVM>();
                      MessengerInstance.Send<ViewModelBase>(ViewModelLocator.RegisterPageVM, "ChangePage");
                  }
 

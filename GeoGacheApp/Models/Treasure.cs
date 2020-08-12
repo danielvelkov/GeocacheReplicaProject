@@ -9,9 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Geocache
+namespace Geocache.Models
 {
-    
     public class Treasure
     {
         public Treasure(string name, 

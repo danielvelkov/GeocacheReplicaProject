@@ -38,7 +38,6 @@ namespace Geocache.Views.BrowsersViews
             if (!Cef.IsInitialized)
             {
                 var settings = new CefSettings();
-
                 settings.BrowserSubprocessPath = System.IO.Path.GetFullPath("CefSharp.BrowserSubprocess.exe");
 
                 settings.RegisterScheme(new CefCustomScheme

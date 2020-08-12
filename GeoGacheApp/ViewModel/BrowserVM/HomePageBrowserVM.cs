@@ -119,6 +119,15 @@ namespace Geocache.ViewModel.BrowserVM
                     .Cast<TreasureSizes>();
             }
         }
+
+        public List<Treasure> UserTreasures
+        {
+            get
+            {
+                return UserData.GetUserTreasures();
+            }
+        }
+
         public const string DifficultyPropertyName = "Difficulty";
 
         private double difficulty ;
@@ -219,7 +228,7 @@ namespace Geocache.ViewModel.BrowserVM
                     {
                         using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
                         {
-                            foreach (var treas in UnitofWork.Treasures.GetTreasures(UserData.GetUser().ID))
+                            foreach (var treas in UnitofWork.Treasures.GetOthersTreasures(UserData.GetUser().ID))
                             {
                                 if((SelectedTreasureSize==Enums.TreasureSizes.ANY || treas.TreasureSize==SelectedTreasureSize) &&
                                 (SelectedTreasureType==TreasureType.ANY || treas.TreasureType==SelectedTreasureType))

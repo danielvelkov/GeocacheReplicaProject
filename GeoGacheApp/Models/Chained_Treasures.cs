@@ -24,6 +24,8 @@ namespace Geocache.Models
         [Key]
         public int Id { get; set; }
 
+
+
         public virtual Treasure Treasure_1{ get; set; }
         public virtual Treasure Treasure_2 { get; set; }
     }
