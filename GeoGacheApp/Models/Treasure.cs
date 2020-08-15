@@ -1,5 +1,6 @@
 ﻿
 using Geocache.Enums;
+using Geocache.Helper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -74,5 +75,10 @@ namespace Geocache.Models
         public virtual ICollection<Chained_Treasures> Chained_Treasure1 { get; set; }
         [InverseProperty("Treasure_2")]
         public virtual ICollection<Chained_Treasures> Chained_Treasure2 { get; set; }
+
+        public Location GetLatLng()
+        {
+            return new Location(MarkerInfo.Latitude, MarkerInfo.Longtitude);
+        }
     }
 }

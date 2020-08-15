@@ -32,7 +32,7 @@ namespace Geocache.ViewModel
         {
             get
             {
-                return "Welcome " + UserData.GetUser().FirstName;
+                return "Welcome " + UserData.CurrentUser.FirstName;
             }
         }
         public const string UserRolePropertyName = "UserRole";
@@ -48,7 +48,7 @@ namespace Geocache.ViewModel
             get
             {
                 if (userRole == UserRoles.NONE)
-                    userRole=UserData.GetUser().Role;
+                    userRole=UserData.CurrentUser.Role;
                 return userRole;
             }
 

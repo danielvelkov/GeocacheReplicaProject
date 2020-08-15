@@ -105,85 +105,141 @@
         
     </style>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPcLmG95S4gidIK7ixsqzIqf0oIcNDFFs&callback=initMap&libraries=&v=weekly"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPcLmG95S4gidIK7ixsqzIqf0oIcNDFFs&callback=initMap&libraries=places"
             defer></script>
     <script type="text/javascript">
       var geocoder;
       var map;
       var markers = [];
       var homeMarker;
+      var currentLocationMarker;
       function initMap() {
-        geocoder = new google.maps.Geocoder();
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
-        });
+          geocoder = new google.maps.Geocoder();
+          map = new google.maps.Map(document.getElementById('map'), {
+              center: {lat: -34.397, lng: 150.644},
+              zoom: 8,
+              mapTypeControl: false,
+              streetViewControl: false,
+              rotateControl: false,
+              fullscreenControl: false
+          });
           // creates an auto complete search box on top 
 
           // Create the search box and link it to the UI element.
-        var input = document.getElementById('pac-input');
-        var searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+          var input = document.getElementById('pac-input');
+          var searchBox = new google.maps.places.SearchBox(input);
+          map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
           // Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed', function () {
-            searchBox.setBounds(map.getBounds());
-        });
+          map.addListener('bounds_changed', function () {
+              searchBox.setBounds(map.getBounds());
+          });
 
         
           // Listen for the event fired when the user selects a prediction and retrieve
           // more details for that place.
-        searchBox.addListener('places_changed', function () {
-            var places = searchBox.getPlaces();
+          searchBox.addListener('places_changed', function () {
+              var places = searchBox.getPlaces();
 
-            if (places.length == 0) {
-                return;
-            }
+              if (places.length == 0) {
+                  return;
+              }
 
-            // Clear out the old markers.
-            markers.forEach(function (marker) {
-                marker.setMap(null);
-            });
-            markers = [];
+              // Clear out the old markers.
+              markers.forEach(function (marker) {
+                  marker.setMap(null);
+              });
+              markers = [];
 
-            // For each place, get the icon, name and location.
-            var bounds = new google.maps.LatLngBounds();
-            places.forEach(function (place) {
-                if (!place.geometry) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
-                var icon = {
-                    url: place.icon,
-                    size: new google.maps.Size(71, 71),
-                    origin: new google.maps.Point(0, 0),
-                    anchor: new google.maps.Point(17, 34),
-                    scaledSize: new google.maps.Size(25, 25)
-                };
+              // For each place, get the icon, name and location.
+              var bounds = new google.maps.LatLngBounds();
+              places.forEach(function (place) {
+                  if (!place.geometry) {
+                      console.log("Returned place contains no geometry");
+                      return;
+                  }
+                  //var icon = {
+                  //    url: place.icon,
+                  //    size: new google.maps.Size(71, 71),
+                  //    origin: new google.maps.Point(0, 0),
+                  //    anchor: new google.maps.Point(17, 34),
+                  //    scaledSize: new google.maps.Size(25, 25)
+                  //};
 
-                // Create a marker for each place.
-                markers.push(new google.maps.Marker({
-                    map: map,
-                    icon: icon,
-                    title: place.name,
-                    position: place.geometry.location
-                }));
+                  // Create a marker for each place.
+                  //markers.push(new google.maps.Marker({
+                  //    map: map,
+                  //    icon: icon,
+                  //    title: place.name,
+                  //    position: place.geometry.location
+                  //}));
 
-                if (place.geometry.viewport) {
-                    // Only geocodes have viewport.
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
-            });
-            map.fitBounds(bounds);
-        });
+                  if (place.geometry.viewport) {
+                      // Only geocodes have viewport.
+                      bounds.union(place.geometry.viewport);
+                  } else {
+                      bounds.extend(place.geometry.location);
+                  }
+              });
+              map.fitBounds(bounds);
+          });
+      }
+      function dropMarker(address) {
+          geocoder.geocode({ 'address': address }, function (results, status) {
+              if (status == 'OK') {
+                  if (currentLocationMarker != null) {
+                      currentLocationMarker.setMap(null);
+                  }
+                  map.setCenter(results[0].geometry.location);
+                  map.setZoom(14);
+                  currentLocationMarker = new google.maps.Marker({
+                      map:map,
+                      animation: google.maps.Animation.BOUNCE,
+                      position: results[0].geometry.location,
+                      draggable: true,
+                      title: "drag & drop\n to change location"
+                  });
+                  endDragMarker(currentLocationMarker.getPosition());
+                  google.maps.event.addListener(currentLocationMarker, 'dragend', function(){
+                      eventEndDragMarker(currentLocationMarker)
+              })
+              }
+              else if(status=="INVALID_REQUEST")
+                  alert("enter an address");
+              else alert(status);
+          });
+      }
+      function eventEndDragMarker(marker) {
+          var pos = new google.maps.LatLng;
+          pos = marker.getPosition();
+          endDragMarker(pos);
+      }
+      //this is the binding to the .net object 
+      async function endDragMarker(pos) {
+          await CefSharp.BindObjectAsync("homePageVM");
+          geocoder.geocode({'location': pos}, function(results, status) {
+              if (status === 'OK') {
+                  if (results[0]) {
+                      
+                      homePageVM.endDragMarkerCS(pos.lat(), pos.lng());
+                  } 
+                  else {
+                      window.alert('No results found');
+                  }
+              } 
+              else {
+                  window.alert('Geocoder failed due to: ' + status);
+              }
+          });
       }
         // handles coding the physical adress to a geocode which is basically latitude and longtitude
 
-      function codeAdress(adress) {
+      function codeHomeAdress(adress) {
           geocoder.geocode({ 'address': adress }, function (results, status) {
               if (status == 'OK') {
+                  if (currentLocationMarker != null) {
+                      currentLocationMarker.setMap(null);
+                  }
                   homeMarker = null;
                   var image='https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
                   map.setCenter(results[0].geometry.location);
@@ -193,7 +249,15 @@
                       animation: google.maps.Animation.DROP,
                       position: results[0].geometry.location,
                       icon: image
-                      
+                  });
+                  var contentString='<div id="content">'+
+                '<h1>'+'This is your base :p'+'</h1>'+
+                  '</div>';
+                  var infoWindow = new google.maps.InfoWindow({
+                      content: contentString
+                  });
+                  homeMarker.addListener('click', function () {
+                      infoWindow.open(map, homeMarker);
                   });
               } else {
                   alert(status);
@@ -203,58 +267,63 @@
       function showTreasures(latitude,longtitude,id,
           name,type,size,description,rating,isChained) {
           
-          //check if marker is already on the map
-              var myLatLng = {lat:latitude, lng:longtitude} ;
-              var marker=new google.maps.Marker({
-                  map: map,
-                  animation: google.maps.Animation.DROP,
-                  position:myLatLng});
-              var contentString='<div id="content">'+
-                  '<h1>'+name+'</h1>'+
-                '<p>Treasure id: ' + id + '</p>' +
-                 '<p>' + description + '</p>' +
-                  '<p>Rating: ' + rating + '</p>' +
-                   '<p>Type: ' + type + '</p>' +
-                    '<p>Size: ' + size + '</p>' +
-                     '<p>Connected to treasures:' + isChained + '</p>'
-                  '</div>';
-              var infoWindow = new google.maps.InfoWindow({
-                  content: contentString
-              });
-              marker.addListener('click', function () {
-                  infoWindow.open(map, marker);
-              });
+            var markerPosition = {lat:latitude, lng:longtitude} ;
+         
+            var marker=new google.maps.Marker({
+                map: map,
+                animation: google.maps.Animation.DROP,
+                position:markerPosition});
+            var contentString='<div id="content">'+
+                '<h1>'+name+'</h1>'+
+            '<p>Treasure id: ' + id + '</p>' +
+                '<p>' + description + '</p>' +
+                '<p>Rating: ' + rating + '</p>' +
+                '<p>Type: ' + type + '</p>' +
+                '<p>Size: ' + size + '</p>' +
+                    '<p>Connected to treasures:' + isChained + '</p>'
+                '</div>';
+            var infoWindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            marker.addListener('click', function () {
+                infoWindow.open(map, marker);
+            });
 
-                 //marker.addListener('dblclick', function(){
-                 //     startHunt(latitude,longtitude,name);
-              //});
-              map.setZoom(14);
-              markers.push(marker);
+                marker.addListener('dblclick', function(){
+                     startHunt(latitude,longtitude,name,id);
+            });
+            map.setZoom(14);
+            markers.push(marker);
       }
-
-        function dropMarkers() {
+        //for some reason the method without argument didnt work
+        function removeMarkers(string) {
             for (var i = 0; i < markers.length; i++) {
                 markers[i].setMap(null);
+                markers[i]=null;
             }
+            markers=[];
         }
-
-        function startHunt(lat, lng, name) {
-            window.external.startHuntCS(lat, lng, name);
+        async function startHunt(lat,lng,name,id) {
+            await CefSharp.BindObjectAsync("homePageVM");
+            if(currentLocationMarker!=null ||
+                homeMarker!=null)
+                homePageVM.startHuntCS(lat, lng,name,id);
+            else alert('Enter your location first');
+        }
+        async function getAllTreasures(address){
+            await CefSharp.BindObjectAsync("homePageVM");
+            homePageVM.getAllTreasuresCS(address);
         }
     </script>
 
 </head>
 <body onload="initMap()">
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-     
-    <!-- HANDLE THE GEOCODE-->
-    
-    <!--<div id="floating-panel" style="position:relative">
-        <input id="address" type="text" value="sofia">
-        <input type="button" value="encode" onclick="codeaddress()">
-    </div>-->
-    <div id="map" >
-        
+
+    <input id="pac-input" class="controls" type="text" placeholder="{Address},{City},{Country}">
+    <input type="button" value="Set Current Location" onclick="dropMarker(document.getElementById('pac-input').value)">
+    <input type="button" value="Show Markers" onclick="getAllTreasures(document.getElementById('pac-input').value)">
+
+    <div id="map">
     </div>
 </body>
 </html>

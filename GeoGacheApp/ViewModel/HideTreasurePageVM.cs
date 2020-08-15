@@ -310,19 +310,16 @@ namespace Geocache.ViewModel
                             {
                                 Treasure.Key = Treasure.GenerateKey();
                                 Treasure.Rating = 0;
-                                Treasure.UserId = UserData.GetUser().ID;
+                                Treasure.UserId = UserData.CurrentUser.ID;
                                 Treasure.TreasureSize = SelectedTreasureSize;
                                 Treasure.TreasureType = SelectedTreasureType;
-
-                                MarkerInfo.Address = Address;
-                                MarkerInfo.City = City;
-                                MarkerInfo.Country = Country;
+                                //only lat nad long are actually needed for the position of the marker
                                 MarkerInfo.Latitude = Latitude;
                                 MarkerInfo.Longtitude = Longtitude;
                                 
                                 UnitOfWork.Treasures.Add(Treasure);
                                 Treasure.MarkerInfo = MarkerInfo;
-                                // add a messagebox for if you want to change your key if you already have one
+                                
                                 UnitOfWork.Complete();
 
                                 if (Treasure.IsChained && TreasureChain.ID!=0)
@@ -361,6 +358,10 @@ namespace Geocache.ViewModel
             Address = names[0];
             City = names[names.Length - 2];
             Country= names[names.Length - 1];
+
+            MarkerInfo.Address = Address;
+            MarkerInfo.City = City;
+            MarkerInfo.Country = Country;
         }
         #endregion
     }

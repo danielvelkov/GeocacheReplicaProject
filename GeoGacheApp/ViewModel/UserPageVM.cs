@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Geocache.Database;
 using Geocache.Helper;
 using Geocache.Models;
+using Geocache.ViewModel.BrowserVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace Geocache.ViewModel
             get
             {
                 if (currentUser == null)
-                    currentUser = UserData.GetUser();
+                    currentUser = UserData.CurrentUser;
                 return currentUser;
             }
 
@@ -78,6 +79,10 @@ namespace Geocache.ViewModel
                               user.City = CurrentUser.City;
                               user.Country = CurrentUser.Country;
                               unitOfWork.Complete();
+
+                              UserData.CurrentUser=(CurrentUser);
+                              SimpleIoc.Default.GetInstance<HomePageBrowserVM>().CurrentLocation = new Location(
+                                  UserData.GetUserHomeAddress());
                               MessageBoxResult result =MessageBox.Show("Changes to account made", "saved", MessageBoxButton.OK);
                               if (result == MessageBoxResult.OK)
                                   GoBack.Execute(null);

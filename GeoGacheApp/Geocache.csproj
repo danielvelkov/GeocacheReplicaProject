@@ -133,10 +133,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\DiffTxtBlockConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\IsNullOrWhiteSpaceConverter.cs" />
     <Compile Include="Converters\RngTxtBlockConverter.cs" />
     <Compile Include="Database\Repositories\ChainedTreasureRepository.cs" />
+    <Compile Include="Database\Repositories\FoundTreasuresRepostitory.cs" />
     <Compile Include="Database\Repositories\Repository.cs" />
+    <Compile Include="Database\Repositories\TreasureCommentsRepository.cs" />
     <Compile Include="Database\Repositories\TreasureRepository.cs" />
     <Compile Include="Database\Repositories\UserRepository.cs" />
     <Compile Include="Database\UnitOfWork.cs" />
@@ -144,6 +147,8 @@
     <Compile Include="Enums\TreasureSizes.cs" />
     <Compile Include="Enums\TreasureTypes.cs" />
     <Compile Include="Enums\UserRoles.cs" />
+    <Compile Include="Helper\Extensions.cs" />
+    <Compile Include="Helper\FoundTreasureWindowController.cs" />
     <Compile Include="Helper\Location.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Helper\UserDataService.cs" />
@@ -152,6 +157,7 @@
     <Compile Include="Interfaces\IFoundTreasuresRepository.cs" />
     <Compile Include="Interfaces\IMarkerRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\ITreasureCommentsRepository.cs" />
     <Compile Include="Interfaces\ITreasureRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
@@ -167,15 +173,20 @@
     <Compile Include="Database\GeocachingContext.cs" />
     <Compile Include="Validation\TextValidation.cs" />
     <Compile Include="ViewModel\BrowserVM\HomePageBrowserVM.cs" />
+    <Compile Include="ViewModel\FindTreasureVM.cs" />
     <Compile Include="ViewModel\HideTreasurePageVM.cs" />
     <Compile Include="ViewModel\HomePageVM.cs" />
     <Compile Include="ViewModel\LoginPageVM.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\PopUpVM\TreasureFoundVM.cs" />
     <Compile Include="ViewModel\RegisterPageVM.cs" />
     <Compile Include="ViewModel\UserPageVM.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="Views\BrowsersViews\HomePageBrowserView.xaml.cs">
       <DependentUpon>HomePageBrowserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FindTreasureView.xaml.cs">
+      <DependentUpon>FindTreasureView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HideTreasurePageView.xaml.cs">
       <DependentUpon>HideTreasurePageView.xaml</DependentUpon>
@@ -185,6 +196,10 @@
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\CloseWindowEventArgs.cs" />
+    <Compile Include="Views\PopUpViews\TreasureFoundView.xaml.cs">
+      <DependentUpon>TreasureFoundView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RegisterPageView.xaml.cs">
       <DependentUpon>RegisterPageView.xaml</DependentUpon>
@@ -201,6 +216,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\BrowsersViews\HomePageBrowserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FindTreasureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -225,6 +244,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PopUpViews\TreasureFoundView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -272,6 +295,7 @@
     <Resource Include="res\Images\Geocaching-Icon.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="res\Icons\warning_sign.png" />
     <Resource Include="res\Icons\home_icon.png" />
     <Resource Include="Helper\Ideas.txt" />
     <Content Include="html\map.html">

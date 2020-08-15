@@ -2,6 +2,8 @@
 using CefSharp.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Threading;
 using Geocache.Database;
 using Geocache.Enums;
 using Geocache.Helper;
@@ -14,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Geocache.ViewModel.BrowserVM
 {
@@ -57,17 +60,13 @@ namespace Geocache.ViewModel.BrowserVM
                 webBrowser = value;
                 // second check is when the destruction is called
                 if (webBrowser != null && webBrowser.Address == null)
-                    //webBrowser.Address="localfolder://cefsharp/";
-
-                    RaisePropertyChanged(WebBrowserPropertyName);
+                {
+                    webBrowser.Address = "localfolder://cefsharp/";
+                    webBrowser.JavascriptObjectRepository.Register("homePageVM",
+                            this, true, BindingOptions.DefaultBinder);
+                }
+                RaisePropertyChanged(WebBrowserPropertyName);
             }
-        }
-
-        private object evaluateJavaScriptResult;
-        public object EvaluateJavaScriptResult
-        {
-            get { return evaluateJavaScriptResult; }
-            set { Set(ref evaluateJavaScriptResult, value); }
         }
         
 
@@ -75,6 +74,8 @@ namespace Geocache.ViewModel.BrowserVM
         {
             Markers = new List<MarkerInfo>();
             UserData = userData;
+            CefSharpSettings.LegacyJavascriptBindingEnabled = true;
+            CefSharpSettings.WcfEnabled = true;
         }
         
 
@@ -147,7 +148,7 @@ namespace Geocache.ViewModel.BrowserVM
         
         public const string RadiusPropertyName = "Radius";
 
-        private double radius;
+        private double radius=1;
 
         /// <summary>
         /// Sets and gets the Radius property.
@@ -172,9 +173,64 @@ namespace Geocache.ViewModel.BrowserVM
             }
         }
 
+        public const string FindChainedTreasuresName = "FindChainedTreasures";
+
+        private bool findChainedTreasures = false;
+
         /// <summary>
-            /// The <see cref="CurrentLocation" /> property's name.
-            /// </summary>
+        /// Sets and gets the findChainedTreasures property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public bool FindChainedTreasures
+        {
+            get
+            {
+                return findChainedTreasures;
+            }
+
+            set
+            {
+                if (findChainedTreasures == value)
+                {
+                    return;
+                }
+
+                findChainedTreasures = value;
+                RaisePropertyChanged(FindChainedTreasuresName);
+            }
+        }
+        // if the user wants to see found by him treasures
+        public const string FoundByUserName = "FoundByUser";
+
+        private bool foundByUser=false;
+
+        /// <summary>
+        /// Sets and gets the foundByUser property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public bool FoundByUser
+        {
+            get
+            {
+                return foundByUser;
+            }
+
+            set
+            {
+                if (foundByUser == value)
+                {
+                    return;
+                }
+
+                foundByUser = value;
+                RaisePropertyChanged(FoundByUserName);
+            }
+        }
+
+
+        /// <summary>
+        /// The <see cref="CurrentLocation" /> property's name.
+        /// </summary>
         public const string CurrentLocationPropertyName = "CurrentLocation";
 
         private Location currentLocation;
@@ -188,7 +244,7 @@ namespace Geocache.ViewModel.BrowserVM
             get
             {
                 if (currentLocation == null)
-                    currentLocation = new Location(UserData.GetUserAddress());
+                    currentLocation = new Location(0,0);
                 return currentLocation;
             }
 
@@ -216,18 +272,22 @@ namespace Geocache.ViewModel.BrowserVM
                 if (filterTreasures == null)
                     filterTreasures = new RelayCommand(() =>
                     {
+                        WebBrowser.ExecuteScriptAsync("removeMarkers","removed");
                         using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
                         {
-                            foreach (var treas in UnitofWork.Treasures.GetOthersTreasures(UserData.GetUser().ID))
+                            foreach (var treas in UnitofWork.Treasures.GetOthersTreasures(UserData.CurrentUser.ID))
                             {
                                 if((SelectedTreasureSize==Enums.TreasureSizes.ANY || treas.TreasureSize==SelectedTreasureSize) &&
-                                (SelectedTreasureType==TreasureType.ANY || treas.TreasureType==SelectedTreasureType))
+                                (SelectedTreasureType==TreasureType.ANY || treas.TreasureType==SelectedTreasureType) &&
+                                (Difficulty==0 || treas.Difficulty<=Difficulty) && treas.IsChained==FindChainedTreasures
+                                )
                                 {
                                     if(treas.MarkerInfo.IsInRadius(CurrentLocation.Lat, CurrentLocation.Lon,Radius))
                                         Markers.Add(treas.MarkerInfo);
                                 }
                             }
 
+                            if (Markers.Count != 0)
                             foreach (MarkerInfo marker in Markers)
                             {
                                 Treasure treasr = UnitofWork.Treasures.Get(marker.TreasureId);
@@ -236,6 +296,7 @@ namespace Geocache.ViewModel.BrowserVM
                                 treasr.TreasureSize.ToString(), treasr.Description,
                                 treasr.Rating, treasr.IsChained.ToString());
                             }
+                            Markers.Clear();
                         }
                     });
                 return filterTreasures;
@@ -249,41 +310,85 @@ namespace Geocache.ViewModel.BrowserVM
                 if (goToHomeLocation == null)
                     goToHomeLocation = new RelayCommand(() =>
                       {
-                          string address = UserData.GetUserAddress();
-                          //WebBrowser.ExecuteScriptAsync("codeAdress", address);
+                          CurrentLocation = new Location(UserData.GetUserHomeAddress());
+                          string address = UserData.GetUserHomeAddress();
+                          WebBrowser.ExecuteScriptAsync("codeHomeAdress", address);
                       });
                 return goToHomeLocation;
             }
         }
 
-        private async void EvaluateJavaScript(string s)
+        #region methods
+        public void endDragMarkerCS(double Lat, double Lng)
         {
-            try
+            CurrentLocation = new Location(Lat, Lng);
+        }
+
+        public void startHuntCS(double lat, double lng, string name, int id)
+        {
+            if (MessageBox.Show("are you sure you wanna search for " +
+                   "treasure at coordinates:" + lat.ToString().Substring(0,4) +
+                   "- " + lng.ToString().Substring(0, 4) + " " + "\nwith name: " + name, "confirmation", MessageBoxButton.YesNo) ==
+                   MessageBoxResult.Yes)
             {
-                var response = await webBrowser.EvaluateScriptAsync(s);
-                if (response.Success && response.Result is IJavascriptCallback)
+                SimpleIoc.Default.GetInstance<UserDataService>().UserLocation = CurrentLocation;
+                if (!SimpleIoc.Default.IsRegistered<FoundTreasureArgs>())
                 {
-                    response = await ((IJavascriptCallback)response.Result).ExecuteAsync("This is a callback from EvaluateJavaScript");
+                    SimpleIoc.Default.Register<FoundTreasureArgs>(() =>
+                    {
+                        return new FoundTreasureArgs
+                        {
+                            FoundTreasureId = id,
+                            FoundTreasureLocation = new Location(lat, lng)
+                        };
+                    });
+                    SimpleIoc.Default.Register<FoundTreasureWindowController>();
                 }
-
-                EvaluateJavaScriptResult = response.Success ? (response.Result ?? "null") : response.Message;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error while evaluating Javascript: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                else
+                {
+                    SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureId = id;
+                    SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureLocation = new Location(lat, lng);
+                }
+                MessengerInstance.Send<ViewModelBase>(ViewModelLocator.FindTreasureVM, "ChangePage");
             }
         }
 
-        private void ExecuteJavaScript(string s)
+        public void getAllTreasuresCS(string address)
         {
-            try
+            string[] names = address.Split(',');
+            if (names.Length >= 2)
             {
-                webBrowser.ExecuteScriptAsync(s);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error while executing Javascript: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                string country = names[names.Length-1];
+                string city = names[names.Length - 2];
+                WebBrowser.ExecuteScriptAsync("removeMarkers", "removed");
+                using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
+                {
+                    foreach (var treas in UnitofWork.Treasures.GetOthersTreasures(UserData.CurrentUser.ID))
+                    {
+                        if ((SelectedTreasureSize == Enums.TreasureSizes.ANY || treas.TreasureSize == SelectedTreasureSize) &&
+                        (SelectedTreasureType == TreasureType.ANY || treas.TreasureType == SelectedTreasureType) &&
+                        (Difficulty == 0 || treas.Difficulty <= Difficulty) && treas.IsChained == FindChainedTreasures
+                        )
+                        {
+                            if (treas.MarkerInfo.Country.Contains(country, StringComparison.OrdinalIgnoreCase) &&
+                                treas.MarkerInfo.City.Contains(city, StringComparison.OrdinalIgnoreCase))
+                                Markers.Add(treas.MarkerInfo);
+                        }
+                    }
+
+                    if (Markers.Count != 0)
+                        foreach (MarkerInfo marker in Markers)
+                        {
+                            Treasure treasr = UnitofWork.Treasures.Get(marker.TreasureId);
+                            WebBrowser.ExecuteScriptAsync("showTreasures", marker.Latitude, marker.Longtitude,
+                            treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
+                            treasr.TreasureSize.ToString(), treasr.Description,
+                            treasr.Rating, treasr.IsChained.ToString());
+                        }
+                    Markers.Clear();
+                }
             }
         }
+        #endregion
     }
 }

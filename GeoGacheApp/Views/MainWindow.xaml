@@ -24,6 +24,9 @@
         <DataTemplate DataType="{x:Type vm:HideTreasurePageVM}">
             <local:HideTreasurePageView></local:HideTreasurePageView>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FindTreasureVM}">
+            <local:FindTreasureView></local:FindTreasureView>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <ContentControl Name="content" Content="{Binding CurrentContent}" ></ContentControl>

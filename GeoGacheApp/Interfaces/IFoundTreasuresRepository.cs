@@ -10,5 +10,8 @@ namespace Geocache.Interfaces
     public interface IFoundTreasuresRepository:IRepository<Found_Treasures>
     {
         //methods concerning found treasures
+        int GetUserPoints(int UserId);
+        bool HasUserFoundTreasure(int UserId, int TreasureId);
+        Treasure GetNextTreasure(int TreasureId);
     }
 }

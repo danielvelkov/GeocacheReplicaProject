@@ -13,31 +13,26 @@ namespace Geocache.Helper
     {
         User currentUser;
         List<Treasure> userTreasures;
+        Location userLocation;
+
+        public Location UserLocation { get => userLocation; set => userLocation = value; }
+        public User CurrentUser { get => currentUser; set => currentUser = value; }
+
         //ICollection<Treasures_Comments> userComments;
 
         public UserDataService(User LoggedUser)
         {
-            SetUser(LoggedUser);
+            CurrentUser=LoggedUser;
         }
-
-        public User GetUser()
-        {
-            return currentUser;
-        }
-
-        public void SetUser(User user)
-        {
-            currentUser = user;
-        }
-        public string GetUserAddress()
+        public string GetUserHomeAddress()
         {
             StringBuilder address = new StringBuilder();
-            if(!string.IsNullOrEmpty(currentUser.Adress))
-            address.Append(currentUser.Adress + ",");
-            if (!string.IsNullOrEmpty(currentUser.City))
-                address.Append(currentUser.City + ",");
-            if (!string.IsNullOrEmpty(currentUser.Country))
-                address.Append(currentUser.Country);
+            if(!string.IsNullOrEmpty(CurrentUser.Adress))
+            address.Append(CurrentUser.Adress + ",");
+            if (!string.IsNullOrEmpty(CurrentUser.City))
+                address.Append(CurrentUser.City + ",");
+            if (!string.IsNullOrEmpty(CurrentUser.Country))
+                address.Append(CurrentUser.Country);
             else address.Length--;
             return address.ToString();
         }
@@ -46,7 +41,7 @@ namespace Geocache.Helper
             userTreasures = new List<Treasure>();
             using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
             {
-                userTreasures = UnitofWork.Treasures.GetUserTreasures(currentUser.ID);
+                userTreasures = UnitofWork.Treasures.GetUserTreasures(CurrentUser.ID);
             }
             return userTreasures;
         }
@@ -56,7 +51,7 @@ namespace Geocache.Helper
             userTreasures = new List<Treasure>();
             using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
             {
-                userTreasures = UnitofWork.Treasures.GetUserTreasuresNotChained(currentUser.ID);
+                userTreasures = UnitofWork.Treasures.GetUserTreasuresNotChained(CurrentUser.ID);
             }
             return userTreasures;
         }

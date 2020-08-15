@@ -17,6 +17,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Geocache.ViewModel;
 using Geocache.ViewModel.BrowserVM;
+using Geocache.ViewModel.PopUpVM;
 
 namespace Geocache.ViewModel
 {
@@ -35,7 +36,7 @@ namespace Geocache.ViewModel
             
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LoginPageVM>();
-            
+            SimpleIoc.Default.Register<FindTreasureVM>();
             //SimpleIoc.Default.Register<HideTreasurePageVM>();
         }
         
@@ -99,6 +100,20 @@ namespace Geocache.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<HideTreasurePageVM>();
+            }
+        }
+        public static FindTreasureVM FindTreasureVM
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<FindTreasureVM>();
+            }
+        }
+        public static TreasureFoundVM TreasureFoundVM
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<TreasureFoundVM>();
             }
         }
     }

@@ -62,6 +62,8 @@ namespace Geocache.Helper
         }
         public Location(double lat,double lon)
         {
+            Lat = lat;
+            Lon = lon;
             //make address from lat and lon
         }
 

@@ -49,6 +49,6 @@
                 <Hyperlink Command="{Binding Register}">New to the app?</Hyperlink>
             </TextBlock>
         </Grid>
-        <TextBlock Grid.Row="3" HorizontalAlignment="Center" FontSize="16">USER: geochacher2 meatballs <LineBreak></LineBreak> MOD: geochacher3 baloni <LineBreak></LineBreak> ADMIN: adminadmin password</TextBlock>
+        <TextBlock Grid.Row="3" HorizontalAlignment="Center" FontSize="16">USER: geochacher2 meatballs <LineBreak></LineBreak> MOD: geochacher3 baloni12 <LineBreak></LineBreak> ADMIN: adminadmin password</TextBlock>
     </Grid>
 </UserControl>
