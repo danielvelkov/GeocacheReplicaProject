@@ -87,7 +87,7 @@ namespace Geocache.ViewModel
                         SimpleIoc.Default.Unregister<UserPageVM>();
                         SimpleIoc.Default.Unregister<HomePageBrowserVM>();
                         // change to login page
-                        MessengerInstance.Send<ViewModelBase>(ViewModelLocator.LoginPageVM, "ChangePage");
+                        MessengerInstance.Send<Type>(typeof(LoginPageVM), "ChangePage");
                     });
                 return logOut;
             }

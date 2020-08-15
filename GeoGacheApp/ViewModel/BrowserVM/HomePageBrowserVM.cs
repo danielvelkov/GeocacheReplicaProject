@@ -342,13 +342,15 @@ namespace Geocache.ViewModel.BrowserVM
                             FoundTreasureLocation = new Location(lat, lng)
                         };
                     });
-                    SimpleIoc.Default.Register<FoundTreasureWindowController>();
+                    SimpleIoc.Default.Register<PopUpWindowController>();
                 }
                 else
                 {
                     SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureId = id;
                     SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureLocation = new Location(lat, lng);
                 }
+                if(!SimpleIoc.Default.IsRegistered<FindTreasureVM>())
+                    SimpleIoc.Default.Register<FindTreasureVM>();
                 MessengerInstance.Send<ViewModelBase>(ViewModelLocator.FindTreasureVM, "ChangePage");
             }
         }

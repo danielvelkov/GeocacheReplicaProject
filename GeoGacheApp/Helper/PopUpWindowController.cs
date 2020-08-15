@@ -6,25 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Geocache.Helper
 {
-    public class FoundTreasureWindowController 
+    public class PopUpWindowController 
     {
         /// <summary>
         /// Show FoundTreasureWindow
         /// </summary>
-        public bool? ShowPopUp(FoundTreasureArgs args)
+        public bool? ShowPopUp(Window popUpWindow)
         {
-            if (SimpleIoc.Default.ContainsCreated<FoundTreasureArgs>())
-            {
-                 
-            }
-            else
-            SimpleIoc.Default.Register(() => args);
-
-            TreasureFoundView view = new TreasureFoundView();
-            return view.ShowDialog();
+            return popUpWindow.ShowDialog();
         }
     }
 

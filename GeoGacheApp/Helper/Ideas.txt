@@ -8,15 +8,10 @@
 mytreasures button
 https://github.com/imnbwd/FriendEditor/blob/master/FriendEditor/ViewModels/MainViewModel.cs
 
-- set default location on another screen or
-a popup window
-
 - filtering the treasures + the cefsharp browser into another control(DONE)
-
-- add a profile pic to user
-
--add images to treasures, to comments
 
 - during the registration add something to tell the user how to input the address
 - maybe add a  browser and a map so the user can check if its the right place or mayne
 incorporate a drag and drop marker that transforms the 
+
+- mvvm memory leaks

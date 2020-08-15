@@ -148,7 +148,7 @@
     <Compile Include="Enums\TreasureTypes.cs" />
     <Compile Include="Enums\UserRoles.cs" />
     <Compile Include="Helper\Extensions.cs" />
-    <Compile Include="Helper\FoundTreasureWindowController.cs" />
+    <Compile Include="Helper\PopUpWindowController.cs" />
     <Compile Include="Helper\Location.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Helper\UserDataService.cs" />

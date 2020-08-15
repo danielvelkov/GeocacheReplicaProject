@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Geocaching" SizeToContent="WidthAndHeight"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator} }">
-    <Window.Resources>
+    <!--<Window.Resources>
         <DataTemplate DataType="{x:Type vm:LoginPageVM}">
             <local:LoginPageView></local:LoginPageView>
         </DataTemplate>
@@ -27,7 +27,7 @@
         <DataTemplate DataType="{x:Type vm:FindTreasureVM}">
             <local:FindTreasureView></local:FindTreasureView>
         </DataTemplate>
-    </Window.Resources>
+    </Window.Resources>-->
     <Grid>
         <ContentControl Name="content" Content="{Binding CurrentContent}" ></ContentControl>
     </Grid>

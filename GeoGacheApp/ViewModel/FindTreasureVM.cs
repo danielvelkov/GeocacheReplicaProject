@@ -9,6 +9,7 @@ using Geocache.Enums;
 using Geocache.Helper;
 using Geocache.Models;
 using Geocache.ViewModel.PopUpVM;
+using Geocache.Views.PopUpViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Geocache.ViewModel
 {
     public class FindTreasureVM:ViewModelBase
     {
-        public FindTreasureVM(UserDataService userdata,FoundTreasureWindowController popUp,FoundTreasureArgs args)
+        public FindTreasureVM(UserDataService userdata,PopUpWindowController popUp,FoundTreasureArgs args)
         {
             UserData = userdata;
             TreasureArgs = args;
@@ -32,7 +33,7 @@ namespace Geocache.ViewModel
         private FoundTreasureArgs treasureArgs;
         public UserDataService UserData { get; private set; }
         public FoundTreasureArgs TreasureArgs { get => treasureArgs; set => treasureArgs = value; }
-        public FoundTreasureWindowController PopUp { get; private set; }
+        public PopUpWindowController PopUp { get; private set; }
 
         private ChromiumWebBrowser webBrowser;
         public const string WebBrowserPropertyName = "WebBrowser";
@@ -130,13 +131,8 @@ namespace Geocache.ViewModel
                 {
                     if(!SimpleIoc.Default.IsRegistered<TreasureFoundVM>())
                     SimpleIoc.Default.Register<TreasureFoundVM>();
-                    var result = PopUp.ShowPopUp(null);
-                    if (result.HasValue && result.Value)
-                    {
-                        //https://docs.microsoft.com/en-us/dotnet/api/system.windows.window.showdialog?view=netcore-3.1
-                        // maybe set the dialog result to false when user hasnt found 
-                        // and set it to true when the treasure is chained and there are others after it
-                    }
+                    PopUp.ShowPopUp(new TreasureFoundView());
+                    
                 }));
             }
         }

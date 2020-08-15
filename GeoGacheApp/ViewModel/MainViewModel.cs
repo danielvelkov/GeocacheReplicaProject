@@ -1,4 +1,5 @@
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Ioc;
 using System;
 
 namespace Geocache.ViewModel
@@ -10,16 +11,16 @@ namespace Geocache.ViewModel
         /// </summary>
         public MainViewModel()
         {
-            MessengerInstance.Register<ViewModelBase>(this, "ChangePage", ViewModel => { ChangeContent(ViewModel); });
+            MessengerInstance.Register<Type>(this, "ChangePage", ViewModel => { ChangeContent(ViewModel); });
         }
 
         #region variables
-        ViewModelBase _currentContent;
+        dynamic _currentContent;
         #endregion
 
         #region parameters
 
-        public ViewModelBase CurrentContent
+        public dynamic CurrentContent
         {
             get
             {
@@ -47,9 +48,9 @@ namespace Geocache.ViewModel
 
         #region methods
         // basically the old way of doing it, ViewModelLocator is not used at alll
-        void ChangeContent(ViewModelBase ViewModel)
+        void ChangeContent(Type ViewModel)
         {
-            CurrentContent = ViewModel;
+            CurrentContent = SimpleIoc.Default.GetInstance(ViewModel,ViewModel.GUID.ToString());
         }
 
         #endregion
