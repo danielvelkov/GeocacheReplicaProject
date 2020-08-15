@@ -9,7 +9,8 @@
              xmlns:convert="clr-namespace:Geocache.Converters"
              xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              MinHeight="600" MinWidth="800"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             >
     <UserControl.Resources>
         <convert:RngTxtBlockConverter x:Key="DifficultyConverter"></convert:RngTxtBlockConverter>
         <convert:InverseBooleanConverter x:Key="InverseBoolean"></convert:InverseBooleanConverter>
@@ -62,7 +63,7 @@
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding ElementName=scrollBar, Path=Value,Converter={StaticResource DifficultyConverter}}" 
+                        <TextBlock Grid.Column="0" Text="{Binding ElementName=scrollBar, Path=Value,Converter={StaticResource DifficultyConverter},Mode=OneTime}" 
                                    FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" >
                         </TextBlock>
                         <ScrollBar Grid.Column="1" Name="scrollBar" Minimum="0" Value="{Binding Difficulty}"  SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
@@ -92,7 +93,7 @@
                         <Label >Radius</Label>
                         <Slider Name="slider" Orientation="Horizontal" IsSnapToTickEnabled="True" Value="{Binding Radius}"
                                 Ticks="" Minimum="0" Maximum="10" TickPlacement="BottomRight" VerticalAlignment="Center" Width="100"></Slider>
-                        <TextBlock Grid.Column="0" Text="{Binding ElementName=slider, Path=Value}" 
+                        <TextBlock Grid.Column="0" Text="{Binding ElementName=slider, Path=Value,Mode=OneTime}" 
                                    FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" >
                         </TextBlock>
                         <TextBlock VerticalAlignment="Center">km.</TextBlock>
@@ -105,13 +106,13 @@
                 </Grid>
             </GroupBox>
            
-            <ProgressBar  IsIndeterminate="{Binding WebBrowser.IsLoading}"
+            <ProgressBar  IsIndeterminate="{Binding WebBrowser.IsLoading,Mode=OneTime}"
                              HorizontalAlignment="Right"
                             Width="100"
                              Height="5"/>
         </StackPanel>
         <GroupBox Grid.Row="2" Header="Map">
-            <wpf:ChromiumWebBrowser WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}"  ></wpf:ChromiumWebBrowser>
+            <wpf:ChromiumWebBrowser WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}"></wpf:ChromiumWebBrowser>
         </GroupBox>
        
     </Grid>

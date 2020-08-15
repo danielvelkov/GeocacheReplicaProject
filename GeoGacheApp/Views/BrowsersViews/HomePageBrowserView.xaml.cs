@@ -40,7 +40,7 @@ namespace Geocache.Views.BrowsersViews
                 var settings = new CefSettings();
 
                 settings.BrowserSubprocessPath = System.IO.Path.GetFullPath("CefSharp.BrowserSubprocess.exe");
-                
+
                 settings.RegisterScheme(new CefCustomScheme
                 {
                     SchemeName = "localfolder",
@@ -52,7 +52,7 @@ namespace Geocache.Views.BrowsersViews
                 )
                 });
 
-                Cef.Initialize(settings,performDependencyCheck: true, browserProcessHandler: null);
+                Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
             }
         }
     }

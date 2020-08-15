@@ -119,7 +119,7 @@ namespace Geocache.ViewModel
             {
                 return goBack ?? (goBack = new RelayCommand(() => {
 
-                    MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
+                    MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage");
                 }));
             }
         }

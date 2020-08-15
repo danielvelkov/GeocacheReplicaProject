@@ -28,10 +28,7 @@
                     <TextBlock VerticalAlignment="Center" Margin="0,0,10,0"><Hyperlink Command="{Binding LogOut}"  Foreground="Gray">Log out</Hyperlink></TextBlock>
                 </StackPanel>
 
-                <Image Width="50" Height="50" Margin="0,10,10,0" >
-                    <Image.Source >
-                        <BitmapImage UriSource="/res/Images/icon.png"></BitmapImage>
-                    </Image.Source>
+                <Image Width="50" Height="50" Margin="0,10,10,0" Source="/res/Images/icon.png">
                 </Image>
             </StackPanel>
             

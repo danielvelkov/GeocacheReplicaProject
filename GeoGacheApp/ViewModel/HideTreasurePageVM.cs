@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
+using Geocache.ViewModel.BrowserVM;
 
 namespace Geocache.ViewModel
 {
@@ -257,6 +258,7 @@ namespace Geocache.ViewModel
                     webBrowser.Address = "localfolder://cefsharp/map_hiding.html";
                     webBrowser.JavascriptObjectRepository.Register("hideTreasureVM",
                         this, true,BindingOptions.DefaultBinder);
+                    
                 }
                 RaisePropertyChanged(WebBrowserPropertyName);
             }
@@ -273,7 +275,8 @@ namespace Geocache.ViewModel
                   new RelayCommand((() =>
                   {
                       SimpleIoc.Default.Unregister<HideTreasurePageVM>();
-                      MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
+                      WebBrowser.JavascriptObjectRepository.UnRegisterAll();
+                      MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage");
                   })
                 ));
 

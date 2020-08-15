@@ -144,7 +144,7 @@ namespace Geocache.ViewModel
                     goToLoginPage = new RelayCommand(() =>
                      {
                          SimpleIoc.Default.Unregister<RegisterPageVM>();
-                         MessengerInstance.Send<ViewModelBase>(ViewModelLocator.LoginPageVM, "ChangePage");
+                         MessengerInstance.Send<Type>(typeof(LoginPageVM), "ChangePage");
                      });
                 return goToLoginPage;
             }

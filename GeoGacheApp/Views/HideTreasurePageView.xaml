@@ -170,7 +170,7 @@
                     <RowDefinition Height="20"></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                <ProgressBar  IsIndeterminate="{Binding WebBrowser.IsLoading}"
+                <ProgressBar  IsIndeterminate="{Binding WebBrowser.IsLoading,Mode=OneTime}"
                                  HorizontalAlignment="Right"
                                 Width="100"
                                  Height="16"/>

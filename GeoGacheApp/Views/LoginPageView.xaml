@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Geocache"
         mc:Ignorable="d"
-         MinHeight="400" MinWidth="500"
-        DataContext="{Binding LoginPageVM, Source={StaticResource Locator}}">
+         MinHeight="400" MinWidth="500">
     <UserControl.InputBindings>
         <KeyBinding Command="{Binding Login}" Key="Enter"></KeyBinding>
     </UserControl.InputBindings>

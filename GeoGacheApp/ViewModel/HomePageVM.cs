@@ -82,10 +82,9 @@ namespace Geocache.ViewModel
                     logOut = new RelayCommand(() =>
                     {
                         //remove the user specific instances of pages
-                        SimpleIoc.Default.Unregister<UserDataService>();
-                        SimpleIoc.Default.Unregister<HomePageVM>();
-                        SimpleIoc.Default.Unregister<UserPageVM>();
-                        SimpleIoc.Default.Unregister<HomePageBrowserVM>();
+                        SimpleIoc.Default.GetInstance<UserDataService>().CurrentUser = null;
+                        
+                        //ViewModelLocator.Cleanup();
                         // change to login page
                         MessengerInstance.Send<Type>(typeof(LoginPageVM), "ChangePage");
                     });
@@ -100,8 +99,7 @@ namespace Geocache.ViewModel
                 if (goToUserPage == null)
                     goToUserPage = new RelayCommand(() =>
                     {
-                        SimpleIoc.Default.Register<UserPageVM>();
-                        MessengerInstance.Send<ViewModelBase>(ViewModelLocator.UserPageVM, "ChangePage");
+                        MessengerInstance.Send<Type>(typeof(UserPageVM), "ChangePage");
                     });
                 return goToUserPage;
             }
@@ -127,8 +125,10 @@ namespace Geocache.ViewModel
                 if (hideTreasure == null)
                     hideTreasure = new RelayCommand(() =>
                     {
+                        if(!SimpleIoc.Default.IsRegistered<HideTreasurePageVM>())
                         SimpleIoc.Default.Register<HideTreasurePageVM>();
-                        MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HideTreasurePageVM, "ChangePage");
+
+                        MessengerInstance.Send<Type>(typeof(HideTreasurePageVM), "ChangePage");
                     });
                 return hideTreasure;
             }

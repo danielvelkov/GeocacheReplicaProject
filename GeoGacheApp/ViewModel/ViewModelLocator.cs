@@ -37,6 +37,10 @@ namespace Geocache.ViewModel
             
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LoginPageVM>();
+            SimpleIoc.Default.Register<HomePageBrowserVM>();
+            SimpleIoc.Default.Register<HomePageVM>();
+            SimpleIoc.Default.Register<HideTreasurePageVM>();
+            SimpleIoc.Default.Register<UserPageVM>();
         }
         
         public static void Cleanup()
@@ -48,73 +52,7 @@ namespace Geocache.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
         }
-
-        /// <summary>
-        /// Gets the LoginPageVM property.
-        /// </summary>
-        //public static LoginPageVM LoginPageVM
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<LoginPageVM>();
-        //    }
-        //}
-        //public static MainViewModel MainViewModel
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<MainViewModel>();
-        //    }
-        //}
-        //public static HomePageVM HomePageVM
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<HomePageVM>();
-        //    }
-        //}
-        //public static RegisterPageVM RegisterPageVM
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<RegisterPageVM>();
-        //    }
-        //}
-        //public static HomePageBrowserVM HomePageBrowserVM
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<HomePageBrowserVM>();
-        //    }
-        //}
-        //public static UserPageVM UserPageVM
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<UserPageVM>();
-        //    }
-        //}
-        //public static HideTreasurePageVM HideTreasurePageVM
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<HideTreasurePageVM>();
-        //    }
-        //}
-        //public static FindTreasureVM FindTreasureVM
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<FindTreasureVM>();
-        //    }
-        //}
-        //public static TreasureFoundVM TreasureFoundVM
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<TreasureFoundVM>();
-        //    }
-        //}
+        
         public LoginPageVM LoginPageVM => SimpleIoc.Default.GetInstance<LoginPageVM>(Guid.NewGuid().ToString());
         public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>(Guid.NewGuid().ToString());
         public HomePageVM HomePageVM => SimpleIoc.Default.GetInstance<HomePageVM>(Guid.NewGuid().ToString());

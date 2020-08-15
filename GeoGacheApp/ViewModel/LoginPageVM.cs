@@ -107,15 +107,12 @@ namespace Geocache.ViewModel
 
                               if (user != null)
                               {
-                                  //create the instances of the pages connected to the user
-                                  SimpleIoc.Default.Register<HomePageVM>();
-                                  SimpleIoc.Default.Register<HomePageBrowserVM>();
-                                  
                                   //login the user
-                                  SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
-
+                                  if (!SimpleIoc.Default.IsRegistered<UserDataService>())
+                                      SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
+                                  else SimpleIoc.Default.GetInstance<UserDataService>().CurrentUser = user;
                                   //change to homepage
-                                  MessengerInstance.Send<ViewModelBase>(ViewModelLocator.HomePageVM, "ChangePage");
+                                  MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage");
 
                               }
                               else
@@ -140,7 +137,7 @@ namespace Geocache.ViewModel
                  new RelayCommand<Object>(x =>
                  {
                      SimpleIoc.Default.Register<RegisterPageVM>();
-                     MessengerInstance.Send<ViewModelBase>(ViewModelLocator.RegisterPageVM, "ChangePage");
+                     MessengerInstance.Send<Type>(typeof(RegisterPageVM), "ChangePage");
                  }
 
                 ));

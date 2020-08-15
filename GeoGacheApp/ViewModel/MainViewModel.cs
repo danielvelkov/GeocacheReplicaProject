@@ -32,8 +32,6 @@ namespace Geocache.ViewModel
             }
             set
             {
-                if (_currentContent == value)
-                    return;
                 _currentContent = value;
                 RaisePropertyChanged("CurrentContent");
             }

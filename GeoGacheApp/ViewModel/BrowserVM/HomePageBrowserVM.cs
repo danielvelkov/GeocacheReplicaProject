@@ -22,9 +22,14 @@ namespace Geocache.ViewModel.BrowserVM
 {
     public class HomePageBrowserVM : ViewModelBase
     {
+        public HomePageBrowserVM(UserDataService userData)
+        {
+            Markers = new List<MarkerInfo>();
+            UserData = userData;
+            CefSharpSettings.LegacyJavascriptBindingEnabled = true;
+            CefSharpSettings.WcfEnabled = true;
+        }
         public UserDataService UserData { get; }
-
-
         private TreasureType selectedTreasureType= TreasureType.ANY;
         private TreasureSizes selectedTreasureSize= Enums.TreasureSizes.ANY;
 
@@ -68,17 +73,6 @@ namespace Geocache.ViewModel.BrowserVM
                 RaisePropertyChanged(WebBrowserPropertyName);
             }
         }
-        
-
-        public HomePageBrowserVM(UserDataService userData)
-        {
-            Markers = new List<MarkerInfo>();
-            UserData = userData;
-            CefSharpSettings.LegacyJavascriptBindingEnabled = true;
-            CefSharpSettings.WcfEnabled = true;
-        }
-        
-
         public TreasureType SelectedTreasureType
         {
             get
@@ -286,7 +280,6 @@ namespace Geocache.ViewModel.BrowserVM
                                         Markers.Add(treas.MarkerInfo);
                                 }
                             }
-
                             if (Markers.Count != 0)
                             foreach (MarkerInfo marker in Markers)
                             {
@@ -351,7 +344,7 @@ namespace Geocache.ViewModel.BrowserVM
                 }
                 if(!SimpleIoc.Default.IsRegistered<FindTreasureVM>())
                     SimpleIoc.Default.Register<FindTreasureVM>();
-                MessengerInstance.Send<ViewModelBase>(ViewModelLocator.FindTreasureVM, "ChangePage");
+                MessengerInstance.Send<Type>(typeof(FindTreasureVM), "ChangePage");
             }
         }
 
