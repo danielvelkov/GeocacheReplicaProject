@@ -15,6 +15,7 @@
 using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
+using Geocache.Helper;
 using Geocache.ViewModel;
 using Geocache.ViewModel.BrowserVM;
 using Geocache.ViewModel.PopUpVM;
@@ -41,6 +42,9 @@ namespace Geocache.ViewModel
             SimpleIoc.Default.Register<HomePageVM>();
             SimpleIoc.Default.Register<HideTreasurePageVM>();
             SimpleIoc.Default.Register<UserPageVM>();
+            SimpleIoc.Default.Register<LeaderboardVM>();
+            SimpleIoc.Default.Register<PopUpWindowController>();
+            SimpleIoc.Default.Register<UserTreasuresVM>();
         }
         
         public static void Cleanup()
@@ -62,5 +66,7 @@ namespace Geocache.ViewModel
         public HideTreasurePageVM HideTreasurePageVM => SimpleIoc.Default.GetInstance<HideTreasurePageVM>(Guid.NewGuid().ToString());
         public FindTreasureVM FindTreasureVM => SimpleIoc.Default.GetInstance<FindTreasureVM>(Guid.NewGuid().ToString());
         public TreasureFoundVM TreasureFoundVM => SimpleIoc.Default.GetInstance<TreasureFoundVM>(Guid.NewGuid().ToString());
+        public LeaderboardVM LeaderboardVM => SimpleIoc.Default.GetInstance<LeaderboardVM>(Guid.NewGuid().ToString());
+        public UserTreasuresVM UserTreasuresVM => SimpleIoc.Default.GetInstance<UserTreasuresVM>(Guid.NewGuid().ToString());
     }
 }

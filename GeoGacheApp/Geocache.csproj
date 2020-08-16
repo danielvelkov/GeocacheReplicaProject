@@ -132,9 +132,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\ArrowImageSwitch.cs" />
     <Compile Include="Converters\DiffTxtBlockConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\IsNullOrWhiteSpaceConverter.cs" />
+    <Compile Include="Converters\NameHighlight.cs" />
     <Compile Include="Converters\RngTxtBlockConverter.cs" />
     <Compile Include="Database\Repositories\ChainedTreasureRepository.cs" />
     <Compile Include="Database\Repositories\FoundTreasuresRepostitory.cs" />
@@ -178,7 +180,9 @@
     <Compile Include="ViewModel\HomePageVM.cs" />
     <Compile Include="ViewModel\LoginPageVM.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\PopUpVM\LeaderboardVM.cs" />
     <Compile Include="ViewModel\PopUpVM\TreasureFoundVM.cs" />
+    <Compile Include="ViewModel\PopUpVM\UserTreasuresVM.cs" />
     <Compile Include="ViewModel\RegisterPageVM.cs" />
     <Compile Include="ViewModel\UserPageVM.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -198,8 +202,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper\CloseWindowEventArgs.cs" />
+    <Compile Include="Views\PopUpViews\LeaderboardView.xaml.cs">
+      <DependentUpon>LeaderboardView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PopUpViews\TreasureFoundView.xaml.cs">
       <DependentUpon>TreasureFoundView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PopUpViews\UserTreasuresView.xaml.cs">
+      <DependentUpon>UserTreasuresView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RegisterPageView.xaml.cs">
       <DependentUpon>RegisterPageView.xaml</DependentUpon>
@@ -247,7 +257,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PopUpViews\LeaderboardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PopUpViews\TreasureFoundView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PopUpViews\UserTreasuresView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -295,6 +313,8 @@
     <Resource Include="res\Images\Geocaching-Icon.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="res\Icons\sortArrowDown.png" />
+    <Resource Include="res\Icons\sortArrowUp.png" />
     <Resource Include="res\Icons\warning_sign.png" />
     <Resource Include="res\Icons\home_icon.png" />
     <Resource Include="Helper\Ideas.txt" />

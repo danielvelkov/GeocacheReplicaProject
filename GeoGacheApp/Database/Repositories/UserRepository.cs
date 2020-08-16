@@ -1,8 +1,10 @@
 ﻿using Geocache;
+using Geocache.Helper;
 using Geocache.Interfaces;
 using Geocache.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -44,5 +46,6 @@ namespace Geocache.Database.Repositories
             User user = UserContext.Users.FirstOrDefault(a => a.Username == Username && a.Password==Password);
             return user;
         }
+        
     }
 }

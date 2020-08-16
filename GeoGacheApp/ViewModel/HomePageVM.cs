@@ -4,6 +4,8 @@ using GalaSoft.MvvmLight.Ioc;
 using Geocache.Enums;
 using Geocache.Helper;
 using Geocache.ViewModel.BrowserVM;
+using Geocache.ViewModel.PopUpVM;
+using Geocache.Views.PopUpViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,18 +17,18 @@ namespace Geocache.ViewModel
 {
     public class HomePageVM : ViewModelBase
     {
-        public HomePageVM(UserDataService userData)
+        public HomePageVM(UserDataService userData,PopUpWindowController popUp)
         {
+            PopUp = popUp;
             UserData = userData;
         }
-
         #region fields
 
         #endregion
 
         #region Parameters
         public UserDataService UserData { get; }
-
+        public PopUpWindowController PopUp { get; private set; }
         //welcome message
         public string Welcome
         {
@@ -134,7 +136,20 @@ namespace Geocache.ViewModel
             }
         }
 
-        public ICommand ShowLeaderBoards { get => showLeaderBoards; set => showLeaderBoards = value; }
+        public ICommand ShowLeaderBoards
+        {
+            get
+            {
+                if (showLeaderBoards == null)
+                    showLeaderBoards = new RelayCommand(() =>
+                     {
+                         if (!SimpleIoc.Default.IsRegistered<LeaderboardVM>())
+                             SimpleIoc.Default.Register<LeaderboardVM>();
+                         PopUp.ShowPopUp(new LeaderboardView());
+                     });
+                return showLeaderBoards;
+            }
+        }
         public ICommand ShowUserTreasures { get => showUserTreasures; set => showUserTreasures = value; }
 
         #endregion

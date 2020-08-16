@@ -15,3 +15,5 @@ https://github.com/imnbwd/FriendEditor/blob/master/FriendEditor/ViewModels/MainV
 incorporate a drag and drop marker that transforms the 
 
 - mvvm memory leaks
+
+- the leaderboard should be static or a resource so we dont initialize  it always

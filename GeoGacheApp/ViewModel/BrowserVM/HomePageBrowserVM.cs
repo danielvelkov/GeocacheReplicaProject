@@ -28,6 +28,15 @@ namespace Geocache.ViewModel.BrowserVM
             UserData = userData;
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
             CefSharpSettings.WcfEnabled = true;
+
+            MessengerInstance.Register<Treasure>(this, "ShowTreasure", treasr => 
+            {
+                WebBrowser.ExecuteScriptAsync("removeMarkers", "removed");
+                WebBrowser.ExecuteScriptAsync("showTreasures", treasr.MarkerInfo.Latitude, treasr.MarkerInfo.Longtitude,
+                            treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
+                            treasr.TreasureSize.ToString(), treasr.Description,
+                            treasr.Rating, treasr.IsChained.ToString());
+            });
         }
         public UserDataService UserData { get; }
         private TreasureType selectedTreasureType= TreasureType.ANY;
