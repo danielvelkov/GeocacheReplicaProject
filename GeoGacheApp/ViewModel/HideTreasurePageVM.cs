@@ -20,14 +20,28 @@ namespace Geocache.ViewModel
 {
     public class HideTreasurePageVM : ViewModelBase
     {
+        private TaskCompletionSource<bool> tcs;
         public HideTreasurePageVM(UserDataService userdata)
         {
             UserData = userdata;
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
             CefSharpSettings.WcfEnabled = true;
-            Treasure = new Treasure();
-            MarkerInfo = new MarkerInfo();
+            MessengerInstance.Register<Treasure>(this, "ChangeTreasure", async Treasur =>
+            { Treasure = Treasur; MarkerInfo = Treasur.MarkerInfo;
+                Latitude = MarkerInfo.Latitude;
+                Longtitude = MarkerInfo.Longtitude;
+                Address = MarkerInfo.Address;
+                City = MarkerInfo.City;
+                Country = MarkerInfo.Country;
+                Key = Treasur.Key;
+
+                 tcs= new TaskCompletionSource<bool>();
+                await tcs.Task;
+                WebBrowser.ExecuteScriptAsync("setMarker", Latitude, Longtitude);
+                
+            });
             TreasureChain = new Treasure();
+
         }
 
         #region fields
@@ -86,6 +100,8 @@ namespace Geocache.ViewModel
         {
             get
             {
+                if (treasure == null)
+                    treasure = new Treasure();
                 return treasure;
             }
             set
@@ -99,6 +115,8 @@ namespace Geocache.ViewModel
         {
             get
             {
+                if (markerInfo == null)
+                    markerInfo = new MarkerInfo();
                 return markerInfo;
             }
             set
@@ -178,7 +196,23 @@ namespace Geocache.ViewModel
                 RaisePropertyChanged(LongtitudeProperyName);
             }
         }
-        
+        private string key;
+        public string Key
+        {
+            get
+            {
+                return key;
+            }
+            set
+            {
+                if (key != value)
+                {
+                    key = value;
+                    RaisePropertyChanged("Key");
+                }
+            }
+        }
+
         private string address;
         public string Address
         {
@@ -258,14 +292,34 @@ namespace Geocache.ViewModel
                     webBrowser.Address = "localfolder://cefsharp/map_hiding.html";
                     webBrowser.JavascriptObjectRepository.Register("hideTreasureVM",
                         this, true,BindingOptions.DefaultBinder);
-                    
+                    if(tcs!=null)
+                    webBrowser.FrameLoadEnd += WebBrowser_FrameLoadEnd;
                 }
                 RaisePropertyChanged(WebBrowserPropertyName);
             }
         }
+
+        private void WebBrowser_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
+        {
+            //that means v8 context is loaded so we can actually stop the task
+            tcs.SetResult(true);
+            webBrowser.FrameLoadEnd -= WebBrowser_FrameLoadEnd;
+        }
         #endregion
 
         #region Commands
+        ICommand generateKey;
+        public ICommand GenerateKey
+        {
+            get
+            {
+                return generateKey ?? (generateKey =
+                  new RelayCommand(() =>
+                  {
+                      Key = Treasure.GenerateKey();
+                  }));
+            }
+        }
         private ICommand goBack;
         public ICommand GoBack
         {
@@ -306,44 +360,70 @@ namespace Geocache.ViewModel
                     new RelayCommand(() =>
                     {
                         //coordinates are vital so we check first
-                        if(!Double.IsNaN(Latitude) ||
-                        !Double.IsNaN(Longtitude))
+                        if(!Double.IsNaN(Latitude))
                         {
                             using(var UnitOfWork= new UnitOfWork(new GeocachingContext()))
                             {
-                                Treasure.Key = Treasure.GenerateKey();
-                                Treasure.Rating = 0;
-                                Treasure.UserId = UserData.CurrentUser.ID;
-                                Treasure.TreasureSize = SelectedTreasureSize;
-                                Treasure.TreasureType = SelectedTreasureType;
-                                //only lat nad long are actually needed for the position of the marker
-                                MarkerInfo.Latitude = Latitude;
-                                MarkerInfo.Longtitude = Longtitude;
-                                
-                                UnitOfWork.Treasures.Add(Treasure);
-                                Treasure.MarkerInfo = MarkerInfo;
-                                
-                                UnitOfWork.Complete();
-
-                                if (Treasure.IsChained && TreasureChain.ID!=0)
+                                // if we came to change treasure
+                                if (Treasure.ID != 0)
                                 {
-                                    UnitOfWork.ChainedTreasures.Add(
-                                        new Chained_Treasures(TreasureChain.ID, Treasure.ID));
+                                    var changedMarker = UnitOfWork.Treasures.GetTreasureInfo(Treasure.ID);
+                                    changedMarker.Address = Address;
+                                    changedMarker.City = City;
+                                    changedMarker.Country = Country;
+                                    changedMarker.Latitude = Latitude;
+                                    changedMarker.Longtitude = Longtitude;
                                     UnitOfWork.Complete();
-                                    // set the previous treasure to chained=>meaning it cant be chained to anymore
-                                    Treasure updatedTreasure = UnitOfWork.Treasures.Get(TreasureChain.ID);
-                                    updatedTreasure.IsChained = true;
+
+                                    var changedTreasure = UnitOfWork.Treasures.Get(Treasure.ID);
+                                    changedTreasure.Name = Treasure.Name;
+                                    changedTreasure.Description = Treasure.Description;
+                                    changedTreasure.Difficulty = Treasure.Difficulty;
+                                    //TODO handle chained
+                                    changedTreasure.TreasureSize = SelectedTreasureSize;
+                                    changedTreasure.TreasureType = SelectedTreasureType;
+                                    changedTreasure.Key = Key;
                                     UnitOfWork.Complete();
+                                    MessageBox.Show("Changes saved");
+                                    GoBack.Execute(null);
                                 }
-                                // always set the new treasure to ischained=false so you can chain it
-                                Treasure updatedTreasure2 = UnitOfWork.Treasures.Get(Treasure.ID);
-                                updatedTreasure2.IsChained = false;
-                                UnitOfWork.Complete();
-                                
-                                MessageBoxResult result=MessageBox.Show("Treasure added succesfully", "Treasure added", MessageBoxButton.OK);
-                                if (result == MessageBoxResult.OK)
-                                    MessageBox.Show(string.Format("The key:{0} was generated.if you have your own key for the treasure go to MyTreasures and change it!", Treasure.Key), "Key generated", MessageBoxButton.OK);
-                                GoBack.Execute(null);
+                                else //if we are hiding the treasure now
+                                {
+                                    Treasure.Key = Key;
+                                    Treasure.Rating = 0;
+                                    Treasure.UserId = UserData.CurrentUser.ID;
+                                    Treasure.TreasureSize = SelectedTreasureSize;
+                                    Treasure.TreasureType = SelectedTreasureType;
+                                    //only lat nad long are actually needed for the position of the marker
+                                    MarkerInfo.Latitude = Latitude;
+                                    MarkerInfo.Longtitude = Longtitude;
+
+                                    UnitOfWork.Treasures.Add(Treasure);
+                                    Treasure.MarkerInfo = MarkerInfo;
+
+                                    UnitOfWork.Complete();
+
+                                    if (Treasure.IsChained && TreasureChain.ID != 0)
+                                    {
+                                        UnitOfWork.ChainedTreasures.Add(
+                                            new Chained_Treasures(TreasureChain.ID, Treasure.ID));
+                                        UnitOfWork.Complete();
+                                        // set the previous treasure to chained=>meaning it cant be chained to anymore
+                                        Treasure updatedTreasure = UnitOfWork.Treasures.Get(TreasureChain.ID);
+                                        updatedTreasure.IsChained = true;
+                                        UnitOfWork.Complete();
+                                    }
+                                    // always set the new treasure to ischained=false so you can chain it
+                                    Treasure updatedTreasure2 = UnitOfWork.Treasures.Get(Treasure.ID);
+                                    updatedTreasure2.IsChained = false;
+                                    UnitOfWork.Complete();
+
+                                    MessageBoxResult result = MessageBox.Show("Treasure added succesfully", "Success", MessageBoxButton.OK);
+                                    if (result == MessageBoxResult.OK)
+                                        MessageBox.Show(string.Format("The key can always be changed."+
+                                            " If you have your own key for the treasure, go to MyTreasures and change it!", Treasure.Key), "Key generated", MessageBoxButton.OK);
+                                    GoBack.Execute(null);
+                                }
                             }
                         }
                     }));

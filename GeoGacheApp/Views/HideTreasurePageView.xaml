@@ -21,7 +21,7 @@
                 <converter:DiffTxtBlockConverter x:Key="diffTxtBlockConverter"></converter:DiffTxtBlockConverter>
                 <converter:IsNullOrWhiteSpaceConverter x:Key="IsNullOrWhiteSpaceConverter"></converter:IsNullOrWhiteSpaceConverter>
                 <Style x:Name="LabelStyle" TargetType="{x:Type Label}">
-                    <Setter Property="FontSize" Value="16"></Setter>
+                    <Setter Property="FontSize" Value="14"></Setter>
                     <Setter Property="VerticalAlignment" Value="Center"></Setter>
                     <Setter Property="HorizontalAlignment" Value="Center"></Setter>
                 </Style>
@@ -34,7 +34,7 @@
                     <Setter Property="Margin" Value="10,0,10,0"></Setter>
                 </Style>
                 <Style TargetType="{x:Type Button}">
-                    <Setter Property="FontSize" Value="20"></Setter>
+                    <Setter Property="FontSize" Value="16"></Setter>
                 </Style>
             </Grid.Resources>
             <Grid.RowDefinitions>
@@ -113,7 +113,13 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label>Key</Label>
+                    <TextBox Name="keyTxtBox" Text="{Binding Key}" Width="150"></TextBox>
+                    <Button Margin="5" Command="{Binding GenerateKey}">Generate key</Button>
+                </StackPanel>
             </StackPanel>
+            
             <StackPanel Name="markerInfo" Orientation="Vertical" Grid.Row="1">
                 <Label>Country:</Label>
                 <TextBox Text="{Binding Country}" Name="countryTxtBox"></TextBox>
@@ -156,6 +162,7 @@
                             <Binding Path="Text" ElementName="addressTxtBox"></Binding>
                             <Binding Path="Text" ElementName="nameTxtBox"></Binding>
                             <Binding Path="Text" ElementName="descriptionTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="keyTxtBox"></Binding>
                         </MultiBinding>
                     </Button.IsEnabled>
                 </Button>

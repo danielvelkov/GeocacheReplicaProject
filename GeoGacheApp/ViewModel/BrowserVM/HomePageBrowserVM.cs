@@ -35,7 +35,7 @@ namespace Geocache.ViewModel.BrowserVM
                 WebBrowser.ExecuteScriptAsync("showTreasures", treasr.MarkerInfo.Latitude, treasr.MarkerInfo.Longtitude,
                             treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
                             treasr.TreasureSize.ToString(), treasr.Description,
-                            treasr.Rating, treasr.IsChained.ToString());
+                            treasr.Rating, treasr.IsChained.ToString(),true);
             });
         }
         public UserDataService UserData { get; }
@@ -387,7 +387,7 @@ namespace Geocache.ViewModel.BrowserVM
                             WebBrowser.ExecuteScriptAsync("showTreasures", marker.Latitude, marker.Longtitude,
                             treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
                             treasr.TreasureSize.ToString(), treasr.Description,
-                            treasr.Rating, treasr.IsChained.ToString());
+                            treasr.Rating, treasr.IsChained.ToString(),false);
                         }
                     Markers.Clear();
                 }

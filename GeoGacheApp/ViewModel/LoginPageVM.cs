@@ -111,7 +111,10 @@ namespace Geocache.ViewModel
                                   if (!SimpleIoc.Default.IsRegistered<UserDataService>())
                                       SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
                                   else SimpleIoc.Default.GetInstance<UserDataService>().CurrentUser = user;
-                                  //change to homepage
+                                  //change to homepage (we do this check because when we logout we clear the VM)
+                                  if (!SimpleIoc.Default.IsRegistered<HomePageVM>())
+                                      SimpleIoc.Default.Register<HomePageVM>();
+                                  Password = ""; //clear password so they cant enter :p
                                   MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage");
 
                               }
@@ -136,7 +139,6 @@ namespace Geocache.ViewModel
                 return registerCommand ?? (registerCommand =
                  new RelayCommand<Object>(x =>
                  {
-                     SimpleIoc.Default.Register<RegisterPageVM>();
                      MessengerInstance.Send<Type>(typeof(RegisterPageVM), "ChangePage");
                  }
 

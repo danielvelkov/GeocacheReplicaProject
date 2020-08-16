@@ -80,5 +80,6 @@ namespace Geocache.Models
         {
             return new Location(MarkerInfo.Latitude, MarkerInfo.Longtitude);
         }
+
     }
 }

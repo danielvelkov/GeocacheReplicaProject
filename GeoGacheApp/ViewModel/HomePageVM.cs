@@ -84,6 +84,7 @@ namespace Geocache.ViewModel
                     logOut = new RelayCommand(() =>
                     {
                         //remove the user specific instances of pages
+                        SimpleIoc.Default.Unregister<HomePageVM>();
                         SimpleIoc.Default.GetInstance<UserDataService>().CurrentUser = null;
                         
                         //ViewModelLocator.Cleanup();
@@ -150,7 +151,20 @@ namespace Geocache.ViewModel
                 return showLeaderBoards;
             }
         }
-        public ICommand ShowUserTreasures { get => showUserTreasures; set => showUserTreasures = value; }
+        public ICommand ShowUserTreasures
+        {
+            get
+            {
+                if (showUserTreasures == null)
+                    showUserTreasures = new RelayCommand(() =>
+                    {
+                        if (!SimpleIoc.Default.IsRegistered<UserTreasuresVM>())
+                            SimpleIoc.Default.Register<UserTreasuresVM>();
+                        PopUp.ShowPopUp(new UserTreasuresView());
+                    });
+                return showUserTreasures;
+            }
+        }
 
         #endregion
 

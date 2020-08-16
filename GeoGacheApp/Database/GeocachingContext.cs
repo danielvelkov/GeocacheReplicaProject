@@ -21,7 +21,6 @@ namespace Geocache
         // DbTest1 is the connection string
         public GeocachingContext() : base(Properties.Settings.Default.DbTest1)
         {
-
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

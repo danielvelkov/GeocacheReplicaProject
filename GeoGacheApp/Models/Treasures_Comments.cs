@@ -1,4 +1,5 @@
-﻿using Geocache.Enums;
+﻿using Geocache.Database;
+using Geocache.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -45,6 +46,15 @@ namespace Geocache.Models
         public CommentType Type { get; set; }
         public double Rated { get; set; }
 
+        [NotMapped]
+        public string Username
+        {
+            get
+            {
+                using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+                    return unitOfWork.Users.Get(UserID).Username;
+            }
 
+        }
     }
 }

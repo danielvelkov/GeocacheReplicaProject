@@ -220,6 +220,23 @@
               else alert(status);
           });
       }
+      function setMarker(lat,lng){
+          var markerLocation= new google.maps.LatLng(lat, lng);
+          map.setCenter(markerLocation);
+          map.setZoom(14);
+          var marker = new google.maps.Marker({
+              map:map,
+              animation: google.maps.Animation.BOUNCE,
+              position: markerLocation,
+              draggable: true,
+              title: "This is your treasure"
+
+          });
+          treasureMarkers.push(marker);
+          google.maps.event.addListener(marker, 'dragend', function () {
+              eventEndDragMarker(marker)
+          })
+      }
       function eventEndDragMarker(marker) {
           var pos = new google.maps.LatLng;
           pos = marker.getPosition();

@@ -16,5 +16,6 @@ namespace Geocache.Interfaces
         List<Treasure> GetUserTreasures(int UserID);
         List<Treasure> GetOthersTreasures(int UserID);
         List<Treasure> GetUserTreasuresNotChained(int UserID);
+        MarkerInfo GetTreasureInfo(int TreasureId);
     }
 }
