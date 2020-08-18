@@ -8,6 +8,7 @@ using Geocache.Database;
 using Geocache.Enums;
 using Geocache.Helper;
 using Geocache.Models;
+using Geocache.Models.WrappedModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -303,17 +304,20 @@ namespace Geocache.ViewModel.BrowserVM
                 if (filterTreasures == null)
                     filterTreasures = new RelayCommand(() =>
                     {
-                        List<Treasure> mapTreasures;
                         WebBrowser.ExecuteScriptAsync("removeMarkers","removed");
                         using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
                         {
+                            List<Treasure> mapTreasures;
                             if (FoundByUser == true)
                                 mapTreasures = UnitofWork.Treasures.GetTreasuresAndFoundByUser(UserData.CurrentUser.ID);
                             else mapTreasures= UnitofWork.Treasures.GetTreasuresNotFoundByUser(UserData.CurrentUser.ID);
 
                             foreach (var treas in mapTreasures)
                             {
+                                // Genius idea (that way i wouldnt need to update it anywhre else)
                                 double rating = UnitofWork.TreasureComments.GetTreasureRating(treas.ID);
+                                treas.Rating = rating;
+                                UnitofWork.Complete();
                                 if((SelectedTreasureSize==Enums.TreasureSizes.ANY || treas.TreasureSize==SelectedTreasureSize) &&
                                 (SelectedTreasureType==TreasureType.ANY || treas.TreasureType==SelectedTreasureType) &&
                                 (Difficulty==0 || treas.Difficulty<=Difficulty) && treas.IsChained==FindChainedTreasures &&
@@ -402,12 +406,19 @@ namespace Geocache.ViewModel.BrowserVM
                 WebBrowser.ExecuteScriptAsync("removeMarkers", "removed");
                 using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
                 {
-                    foreach (var treas in UnitofWork.Treasures.GetTreasuresNotFoundByUser(UserData.CurrentUser.ID))
+                    List<Treasure> mapTreasures;
+                    if (FoundByUser == true)
+                        mapTreasures = UnitofWork.Treasures.GetTreasuresAndFoundByUser(UserData.CurrentUser.ID);
+                    else mapTreasures = UnitofWork.Treasures.GetTreasuresNotFoundByUser(UserData.CurrentUser.ID);
+
+                    foreach (var treas in mapTreasures)
                     {
+                        double rating = UnitofWork.TreasureComments.GetTreasureRating(treas.ID);
                         if ((SelectedTreasureSize == Enums.TreasureSizes.ANY || treas.TreasureSize == SelectedTreasureSize) &&
                         (SelectedTreasureType == TreasureType.ANY || treas.TreasureType == SelectedTreasureType) &&
-                        (Difficulty == 0 || treas.Difficulty <= Difficulty) && treas.IsChained == FindChainedTreasures
-                        )
+                        (Difficulty == 0 || treas.Difficulty <= Difficulty) && treas.IsChained == FindChainedTreasures &&
+                        (Rating == 0 || Rating >= Math.Round(rating))
+                        ) 
                         {
                             if (treas.MarkerInfo.Country.Contains(country, StringComparison.OrdinalIgnoreCase) &&
                                 treas.MarkerInfo.City.Contains(city, StringComparison.OrdinalIgnoreCase))
@@ -422,7 +433,7 @@ namespace Geocache.ViewModel.BrowserVM
                             WebBrowser.ExecuteScriptAsync("showTreasures", marker.Latitude, marker.Longtitude,
                             treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
                             treasr.TreasureSize.ToString(), treasr.Description,
-                            treasr.Rating, treasr.IsChained.ToString(),false);
+                            treasr.Rating, treasr.IsChained.ToString());
                         }
                     Markers.Clear();
                 }

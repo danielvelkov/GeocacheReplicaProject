@@ -47,5 +47,13 @@ namespace Geocache.Database.Repositories
         {
             return TreasureContext.MarkerInfos.SingleOrDefault(t => t.TreasureId == TreasureId);
         }
+
+        public int GetUserHiddenTreasuresCount(int UserId)
+        {
+            int count = 0;
+            if (TreasureContext.Treasures.Where(t => t.UserId == UserId) != null)
+                count = TreasureContext.Treasures.Where(t => t.UserId == UserId).Count();
+            return count;
+        }
     }
 }

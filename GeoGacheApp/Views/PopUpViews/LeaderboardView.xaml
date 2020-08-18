@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Geocache.Views.PopUpViews"
         xmlns:converter="clr-namespace:Geocache.Converters"
         mc:Ignorable="d"
-        Title="Leaderboards" Height="450" Width="400"
+        Title="Leaderboards" Height="450" Width="450"
         
         DataContext="{Binding LeaderboardVM, Source={StaticResource Locator} }">
     <Window.Resources>
@@ -71,9 +71,30 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
+                        <GridViewColumn Width="auto">
+                            <Button BorderThickness="0" Click="SortByFoundTreasures"
+                                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                                Treasures Found
+                            </Button>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding FoundTreasures}" FontSize="20"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="auto">
+                            <Button BorderThickness="0" Click="SortByTreasuresHidden"
+                                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                                Treasures Hidden
+                            </Button>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding HiddenTreasures}" FontSize="20"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
-                
             </ListView>
         </GroupBox>
         <Button Grid.Row="2" Command="{Binding CloseWindow}" Height="30" Width="100" FontSize="20">Close</Button>

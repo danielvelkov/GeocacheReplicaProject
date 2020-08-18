@@ -74,7 +74,6 @@ namespace Geocache.ViewModel
         #region Commands
         private ICommand logOut;
         private ICommand goToUserPage;
-        private ICommand findTreasure;
         private ICommand hideTreasure;
         private ICommand showUserTreasures;
         private ICommand showLeaderBoards;
@@ -109,19 +108,6 @@ namespace Geocache.ViewModel
                         MessengerInstance.Send<Type>(typeof(UserPageVM), "ChangePage");
                     });
                 return goToUserPage;
-            }
-        }
-
-        public ICommand FindTreasure
-        {
-            get
-            {
-                if (findTreasure == null)
-                    findTreasure = new RelayCommand(() =>
-                    {
-                        //MessengerInstance.Send<ViewModelBase>(ViewModelLocator.UserPageVM, "ChangePage");
-                    });
-                return findTreasure;
             }
         }
 

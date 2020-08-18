@@ -25,6 +25,9 @@ namespace Geocache.Views.PopUpViews
         public bool sortedByRank = false;
         bool sortedByName = true;
         bool sortedByPoints = false;
+        bool sortedByFoundTreasures = false;
+        bool sortedByTreasuresHidden= false;
+
 
         public LeaderboardView()
         {
@@ -79,6 +82,26 @@ namespace Geocache.Views.PopUpViews
                     new SortDescription("Points", ListSortDirection.Descending));
             else leaderboardList.Items.SortDescriptions.Add(
                 new SortDescription("Points", ListSortDirection.Ascending));
+        }
+        private void SortByTreasuresHidden(object sender, RoutedEventArgs e)
+        {
+            if (leaderboardList.Items.SortDescriptions.Count != 0)
+                leaderboardList.Items.SortDescriptions.Clear();
+            if (sortedByTreasuresHidden = (!sortedByTreasuresHidden))
+                leaderboardList.Items.SortDescriptions.Add(
+                    new SortDescription("HiddenTreasures", ListSortDirection.Descending));
+            else leaderboardList.Items.SortDescriptions.Add(
+                new SortDescription("HiddenTreasures", ListSortDirection.Ascending));
+        }
+        private void SortByFoundTreasures(object sender, RoutedEventArgs e)
+        {
+            if (leaderboardList.Items.SortDescriptions.Count != 0)
+                leaderboardList.Items.SortDescriptions.Clear();
+            if (sortedByFoundTreasures = (!sortedByFoundTreasures))
+                leaderboardList.Items.SortDescriptions.Add(
+                    new SortDescription("FoundTreasures", ListSortDirection.Descending));
+            else leaderboardList.Items.SortDescriptions.Add(
+                new SortDescription("FoundTreasures", ListSortDirection.Ascending));
         }
     }
 }

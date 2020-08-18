@@ -166,7 +166,9 @@
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Models\Chained_Treasures.cs" />
     <Compile Include="Models\MarkerInfo.cs" />
+    <Compile Include="Models\WrappedModels\FoundTreasureArgs.cs" />
     <Compile Include="Models\WrappedModels\UserChangedRole.cs" />
+    <Compile Include="Models\WrappedModels\UserRanking.cs" />
     <Compile Include="Validation\LoginValidation.cs" />
     <Compile Include="Models\Found_Treasures.cs" />
     <Compile Include="Models\Treasure.cs" />
@@ -306,6 +308,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Helper\Snippet.snippet" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -323,6 +326,7 @@
     <Resource Include="res\Images\Geocaching-Icon.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="res\Icons\TreasureMapIcon.png" />
     <Resource Include="res\Icons\sortArrowDown.png" />
     <Resource Include="res\Icons\sortArrowUp.png" />
     <Resource Include="res\Icons\warning_sign.png" />

@@ -8,13 +8,16 @@ using Geocache.Database;
 using Geocache.Enums;
 using Geocache.Helper;
 using Geocache.Models;
+using Geocache.Models.WrappedModels;
 using Geocache.ViewModel.PopUpVM;
 using Geocache.Views.PopUpViews;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Geocache.ViewModel
@@ -26,6 +29,13 @@ namespace Geocache.ViewModel
             UserData = userdata;
             TreasureArgs = args;
             PopUp = popUp;
+            using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+            {
+                TreasureComments = new ObservableCollection<Treasures_Comments>
+                    (unitOfWork.TreasureComments.Find(tc => tc.TreasureID == TreasureArgs.FoundTreasureId));
+                if (unitOfWork.TreasureComments.HasUserCommented(UserData.CurrentUser.ID, TreasureArgs.FoundTreasureId))
+                    Rating = unitOfWork.TreasureComments.GetUserRating(UserData.CurrentUser.ID, TreasureArgs.FoundTreasureId);
+            }
         }
 
         #region properties
@@ -34,6 +44,7 @@ namespace Geocache.ViewModel
         public UserDataService UserData { get; private set; }
         public FoundTreasureArgs TreasureArgs { get => treasureArgs; set => treasureArgs = value; }
         public PopUpWindowController PopUp { get; private set; }
+        public ObservableCollection<Treasures_Comments> TreasureComments { get; set; }
 
         private ChromiumWebBrowser webBrowser;
         public const string WebBrowserPropertyName = "WebBrowser";
@@ -73,23 +84,36 @@ namespace Geocache.ViewModel
             }
         }
 
-        private string reportContent;
-        public string ReportContent
+        private string commentText;
+        public string CommentText
         {
             get
             {
-                return reportContent;
+                return commentText;
             }
             set
             {
-                if (reportContent != value)
-                {
-                    reportContent = value;
-                    RaisePropertyChanged("ReportContent");
-                }
+                if (commentText == value)
+                    return;
+                commentText = value;
+                RaisePropertyChanged("CommentText");
             }
         }
-
+        private int rating;
+        public int Rating
+        {
+            get
+            {
+                return rating;
+            }
+            set
+            {
+                if (rating == value)
+                    return;
+                rating = value;
+                RaisePropertyChanged("Rating");
+            }
+        }
         #endregion
 
         #region Commands
@@ -97,7 +121,8 @@ namespace Geocache.ViewModel
         private ICommand showRoute;
         private ICommand goBack;
         private ICommand foundTreasure;
-        private ICommand submitReport;
+        private ICommand comment;
+
         public ICommand ShowRoute
         {
             get
@@ -109,7 +134,7 @@ namespace Geocache.ViewModel
                     WebBrowser.ExecuteScriptAsync("setDestination",
                         TreasureArgs.FoundTreasureLocation.Lat,
                         TreasureArgs.FoundTreasureLocation.Lon);
-                    WebBrowser.ExecuteScriptAsync("initMap1", "ok");
+                    WebBrowser.ExecuteScriptAsync("showRouteMarkers", "OK");
                 }));
             }
         }
@@ -118,7 +143,7 @@ namespace Geocache.ViewModel
             get
             {
                 return goBack ?? (goBack = new RelayCommand(() => {
-
+                    Rating = 0;  CommentText = "";
                     MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage");
                 }));
             }
@@ -136,23 +161,37 @@ namespace Geocache.ViewModel
                 }));
             }
         }
-
-        public ICommand SubmitReport
+        public ICommand Comment
         {
             get
             {
-                if (submitReport == null)
-                    submitReport = new RelayCommand(() =>
+                return comment ?? (comment = new RelayCommand(() =>
+                {
+                    if (!string.IsNullOrWhiteSpace(CommentText))
                     {
                         using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
                         {
-                            var report = new Treasures_Comments(
-                                TreasureArgs.FoundTreasureId, UserData.CurrentUser.ID, ReportContent,
-                                DateTime.Now, CommentType.REPORT, 0);
+                            if (!unitOfWork.TreasureComments.HasUserCommented(UserData.CurrentUser.ID, TreasureArgs.FoundTreasureId))
+                            {
+                                Treasures_Comments tc = new Treasures_Comments(
+                                    TreasureArgs.FoundTreasureId,
+                                    UserData.CurrentUser.ID,
+                                    CommentText,
+                                    DateTime.Now,
+                                    CommentType.COMMENT,
+                                    Rating);
+                                unitOfWork.TreasureComments.Add(tc);
+                                unitOfWork.Complete();
+                                TreasureComments.Add(tc);
+                            }
+                            else
+                            {
+                                MessageBox.Show("You have already commented.");
+                            }
                         }
+                    }
 
-                    });
-                return submitReport;
+                }));
             }
         }
         #endregion

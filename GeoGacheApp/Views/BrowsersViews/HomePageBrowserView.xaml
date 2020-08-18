@@ -101,7 +101,8 @@
                     </StackPanel>
                     <Label Grid.Column="2" Grid.Row="0">Rating:</Label>
                     <Button Command="{Binding FilterTreasures}" Grid.Column="2" Grid.Row="3" 
-                       IsEnabled="{Binding WebBrowser.IsLoading,Converter={StaticResource InverseBoolean}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,0" >Filter</Button>
+                       IsEnabled="{Binding WebBrowser.IsLoading,Converter={StaticResource InverseBoolean}}" 
+                            HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,0" >Find Treasures</Button>
 
                 </Grid>
             </GroupBox>
@@ -109,7 +110,7 @@
             <ProgressBar  IsIndeterminate="{Binding WebBrowser.IsLoading,Mode=OneTime}"
                              HorizontalAlignment="Right"
                             Width="100"
-                             Height="5"/>
+                             Height="10"/>
         </StackPanel>
         <GroupBox Grid.Row="2" Header="Map">
             <wpf:ChromiumWebBrowser Unloaded="ChromiumWebBrowser_Unloaded" WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}"></wpf:ChromiumWebBrowser>

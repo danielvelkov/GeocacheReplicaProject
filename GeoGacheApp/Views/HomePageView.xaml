@@ -32,8 +32,6 @@
                 </Image>
             </StackPanel>
             
-            <!--this shows all the markers around your starting location in a 1km radius-->
-            <Button Command="{Binding FindTreasure}"  Name="findTreasureBttn" Height="30" Width="150">Find Treasure</Button>
             <Button Command="{Binding HideTreasure}" Height="30" Width="150">Hide a Treasure</Button>
             <Button Command="{Binding ShowUserTreasures}" Name="myTreasuresBttn" Height="30" Width="150">My Treasures</Button>
             <Button Command="{Binding ShowLeaderBoards}" Name="leaderboardsBttn" Height="30" Width="150">Leaderboards</Button>

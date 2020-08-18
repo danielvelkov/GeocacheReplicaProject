@@ -27,6 +27,14 @@ namespace Geocache.Database.Repositories
             else return null;
         }
 
+        public int GetUserFoundTreasuresCount(int UserId)
+        {
+            int count = 0;
+            if (FoundTreasuresContext.Found_Treasures.Where(ft => ft.UserID == UserId) != null)
+                count = FoundTreasuresContext.Found_Treasures.Where(ft => ft.UserID == UserId).Count();
+            return count;
+        }
+
         public int GetUserPoints(int UserId)
         {
             int userPoints = 0;

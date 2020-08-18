@@ -13,5 +13,6 @@ namespace Geocache.Interfaces
         int GetUserPoints(int UserId);
         bool HasUserFoundTreasure(int UserId, int TreasureId);
         Treasure GetNextTreasure(int TreasureId);
+        int GetUserFoundTreasuresCount(int UserId);
     }
 }

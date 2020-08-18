@@ -6,9 +6,11 @@ using Geocache.Database;
 using Geocache.Enums;
 using Geocache.Helper;
 using Geocache.Models;
+using Geocache.Models.WrappedModels;
 using Geocache.Views.PopUpViews;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,10 +28,12 @@ namespace Geocache.ViewModel.PopUpVM
             {
                 Treasure = unitOfWork.Treasures.Get(treasureArgs.FoundTreasureId);
             }
+            TreasureLocation = treasureArgs.FoundTreasureLocation;
         }
 
         public UserDataService Userdata { get; private set; }
         public Treasure Treasure { get; private set; }
+        public Location TreasureLocation { get; private set; }
 
         #region Commands
 
@@ -63,17 +67,24 @@ namespace Geocache.ViewModel.PopUpVM
                                     {
                                         //add distance? and name?
                                         var result=MessageBox.Show("This treasure is connected to another one! \n" +
-                                            "Would you like to go on another adventure?","New Tresure", MessageBoxButton.YesNo);
+                                            "Would you like to go on another adventure?","New Treasure ", MessageBoxButton.YesNo);
                                         if (result == MessageBoxResult.Yes)
                                         {
                                             var NextTreasure = unitOfWork.FoundTreasures.GetNextTreasure(Treasure.ID);
                                             if (!unitOfWork.FoundTreasures.HasUserFoundTreasure(Userdata.CurrentUser.ID, NextTreasure.ID))
                                             {
-                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().UserData.UserLocation = Treasure.GetLatLng();
+                                                //set the location of the user to the location of the previous treasure
+                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().UserData.UserLocation = TreasureLocation;
 
                                                 SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureId = NextTreasure.ID;
                                                 SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureLocation = NextTreasure.GetLatLng();
+
+                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureComments =
+                                                new ObservableCollection<Treasures_Comments>(
+                                                    unitOfWork.TreasureComments.Find(tc => tc.ID == NextTreasure.ID));
+
                                                 SimpleIoc.Default.GetInstance<FindTreasureVM>().ShowRoute.Execute(null);
+                                                this.CloseWindow.Execute(null);
                                             }
                                             else {
                                                 MessageBox.Show("You have already found that one");
@@ -88,12 +99,11 @@ namespace Geocache.ViewModel.PopUpVM
                                         }
                                     }
                                 }
-                               
+                                else
+                                {
+                                    MessageBox.Show("wrong key");
+                                }
                             }
-                        }
-                        else
-                        {
-                            MessageBox.Show("wrong key", "", MessageBoxButton.OK);
                         }
                     });
                 return submitKey;
@@ -145,7 +155,6 @@ namespace Geocache.ViewModel.PopUpVM
                 return closeWindow;
             }
         }
-        
 
         #endregion
 

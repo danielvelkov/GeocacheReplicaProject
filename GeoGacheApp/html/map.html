@@ -265,7 +265,7 @@
           });
       }
       function showTreasures(latitude,longtitude,id,
-          name,type,size,description,rating,isChained,userTreasure) {
+          name,type,size,description,rating,isChained) {
           
             var markerPosition = {lat:latitude, lng:longtitude} ;
          
@@ -280,7 +280,7 @@
                 '<p>Rating: ' + rating + '</p>' +
                 '<p>Type: ' + type + '</p>' +
                 '<p>Size: ' + size + '</p>' +
-                    '<p>Connected to treasures:' + isChained + '</p>'
+                    '<p>Connected to other treasures:' + isChained + '</p>'
                 '</div>';
             var infoWindow = new google.maps.InfoWindow({
                 content: contentString
@@ -288,8 +288,7 @@
             marker.addListener('click', function () {
                 infoWindow.open(map, marker);
             });
-            if(!userTreasure)
-                marker.addListener('dblclick', function(){
+            marker.addListener('dblclick', function(){
                      startHunt(latitude,longtitude,name,id);
             });
                 map.setZoom(14);

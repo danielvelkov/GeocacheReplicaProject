@@ -34,6 +34,21 @@ namespace Geocache.Database.Repositories
             return rating / (double)count;
         }
 
+        public int GetUserRating(int UserId, int TreasureId)
+        {
+            return (int)TreasureCommentsContext.Treasures_comments.SingleOrDefault
+                (t => t.UserID == UserId && t.TreasureID == TreasureId).Rated;
+        }
+
+        public bool HasUserCommented(int UserId, int TreasureId)
+        {
+            if (TreasureCommentsContext.Treasures_comments.Any(tc =>
+             (tc.UserID == UserId && tc.TreasureID == TreasureId) &&
+             tc.Type == CommentType.COMMENT))
+                return true;
+            return false;
+        }
+
         public bool HasUserReportedTreasure(int UserId, int TreasureId)
         {
             if (TreasureCommentsContext.Treasures_comments.Any(tc =>

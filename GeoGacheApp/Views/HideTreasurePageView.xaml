@@ -8,8 +8,7 @@
             xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         xmlns:converter="clr-namespace:Geocache.Converters"
         xmlns:validate="clr-namespace:Geocache.Validation"
-        mc:Ignorable="d" 
-             
+        mc:Ignorable="d"
      MinHeight="700" MinWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -102,8 +101,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label ToolTip="Fill the checkbox and select a treasure\n
                            to create a chain of treasures">Connect to other treasure</Label>
-                    <CheckBox Name="chainedTrsChckBox" IsChecked="{Binding Treasure.IsChained}" VerticalAlignment="Center"
-                              IsEnabled="{Binding Items.IsEmpty, ElementName=userTreasureCmbBox}"></CheckBox>
+                    <CheckBox Name="chainedTrsChckBox" IsChecked="{Binding Treasure.IsChained}" VerticalAlignment="Center"></CheckBox>
                     <ComboBox Name="userTreasureCmbBox" Width="150" ItemsSource="{Binding UserTreasures,Mode=OneWay}"
                               SelectedItem="{Binding TreasureChain}">
                         <ComboBox.ItemTemplate>
