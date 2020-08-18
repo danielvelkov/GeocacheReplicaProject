@@ -8,7 +8,6 @@ namespace Geocache.Enums
 {
     public enum UserRoles
     {
-        NONE=0,
         ADMIN = 1,
         MOD = 2,
         USER = 3

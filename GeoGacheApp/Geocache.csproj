@@ -166,6 +166,7 @@
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Models\Chained_Treasures.cs" />
     <Compile Include="Models\MarkerInfo.cs" />
+    <Compile Include="Models\WrappedModels\UserChangedRole.cs" />
     <Compile Include="Validation\LoginValidation.cs" />
     <Compile Include="Models\Found_Treasures.cs" />
     <Compile Include="Models\Treasure.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PopUpVM\LeaderboardVM.cs" />
     <Compile Include="ViewModel\PopUpVM\TreasureFoundVM.cs" />
+    <Compile Include="ViewModel\PopUpVM\UsersRoleVM.cs" />
     <Compile Include="ViewModel\PopUpVM\UserTreasuresVM.cs" />
     <Compile Include="ViewModel\RegisterPageVM.cs" />
     <Compile Include="ViewModel\UserPageVM.cs" />
@@ -208,6 +210,9 @@
     </Compile>
     <Compile Include="Views\PopUpViews\TreasureFoundView.xaml.cs">
       <DependentUpon>TreasureFoundView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PopUpViews\UsersRoleView.xaml.cs">
+      <DependentUpon>UsersRoleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PopUpViews\UserTreasuresView.xaml.cs">
       <DependentUpon>UserTreasuresView.xaml</DependentUpon>
@@ -263,6 +268,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PopUpViews\TreasureFoundView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PopUpViews\UsersRoleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

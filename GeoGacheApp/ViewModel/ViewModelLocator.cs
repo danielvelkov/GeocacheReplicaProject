@@ -46,6 +46,7 @@ namespace Geocache.ViewModel
             SimpleIoc.Default.Register<UserPageVM>();
             SimpleIoc.Default.Register<LeaderboardVM>();
             SimpleIoc.Default.Register<UserTreasuresVM>();
+            SimpleIoc.Default.Register<UsersRoleVM>();
         }
         
         public static void Cleanup()
@@ -62,5 +63,6 @@ namespace Geocache.ViewModel
         public TreasureFoundVM TreasureFoundVM => SimpleIoc.Default.GetInstance<TreasureFoundVM>();
         public LeaderboardVM LeaderboardVM => SimpleIoc.Default.GetInstance<LeaderboardVM>();
         public UserTreasuresVM UserTreasuresVM => SimpleIoc.Default.GetInstance<UserTreasuresVM>();
+        public UsersRoleVM UsersRoleVM => SimpleIoc.Default.GetInstance<UsersRoleVM>();
     }
 }

@@ -52,7 +52,7 @@ namespace Geocache.ViewModel
         {
             get
             {
-                if (userRole == UserRoles.NONE)
+                if (userRole == 0)
                     userRole=UserData.CurrentUser.Role;
                 return userRole;
             }
@@ -78,6 +78,7 @@ namespace Geocache.ViewModel
         private ICommand hideTreasure;
         private ICommand showUserTreasures;
         private ICommand showLeaderBoards;
+        private ICommand changeUserRole;
 
         public ICommand LogOut
         {
@@ -165,6 +166,20 @@ namespace Geocache.ViewModel
                         PopUp.ShowPopUp(new UserTreasuresView());
                     });
                 return showUserTreasures;
+            }
+        }
+        public ICommand ChangeUserRole
+        {
+            get
+            {
+                if (changeUserRole == null)
+                    changeUserRole = new RelayCommand(() =>
+                    {
+                        if (!SimpleIoc.Default.IsRegistered<UsersRoleVM>())
+                            SimpleIoc.Default.Register<UsersRoleVM>();
+                        PopUp.ShowPopUp(new UsersRoleView());
+                    });
+                return changeUserRole;
             }
         }
 

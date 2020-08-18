@@ -105,6 +105,11 @@ namespace Geocache.ViewModel
                           {
                               User user = unitOfWork.Users.ValidateLogin(Username, Password);
 
+                              if (user.isBanned)
+                              {
+                                  ErrorMsg = "*BANNED USER";
+                                  return;
+                              }
                               if (user != null)
                               {
                                   //login the user
@@ -119,12 +124,12 @@ namespace Geocache.ViewModel
 
                               }
                               else
-                                  ErrorMsg = "Password is wrong or no such user exists";
+                                  ErrorMsg = "*Password is wrong or no such user exists.";
                               return;
                           }
                           else
                           {
-                              ErrorMsg = " Password or Username is empty";
+                              ErrorMsg = "*Password or Username is empty.";
                           }
                       }
                   })

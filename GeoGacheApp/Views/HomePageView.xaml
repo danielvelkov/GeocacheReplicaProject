@@ -81,7 +81,7 @@
                     </Style>
                 </StackPanel.Style>
                 <Label HorizontalAlignment="Center">Admin only</Label>
-                <Button Name="changeRoleBttn" Height="30" Width="150">Change User Role</Button>
+                <Button Command="{Binding ChangeUserRole}" Name="changeRoleBttn" Height="30" Width="150">Change User Role</Button>
                 <Button Name="deleteBttn" Height="30" Width="156">Delete accounts and Treasures</Button>
             </StackPanel>
         </StackPanel>
