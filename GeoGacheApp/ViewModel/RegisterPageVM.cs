@@ -78,10 +78,6 @@ namespace Geocache.ViewModel
         {
             get
             {
-                if (errorMsg == null)
-                {
-                    errorMsg = "Password empty";
-                }
                 return errorMsg;
             }
             set
@@ -143,7 +139,8 @@ namespace Geocache.ViewModel
                 if (goToLoginPage == null)
                     goToLoginPage = new RelayCommand(() =>
                      {
-                         SimpleIoc.Default.Unregister<RegisterPageVM>();
+                         Password = "";
+                         ConfirmPassword = "";
                          MessengerInstance.Send<Type>(typeof(LoginPageVM), "ChangePage");
                      });
                 return goToLoginPage;

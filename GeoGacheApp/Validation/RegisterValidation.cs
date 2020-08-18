@@ -56,23 +56,31 @@ namespace Geocache
         public bool ValidateRegisterData()
         {
             
-            if (String.IsNullOrEmpty(username))
+            if (String.IsNullOrWhiteSpace(username))
             {
-                errMsg = "username is empty";
+                errMsg = "*Username is empty.";
+                act(errMsg);
+
+                return false;
+
+            }
+            if (String.IsNullOrWhiteSpace(password))
+            {
+                errMsg = "*No password entered.";
                 act(errMsg);
 
                 return false;
             }
             if (username.Length < USERNAMEMINCHAR || password.Length < PASSWORDMINCHAR)
             {
-                errMsg = "username or password is too short";
+                errMsg = "*Username or password is too short.";
                 act(errMsg);
 
                 return false;
             }
-            if (String.IsNullOrEmpty(password))
+            if (username.Length > USERNAMEMAXCHAR || password.Length > PASSWORDMAXCHAR)
             {
-                errMsg = "no password";
+                errMsg = "*Username or password is too long.";
                 act(errMsg);
 
                 return false;
@@ -81,14 +89,20 @@ namespace Geocache
             matchingPassword = password.Equals(confirmPass);
             if (!matchingPassword)
             {
-                errMsg = "passwords dont match";
+                errMsg = "*Passwords don't match.";
                     act(errMsg);
                 return false;
             }
             
-            if (String.IsNullOrEmpty(firstName) || String.IsNullOrEmpty(lastName))
+            if (String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName))
             {
-                errMsg = "First or last name empty";
+                errMsg = "*First or last name empty.";
+                act(errMsg);
+                return false;
+            }
+            if(String.IsNullOrWhiteSpace(country) || String.IsNullOrWhiteSpace(city))
+            {
+                errMsg = "*City and country fields are required.";
                 act(errMsg);
                 return false;
             }

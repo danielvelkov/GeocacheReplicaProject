@@ -1,6 +1,10 @@
 ﻿using CefSharp;
 using CefSharp.SchemeHandler;
 using CefSharp.Wpf;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Threading;
 using Geocache.Helper;
 using System;
 using System.Collections.Generic;
@@ -54,6 +58,12 @@ namespace Geocache.Views.BrowsersViews
 
                 Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
             }
+        }
+
+        private void ChromiumWebBrowser_Unloaded(object sender, RoutedEventArgs e)
+        {
+            (e.Source as ChromiumWebBrowser).Dispose();
+            
         }
     }
 }

@@ -34,14 +34,15 @@ namespace Geocache.ViewModel
                 City = MarkerInfo.City;
                 Country = MarkerInfo.Country;
                 Key = Treasur.Key;
-
+                SelectedTreasureSize = Treasur.TreasureSize;
+                SelectedTreasureType = Treasur.TreasureType;
+                UserTreasures = UserData.GetUnchainedUserTreasures(Treasur.ID);
+                // when the mainframe of the browser loads this runs
                  tcs= new TaskCompletionSource<bool>();
                 await tcs.Task;
                 WebBrowser.ExecuteScriptAsync("setMarker", Latitude, Longtitude);
                 
             });
-            TreasureChain = new Treasure();
-
         }
 
         #region fields
@@ -50,6 +51,7 @@ namespace Geocache.ViewModel
         private Treasure treasure;
         private MarkerInfo markerInfo;
         private Treasure treasureChain;
+        private List<Treasure> userTreasures;
         #endregion
 
         #region Params
@@ -131,7 +133,15 @@ namespace Geocache.ViewModel
         {
             get
             {
-                return UserData.GetUnchainedUserTreasures();
+                if (userTreasures == null)
+                {
+                    userTreasures= UserData.GetUnchainedUserTreasures();
+                }
+                return userTreasures;
+            }
+            set
+            {
+                userTreasures = value;
             }
         }
 
@@ -139,6 +149,8 @@ namespace Geocache.ViewModel
         {
             get
             {
+                if (treasureChain == null)
+                    treasureChain = new Treasure();
                 return treasureChain;
             }
             set
@@ -173,11 +185,7 @@ namespace Geocache.ViewModel
 
         private double longitude;
         public const string LongtitudeProperyName = "Longtitude";
-
-        /// <summary>
-        /// Sets and gets the CurrentUser property.
-        /// Changes to that property's value raise the PropertyChanged event. 
-        /// </summary>
+        
         public double Longtitude
         {
             get
@@ -291,8 +299,8 @@ namespace Geocache.ViewModel
                 {
                     webBrowser.Address = "localfolder://cefsharp/map_hiding.html";
                     webBrowser.JavascriptObjectRepository.Register("hideTreasureVM",
-                        this, true,BindingOptions.DefaultBinder);
-                    if(tcs!=null)
+                        this, true, BindingOptions.DefaultBinder);
+                    if (tcs!=null)
                     webBrowser.FrameLoadEnd += WebBrowser_FrameLoadEnd;
                 }
                 RaisePropertyChanged(WebBrowserPropertyName);
@@ -328,8 +336,7 @@ namespace Geocache.ViewModel
                 return goBack ?? (goBack =
                   new RelayCommand((() =>
                   {
-                      SimpleIoc.Default.Unregister<HideTreasurePageVM>();
-                      WebBrowser.JavascriptObjectRepository.UnRegisterAll();
+                      SimpleIoc.Default.Unregister(this);
                       MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage");
                   })
                 ));
@@ -374,7 +381,7 @@ namespace Geocache.ViewModel
                                     changedMarker.Latitude = Latitude;
                                     changedMarker.Longtitude = Longtitude;
                                     UnitOfWork.Complete();
-
+                                    // wish i  could have operand overloading
                                     var changedTreasure = UnitOfWork.Treasures.Get(Treasure.ID);
                                     changedTreasure.Name = Treasure.Name;
                                     changedTreasure.Description = Treasure.Description;
@@ -408,14 +415,11 @@ namespace Geocache.ViewModel
                                         UnitOfWork.ChainedTreasures.Add(
                                             new Chained_Treasures(TreasureChain.ID, Treasure.ID));
                                         UnitOfWork.Complete();
-                                        // set the previous treasure to chained=>meaning it cant be chained to anymore
-                                        Treasure updatedTreasure = UnitOfWork.Treasures.Get(TreasureChain.ID);
-                                        updatedTreasure.IsChained = true;
+                                        TreasureChain.IsChained = true;
                                         UnitOfWork.Complete();
                                     }
                                     // always set the new treasure to ischained=false so you can chain it
-                                    Treasure updatedTreasure2 = UnitOfWork.Treasures.Get(Treasure.ID);
-                                    updatedTreasure2.IsChained = false;
+                                    Treasure.IsChained = false;
                                     UnitOfWork.Complete();
 
                                     MessageBoxResult result = MessageBox.Show("Treasure added succesfully", "Success", MessageBoxButton.OK);
@@ -438,6 +442,14 @@ namespace Geocache.ViewModel
             Latitude = Lat;
             Longtitude = Lng;
             string[] names = address.Split(',');
+            if (names.Length > 3)
+            {
+                Address = "";
+                int index = 0;
+                while (((names.Length) - 2) > index)
+                    Address += names[index++];
+            }
+            else
             Address = names[0];
             City = names[names.Length - 2];
             Country= names[names.Length - 1];

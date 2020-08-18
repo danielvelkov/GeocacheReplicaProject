@@ -10,5 +10,6 @@ namespace Geocache.Interfaces
     public interface ITreasureCommentsRepository:IRepository<Treasures_Comments>
     {
         bool HasUserReportedTreasure(int UserId, int TreasureId);
+        double GetTreasureRating(int TreasureId);
     }
 }

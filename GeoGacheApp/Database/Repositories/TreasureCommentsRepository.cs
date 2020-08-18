@@ -20,6 +20,20 @@ namespace Geocache.Database.Repositories
             get { return Context as GeocachingContext; }
         }
 
+        public double GetTreasureRating(int TreasureId)
+        {
+            int count = 0;
+            double rating = 0;
+            foreach (var tc in TreasureCommentsContext.Treasures_comments.Where(tc => tc.TreasureID == TreasureId))
+            {
+                count++;
+                rating += tc.Rated;
+            }
+            if (rating == 0)
+                return 0;
+            return rating / (double)count;
+        }
+
         public bool HasUserReportedTreasure(int UserId, int TreasureId)
         {
             if (TreasureCommentsContext.Treasures_comments.Any(tc =>

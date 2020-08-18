@@ -13,7 +13,7 @@
                 <Setter Property="Margin" Value="10"></Setter>
             </Style>
         </StackPanel.Resources>
-        <StackPanel VerticalAlignment="Stretch">
+        <StackPanel MinWidth="400">
             <TextBlock Grid.Row="1">First name</TextBlock>
             <TextBox Text="{Binding CurrentUser.FirstName ,Mode=TwoWay}" Grid.Row="2"></TextBox>
             <TextBlock Grid.Column="1" Grid.Row="1">Last name</TextBlock>
@@ -29,7 +29,7 @@
             <TextBox Text="{Binding CurrentUser.Country,Mode=TwoWay}"></TextBox>
             <TextBlock >Created at</TextBlock>
             <TextBlock Text="{Binding CurrentUser.createdAt,Mode=TwoWay}"></TextBlock>
-
+            <TextBlock Text="{Binding ErrorMsg,Mode=TwoWay}" FontSize="20" Foreground="Red"></TextBlock>
             <Button Width="150" FontSize="18"  Command="{Binding SaveChanges}">Save changes</Button>
             <Button Width="150" FontSize="18"  Command="{Binding GoBack}">GoBack</Button>
         </StackPanel>

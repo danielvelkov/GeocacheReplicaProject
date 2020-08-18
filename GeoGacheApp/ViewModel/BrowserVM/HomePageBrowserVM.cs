@@ -22,26 +22,30 @@ namespace Geocache.ViewModel.BrowserVM
 {
     public class HomePageBrowserVM : ViewModelBase
     {
+
         public HomePageBrowserVM(UserDataService userData)
         {
             Markers = new List<MarkerInfo>();
             UserData = userData;
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
             CefSharpSettings.WcfEnabled = true;
-
-            MessengerInstance.Register<Treasure>(this, "ShowTreasure", treasr => 
+            // dont worry about the first parameter, its soft linked
+            
+            MessengerInstance.Register<Treasure>(this, "ShowTreasure",treasr =>
             {
+
                 WebBrowser.ExecuteScriptAsync("removeMarkers", "removed");
                 WebBrowser.ExecuteScriptAsync("showTreasures", treasr.MarkerInfo.Latitude, treasr.MarkerInfo.Longtitude,
                             treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
                             treasr.TreasureSize.ToString(), treasr.Description,
-                            treasr.Rating, treasr.IsChained.ToString(),true);
+                            treasr.Rating, treasr.IsChained.ToString(), true);
+
             });
         }
         public UserDataService UserData { get; }
         private TreasureType selectedTreasureType= TreasureType.ANY;
         private TreasureSizes selectedTreasureSize= Enums.TreasureSizes.ANY;
-
+        private TaskCompletionSource<bool> tcs;
         // good idea to bind it 
         private string address;
         public string Address
@@ -82,6 +86,7 @@ namespace Geocache.ViewModel.BrowserVM
                 RaisePropertyChanged(WebBrowserPropertyName);
             }
         }
+
         public TreasureType SelectedTreasureType
         {
             get
@@ -148,7 +153,30 @@ namespace Geocache.ViewModel.BrowserVM
                 RaisePropertyChanged(DifficultyPropertyName);
             }
         }
+
+        public const string RatingPropertyName = "Rating";
+
+        private int rating;
         
+        public int Rating
+        {
+            get
+            {
+                return rating;
+            }
+
+            set
+            {
+                if (rating == value)
+                {
+                    return;
+                }
+
+                rating = value;
+                RaisePropertyChanged(RatingPropertyName);
+            }
+        }
+
         public const string RadiusPropertyName = "Radius";
 
         private double radius=1;
@@ -247,7 +275,7 @@ namespace Geocache.ViewModel.BrowserVM
             get
             {
                 if (currentLocation == null)
-                    currentLocation = new Location(0,0);
+                    currentLocation = new Location(UserData.GetUserHomeAddress());
                 return currentLocation;
             }
 
@@ -275,14 +303,21 @@ namespace Geocache.ViewModel.BrowserVM
                 if (filterTreasures == null)
                     filterTreasures = new RelayCommand(() =>
                     {
+                        List<Treasure> mapTreasures;
                         WebBrowser.ExecuteScriptAsync("removeMarkers","removed");
                         using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
                         {
-                            foreach (var treas in UnitofWork.Treasures.GetOthersTreasures(UserData.CurrentUser.ID))
+                            if (FoundByUser == true)
+                                mapTreasures = UnitofWork.Treasures.GetTreasuresAndFoundByUser(UserData.CurrentUser.ID);
+                            else mapTreasures= UnitofWork.Treasures.GetTreasuresNotFoundByUser(UserData.CurrentUser.ID);
+
+                            foreach (var treas in mapTreasures)
                             {
+                                double rating = UnitofWork.TreasureComments.GetTreasureRating(treas.ID);
                                 if((SelectedTreasureSize==Enums.TreasureSizes.ANY || treas.TreasureSize==SelectedTreasureSize) &&
                                 (SelectedTreasureType==TreasureType.ANY || treas.TreasureType==SelectedTreasureType) &&
-                                (Difficulty==0 || treas.Difficulty<=Difficulty) && treas.IsChained==FindChainedTreasures
+                                (Difficulty==0 || treas.Difficulty<=Difficulty) && treas.IsChained==FindChainedTreasures &&
+                                (Rating==0 || Rating>=Math.Round(rating) )
                                 )
                                 {
                                     if(treas.MarkerInfo.IsInRadius(CurrentLocation.Lat, CurrentLocation.Lon,Radius))
@@ -329,8 +364,8 @@ namespace Geocache.ViewModel.BrowserVM
         public void startHuntCS(double lat, double lng, string name, int id)
         {
             if (MessageBox.Show("are you sure you wanna search for " +
-                   "treasure at coordinates:" + lat.ToString().Substring(0,4) +
-                   "- " + lng.ToString().Substring(0, 4) + " " + "\nwith name: " + name, "confirmation", MessageBoxButton.YesNo) ==
+                   "treasure at coordinates:" + lat.ToString().Substring(0,5) +
+                   ": " + lng.ToString().Substring(0, 5) + " " + "\n With name: " + name, "confirmation", MessageBoxButton.YesNo) ==
                    MessageBoxResult.Yes)
             {
                 SimpleIoc.Default.GetInstance<UserDataService>().UserLocation = CurrentLocation;
@@ -367,7 +402,7 @@ namespace Geocache.ViewModel.BrowserVM
                 WebBrowser.ExecuteScriptAsync("removeMarkers", "removed");
                 using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
                 {
-                    foreach (var treas in UnitofWork.Treasures.GetOthersTreasures(UserData.CurrentUser.ID))
+                    foreach (var treas in UnitofWork.Treasures.GetTreasuresNotFoundByUser(UserData.CurrentUser.ID))
                     {
                         if ((SelectedTreasureSize == Enums.TreasureSizes.ANY || treas.TreasureSize == SelectedTreasureSize) &&
                         (SelectedTreasureType == TreasureType.ANY || treas.TreasureType == SelectedTreasureType) &&

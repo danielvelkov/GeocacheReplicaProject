@@ -23,5 +23,6 @@ namespace Geocache.Interfaces
         // methods for removing
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);
+        void Remove_Quicker(TEntity entity);
     }
 }

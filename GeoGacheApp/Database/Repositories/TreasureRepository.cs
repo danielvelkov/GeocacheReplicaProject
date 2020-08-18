@@ -21,13 +21,18 @@ namespace Geocache.Database.Repositories
             get { return Context as GeocachingContext; }
         }
 
-        public List<Treasure> GetOthersTreasures(int UserID)
+        public List<Treasure> GetTreasuresNotFoundByUser(int UserID)
         {
             //this gets treasures that the user hasnt found and that arent his
             // add a way to get the first one in the chained treasure
             return TreasureContext.Treasures.Where(
                 t => t.UserId != UserID &&
                 !TreasureContext.Found_Treasures.Any(ft=>(ft.TreasureID==t.ID) && ft.UserID==UserID )).ToList();
+        }
+        public List<Treasure> GetTreasuresAndFoundByUser(int UserID)
+        {
+            return TreasureContext.Treasures.Where(
+                t => t.UserId != UserID ).ToList();
         }
         public List<Treasure> GetUserTreasures(int UserID)
         {

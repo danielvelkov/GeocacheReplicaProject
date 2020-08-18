@@ -1,6 +1,8 @@
+using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using System;
+using System.Diagnostics;
 
 namespace Geocache.ViewModel
 {
@@ -38,17 +40,12 @@ namespace Geocache.ViewModel
         }
 
         #endregion
-        
-
-        #region commands
-        
-        #endregion
 
         #region methods
-        // basically the old way of doing it, ViewModelLocator is not used at alll
-        void ChangeContent(Type ViewModel)
+
+        void ChangeContent(Type ViewModelPage)
         {
-            CurrentContent = SimpleIoc.Default.GetInstance(ViewModel,ViewModel.GUID.ToString());
+            CurrentContent = SimpleIoc.Default.GetInstance(ViewModelPage);
         }
 
         #endregion

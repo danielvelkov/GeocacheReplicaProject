@@ -63,7 +63,7 @@
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding ElementName=scrollBar, Path=Value,Converter={StaticResource DifficultyConverter},Mode=OneTime}" 
+                        <TextBlock Grid.Column="0" Text="{Binding ElementName=scrollBar, Path=Value,Converter={StaticResource DifficultyConverter}}" 
                                    FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" >
                         </TextBlock>
                         <ScrollBar Grid.Column="1" Name="scrollBar" Minimum="0" Value="{Binding Difficulty}"  SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
@@ -88,12 +88,12 @@
                         <Label Grid.Column="0" Grid.Row="3">Chained to others</Label>
                         <CheckBox IsChecked="{Binding FindChainedTreasures}" VerticalAlignment="Center"></CheckBox>
                     </StackPanel>
-                    <MyNamespace:RatingCell x:Name="rating" Grid.Column="2" Grid.Row="1" ></MyNamespace:RatingCell>
+                    <MyNamespace:RatingCell RatingValue="{Binding Rating,Mode=TwoWay}" Grid.Column="2" Grid.Row="1" ></MyNamespace:RatingCell>
                     <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="2" >
                         <Label >Radius</Label>
                         <Slider Name="slider" Orientation="Horizontal" IsSnapToTickEnabled="True" Value="{Binding Radius}"
                                 Ticks="" Minimum="0" Maximum="10" TickPlacement="BottomRight" VerticalAlignment="Center" Width="100"></Slider>
-                        <TextBlock Grid.Column="0" Text="{Binding ElementName=slider, Path=Value,Mode=OneTime}" 
+                        <TextBlock Grid.Column="0" Text="{Binding ElementName=slider, Path=Value}" 
                                    FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" >
                         </TextBlock>
                         <TextBlock VerticalAlignment="Center">km.</TextBlock>
@@ -112,7 +112,8 @@
                              Height="5"/>
         </StackPanel>
         <GroupBox Grid.Row="2" Header="Map">
-            <wpf:ChromiumWebBrowser WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}"></wpf:ChromiumWebBrowser>
+            <wpf:ChromiumWebBrowser Unloaded="ChromiumWebBrowser_Unloaded" WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}"></wpf:ChromiumWebBrowser>
+            
         </GroupBox>
        
     </Grid>

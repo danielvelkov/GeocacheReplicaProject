@@ -17,9 +17,7 @@ namespace Geocache.Helper
 
         public Location UserLocation { get => userLocation; set => userLocation = value; }
         public User CurrentUser { get => currentUser; set => currentUser = value; }
-
-        //ICollection<Treasures_Comments> userComments;
-
+        
         public UserDataService(User LoggedUser)
         {
             CurrentUser=LoggedUser;
@@ -54,6 +52,21 @@ namespace Geocache.Helper
                 userTreasures = UnitofWork.Treasures.GetUserTreasuresNotChained(CurrentUser.ID);
             }
             return userTreasures;
+        }
+        /// <summary>
+        /// Get all the unchained treasures except the ones the param is connected to
+        /// </summary>
+        /// <param name="Tresure to change"></param>
+        /// <returns></returns>
+        public List<Treasure> GetUnchainedUserTreasures(int TreasureId)
+        {
+            userTreasures = new List<Treasure>();
+            using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
+            {
+                userTreasures = UnitofWork.Treasures.GetUserTreasuresNotChained(CurrentUser.ID);
+
+            }
+            return userTreasures.Where(t=>t.ID!=TreasureId).ToList();
         }
 
     }

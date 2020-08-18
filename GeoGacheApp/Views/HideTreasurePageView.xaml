@@ -73,7 +73,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label>Size of treasure :</Label>
                     <ComboBox ItemsSource="{Binding TreasureSizes}" Name="sizeCmboBox" Margin="10,0,10,0" 
-                     SelectedItem="{Binding SelectedTreasureSize}"     Width="100"></ComboBox>
+                     SelectedItem="{Binding SelectedTreasureSize}" Width="100"></ComboBox>
                 </StackPanel>
 
                 <Label>Difficulty:</Label>
@@ -83,8 +83,10 @@
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="{Binding ElementName=scrollBar, Path=Value}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></Label>
-                    <ScrollBar Grid.Column="1" Name="scrollBar" Minimum="1" Value="{Binding Treasure.Difficulty}" SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
+                    <Label Grid.Column="0" Content="{Binding ElementName=scrollBar, Path=Value}" 
+                           FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></Label>
+                    <ScrollBar Grid.Column="1" Name="scrollBar" Minimum="1" Value="{Binding Treasure.Difficulty}"
+                               SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
                         <ScrollBar.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -94,13 +96,15 @@
                             </TransformGroup>
                         </ScrollBar.RenderTransform>
                     </ScrollBar>
-                    <Label Content="{Binding ElementName=scrollBar, Path=Value,Converter={StaticResource diffTxtBlockConverter}}" Grid.Column="2" ></Label>
+                    <Label Content="{Binding ElementName=scrollBar,
+                        Path=Value,Converter={StaticResource diffTxtBlockConverter}}" Grid.Column="2" ></Label>
                 </Grid>
                 <StackPanel Orientation="Horizontal">
-                    <Label>Is connected to other treasure</Label>
-                    <CheckBox Name="chainedTrsChckBox" IsChecked="{Binding Treasure.IsChained}" VerticalAlignment="Center"></CheckBox>
-                    <ComboBox Width="150" ItemsSource="{Binding UserTreasures}"
-                              IsEnabled="{Binding ElementName=chainedTrsChckBox,Path=IsChecked}"
+                    <Label ToolTip="Fill the checkbox and select a treasure\n
+                           to create a chain of treasures">Connect to other treasure</Label>
+                    <CheckBox Name="chainedTrsChckBox" IsChecked="{Binding Treasure.IsChained}" VerticalAlignment="Center"
+                              IsEnabled="{Binding Items.IsEmpty, ElementName=userTreasureCmbBox}"></CheckBox>
+                    <ComboBox Name="userTreasureCmbBox" Width="150" ItemsSource="{Binding UserTreasures,Mode=OneWay}"
                               SelectedItem="{Binding TreasureChain}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type models:Treasure}">
@@ -181,7 +185,10 @@
                                  HorizontalAlignment="Right"
                                 Width="100"
                                  Height="16"/>
-                <wpf:ChromiumWebBrowser WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}" Grid.Row="1" ></wpf:ChromiumWebBrowser>
+                <!--unloaded event is disposing it cuz it memory leaks otherwise-->
+                <wpf:ChromiumWebBrowser WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}" Grid.Row="1" 
+                                        Unloaded="ChromiumWebBrowser_Unloaded">
+                </wpf:ChromiumWebBrowser>
             </Grid>
         </GroupBox>
     </Grid>

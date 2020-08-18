@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Geocache.Database;
 using Geocache.Helper;
 using Geocache.Models;
+using Geocache.ViewModel.BrowserVM;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -55,7 +56,6 @@ namespace Geocache.ViewModel.PopUpVM
                 return deleteTreasure ?? (deleteTreasure =
                   new RelayCommand<Treasure>((x =>
                   {
-                      Treasures.Remove(x);
                       using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
                       {
                           var result = MessageBox.Show("are you sure you wanna " +
@@ -64,8 +64,25 @@ namespace Geocache.ViewModel.PopUpVM
                           if (result == MessageBoxResult.Yes)
                           {
                               Treasures.Remove(x);
-                              unitOfWork.Treasures.Remove(x);
+                              if (x.IsChained)
+                              {
+                                  var temp= unitOfWork.ChainedTreasures.Find(
+                                      ct => ct.Treasure1_ID == x.ID || ct.Treasure2_ID == x.ID).ToList();
+                                  if (temp.Count == 2)
+                                  {
+                                      //temp[0].Treasure_1 set the first to false and second too
+                                      //unitOfWork.ChainedTreasures
+                                  }
+                                  else
+                                  {
+                                      //just first one
+                                  }
+                              }
+                                  
+                              unitOfWork.Markers.Remove_Quicker(x.MarkerInfo);
+                              unitOfWork.Treasures.Remove_Quicker(x);
                               unitOfWork.Complete();
+                              
                           }
                       }
                   })

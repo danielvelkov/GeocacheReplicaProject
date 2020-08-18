@@ -1,0 +1,2 @@
+﻿- sometimes when you click around in mytreasures to go to hidetreasure page the marker doesnt drop for some reason
+- v8 context or webbrowser empty on homepage if you put breakpoints before messengerinstance send OR mainvm change page

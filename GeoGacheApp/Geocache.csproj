@@ -140,6 +140,7 @@
     <Compile Include="Converters\RngTxtBlockConverter.cs" />
     <Compile Include="Database\Repositories\ChainedTreasureRepository.cs" />
     <Compile Include="Database\Repositories\FoundTreasuresRepostitory.cs" />
+    <Compile Include="Database\Repositories\MarkersRepository.cs" />
     <Compile Include="Database\Repositories\Repository.cs" />
     <Compile Include="Database\Repositories\TreasureCommentsRepository.cs" />
     <Compile Include="Database\Repositories\TreasureRepository.cs" />
@@ -318,6 +319,7 @@
     <Resource Include="res\Icons\warning_sign.png" />
     <Resource Include="res\Icons\home_icon.png" />
     <Resource Include="Helper\Ideas.txt" />
+    <Resource Include="Helper\bugs.txt" />
     <Content Include="html\map.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

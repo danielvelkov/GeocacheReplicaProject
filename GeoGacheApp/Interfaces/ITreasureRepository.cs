@@ -14,7 +14,8 @@ namespace Geocache.Interfaces
 
         //get all treasures that user hasnt found
         List<Treasure> GetUserTreasures(int UserID);
-        List<Treasure> GetOthersTreasures(int UserID);
+        List<Treasure> GetTreasuresNotFoundByUser(int UserID);
+        List<Treasure> GetTreasuresAndFoundByUser(int UserID);
         List<Treasure> GetUserTreasuresNotChained(int UserID);
         MarkerInfo GetTreasureInfo(int TreasureId);
     }

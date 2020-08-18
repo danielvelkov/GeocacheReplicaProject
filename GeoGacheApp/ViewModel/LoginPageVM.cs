@@ -139,6 +139,7 @@ namespace Geocache.ViewModel
                 return registerCommand ?? (registerCommand =
                  new RelayCommand<Object>(x =>
                  {
+                     
                      MessengerInstance.Send<Type>(typeof(RegisterPageVM), "ChangePage");
                  }
 

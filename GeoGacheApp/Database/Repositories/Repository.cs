@@ -62,10 +62,15 @@ namespace Geocache.Database.Repositories
         {
             Context.Set<TEntity>().AddRange(entities);
         }
-
+        //this needs 2 trips to db
         public void Remove(TEntity entity)
         {
             Context.Set<TEntity>().Remove(entity);
+        }
+        //this needs 1 :)
+        public void Remove_Quicker(TEntity entity)
+        {
+            Context.Entry(entity).State = EntityState.Deleted;
         }
 
         public void RemoveRange(IEnumerable<TEntity> entities)

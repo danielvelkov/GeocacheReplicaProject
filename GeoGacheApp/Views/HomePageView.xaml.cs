@@ -26,29 +26,6 @@ namespace Geocache.Views
         {
             InitializeComponent();
         }
-
-       
-        //    public void StartHuntCS(Decimal lat, Decimal lng, string name)
-        //    {
-        //        if(MessageBox.Show("are you sure you wanna search for" +
-        //            "treasure at coords:" + lat.ToString() +
-        //            " " + lng.ToString() + " " + "\nwith name:" + name, "confirmation", MessageBoxButton.YesNo)==
-        //            MessageBoxResult.Yes)
-        //        {
-                    
-        //            //string sURL = "D:\\PS kursov proekt\\kursov proekt-20190424T122106Z-001\\kursov proekt\\Geocaching\\GeoCacheGame\\GeoGacheApp\\html\\map_route.html";
-        //            Uri map_location = new Uri("pack://siteoforigin:,,,/html/map_route.html");
-        //            HomePg.browser.Navigate(map_location);
-        //            if (HomePg.browser.IsLoaded) {
-        //                HomePg.browser.InvokeScript("setDestination", new Object[] { lat, lng });
-
-        //                HomePg.browser.InvokeScript("setOrigin", HomePg.currentuser.Country + ", "
-        //                                    + HomePg.currentuser.City + ", " + HomePg.currentuser.Adress);
-        //                HomePg.browser.InvokeScript("initMap1");
-        //            }
-                    
-        //        } 
-        //    }
         
     }
 }

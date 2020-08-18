@@ -35,7 +35,8 @@ namespace Geocache.ViewModel
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            
+
+            SimpleIoc.Default.Register<PopUpWindowController>();
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LoginPageVM>();
             SimpleIoc.Default.Register <RegisterPageVM>();
@@ -44,7 +45,6 @@ namespace Geocache.ViewModel
             SimpleIoc.Default.Register<HideTreasurePageVM>();
             SimpleIoc.Default.Register<UserPageVM>();
             SimpleIoc.Default.Register<LeaderboardVM>();
-            SimpleIoc.Default.Register<PopUpWindowController>();
             SimpleIoc.Default.Register<UserTreasuresVM>();
         }
         
@@ -57,17 +57,10 @@ namespace Geocache.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
         }
-        
-        public LoginPageVM LoginPageVM => SimpleIoc.Default.GetInstance<LoginPageVM>(Guid.NewGuid().ToString());
-        public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>(Guid.NewGuid().ToString());
-        public HomePageVM HomePageVM => SimpleIoc.Default.GetInstance<HomePageVM>(Guid.NewGuid().ToString());
-        public RegisterPageVM RegisterPageVM => SimpleIoc.Default.GetInstance<RegisterPageVM>(Guid.NewGuid().ToString());
-        public HomePageBrowserVM HomePageBrowserVM => SimpleIoc.Default.GetInstance<HomePageBrowserVM>(Guid.NewGuid().ToString());
-        public UserPageVM UserPageVM => SimpleIoc.Default.GetInstance<UserPageVM>(Guid.NewGuid().ToString());
-        public HideTreasurePageVM HideTreasurePageVM => SimpleIoc.Default.GetInstance<HideTreasurePageVM>(Guid.NewGuid().ToString());
-        public FindTreasureVM FindTreasureVM => SimpleIoc.Default.GetInstance<FindTreasureVM>(Guid.NewGuid().ToString());
-        public TreasureFoundVM TreasureFoundVM => SimpleIoc.Default.GetInstance<TreasureFoundVM>(Guid.NewGuid().ToString());
-        public LeaderboardVM LeaderboardVM => SimpleIoc.Default.GetInstance<LeaderboardVM>(Guid.NewGuid().ToString());
-        public UserTreasuresVM UserTreasuresVM => SimpleIoc.Default.GetInstance<UserTreasuresVM>(Guid.NewGuid().ToString());
+        public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
+        public HomePageBrowserVM HomePageBrowserVM => SimpleIoc.Default.GetInstance<HomePageBrowserVM>();
+        public TreasureFoundVM TreasureFoundVM => SimpleIoc.Default.GetInstance<TreasureFoundVM>();
+        public LeaderboardVM LeaderboardVM => SimpleIoc.Default.GetInstance<LeaderboardVM>();
+        public UserTreasuresVM UserTreasuresVM => SimpleIoc.Default.GetInstance<UserTreasuresVM>();
     }
 }

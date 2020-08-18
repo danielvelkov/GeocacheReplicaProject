@@ -26,10 +26,12 @@ namespace Geocache.Database
             ChainedTreasures = new ChainedTreasureRepository(_context);
             FoundTreasures = new FoundTreasuresRepostitory(_context);
             TreasureComments = new TreasureCommentsRepository(_context);
+            Markers = new MarkersRepository(_context);
         }
 
         public IUserRepository Users { get; private set; }
         public ITreasureRepository Treasures { get; private set; }
+        public IMarkerRepository Markers { get; private set; }
         public IChainedTreasureRepository ChainedTreasures { get; private set; }
         public IFoundTreasuresRepository FoundTreasures { get; private set; }
         public ITreasureCommentsRepository TreasureComments { get; private set; }

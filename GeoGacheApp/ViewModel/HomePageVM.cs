@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CefSharp;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using Geocache.Enums;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Geocache.ViewModel
 {
@@ -22,6 +24,7 @@ namespace Geocache.ViewModel
             PopUp = popUp;
             UserData = userData;
         }
+        
         #region fields
 
         #endregion
@@ -130,7 +133,6 @@ namespace Geocache.ViewModel
                     {
                         if(!SimpleIoc.Default.IsRegistered<HideTreasurePageVM>())
                         SimpleIoc.Default.Register<HideTreasurePageVM>();
-
                         MessengerInstance.Send<Type>(typeof(HideTreasurePageVM), "ChangePage");
                     });
                 return hideTreasure;

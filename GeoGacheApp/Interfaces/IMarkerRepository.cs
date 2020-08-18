@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Geocache.Interfaces
 {
-    interface IMarkerRepository:IRepository<MarkerInfo>
+    public interface IMarkerRepository:IRepository<MarkerInfo>
     {
-       
+       //method for marker
     }
 }
