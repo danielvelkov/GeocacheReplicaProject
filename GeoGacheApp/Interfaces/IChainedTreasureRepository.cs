@@ -9,6 +9,7 @@ namespace Geocache.Interfaces
 {
     public interface IChainedTreasureRepository : IRepository<Chained_Treasures>
     {
-
+        Treasure GetNextChainedTreasure(int TreasureId);
+        void UnchainTreasure(int CtId);
     }
 }

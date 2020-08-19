@@ -28,7 +28,7 @@ namespace Geocache.ViewModel
             {
                 if (_currentContent == null)
                 {
-                    _currentContent = new LoginPageVM();
+                    _currentContent = SimpleIoc.Default.GetInstance<LoginPageVM>();
                 }
                 return _currentContent;
             }

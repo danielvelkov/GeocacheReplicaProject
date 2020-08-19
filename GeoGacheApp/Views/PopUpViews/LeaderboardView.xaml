@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Geocache.Views.PopUpViews"
         xmlns:converter="clr-namespace:Geocache.Converters"
         mc:Ignorable="d"
-        Title="Leaderboards" Height="450" Width="450"
+        Title="Leaderboards" Height="450" Width="500"
         
         DataContext="{Binding LeaderboardVM, Source={StaticResource Locator} }">
     <Window.Resources>
@@ -90,6 +90,20 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding HiddenTreasures}" FontSize="20"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="auto">
+                            <Button BorderThickness="0" Click="SortByDateJoined"
+                                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                                Joined
+                            </Button>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Joined}" FontSize="20"/>
+                                        <TextBlock Text=" days ago" VerticalAlignment="Center"></TextBlock>
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

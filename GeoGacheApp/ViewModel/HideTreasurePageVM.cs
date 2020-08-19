@@ -15,6 +15,8 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
 using Geocache.ViewModel.BrowserVM;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Geocache.ViewModel
 {
@@ -24,6 +26,11 @@ namespace Geocache.ViewModel
         public HideTreasurePageVM(UserDataService userdata)
         {
             UserData = userdata;
+            //get the treasures and insert a void selection 
+            UserTreasures = new ObservableCollection<Treasure>(UserData.GetUnchainedUserTreasures());
+            UserTreasures.Insert(0,new Treasure { ID = 0, Name = "-Not chained-" });
+            TreasureChain = UserTreasures[0];
+
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
             CefSharpSettings.WcfEnabled = true;
             MessengerInstance.Register<Treasure>(this, "ChangeTreasure", async Treasur =>
@@ -36,7 +43,33 @@ namespace Geocache.ViewModel
                 Key = Treasur.Key;
                 SelectedTreasureSize = Treasur.TreasureSize;
                 SelectedTreasureType = Treasur.TreasureType;
-                UserTreasures = UserData.GetUnchainedUserTreasures(Treasur.ID);
+                //do the same thing but for the treasure we want to change
+                UserTreasures = new ObservableCollection<Treasure>(UserData.GetUnchainedUserTreasures(Treasur.ID));
+                UserTreasures.Insert(0, new Treasure { ID = 0, Name = "-Not chained-" });
+                TreasureChain = UserTreasures[0];
+                if (Treasur.IsChained)
+                {
+                    using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+                    {
+                        Treasure tc;
+                        tc = unitOfWork.ChainedTreasures.GetNextChainedTreasure(Treasur.ID);
+                        if (tc != null)
+                        {
+                            try
+                            {
+                                if (UserTreasures.Single(t => t.ID == tc.ID) == null) //this is so it doesnt get the same treasure
+                                {
+                                    UserTreasures.Add(tc); //add it last
+
+                                }
+                            }catch (InvalidOperationException e)
+                            {
+                                UserTreasures.Add(tc);
+                            } 
+                            TreasureChain = UserTreasures[UserTreasures.Count - 1]; //set the chained treasure to it
+                        }
+                    }
+                }
                 // when the mainframe of the browser loads this runs
                  tcs= new TaskCompletionSource<bool>();
                 await tcs.Task;
@@ -51,7 +84,6 @@ namespace Geocache.ViewModel
         private Treasure treasure;
         private MarkerInfo markerInfo;
         private Treasure treasureChain;
-        private List<Treasure> userTreasures;
         #endregion
 
         #region Params
@@ -129,20 +161,10 @@ namespace Geocache.ViewModel
             }
         }
 
-        public List<Treasure> UserTreasures
+        public ObservableCollection<Treasure> UserTreasures
         {
-            get
-            {
-                if (userTreasures == null)
-                {
-                    userTreasures= UserData.GetUnchainedUserTreasures();
-                }
-                return userTreasures;
-            }
-            set
-            {
-                userTreasures = value;
-            }
+            get;
+            set;
         }
 
         public Treasure TreasureChain
@@ -150,7 +172,7 @@ namespace Geocache.ViewModel
             get
             {
                 if (treasureChain == null)
-                    treasureChain = new Treasure();
+                    treasureChain = new Treasure { Name="NONE"}; //set it to the empty placeholder
                 return treasureChain;
             }
             set
@@ -381,21 +403,64 @@ namespace Geocache.ViewModel
                                     changedMarker.Latitude = Latitude;
                                     changedMarker.Longtitude = Longtitude;
                                     UnitOfWork.Complete();
-                                    // wish i  could have operand overloading
+
                                     var changedTreasure = UnitOfWork.Treasures.Get(Treasure.ID);
                                     changedTreasure.Name = Treasure.Name;
                                     changedTreasure.Description = Treasure.Description;
                                     changedTreasure.Difficulty = Treasure.Difficulty;
-                                    //TODO handle chained
+                                    
                                     changedTreasure.TreasureSize = SelectedTreasureSize;
                                     changedTreasure.TreasureType = SelectedTreasureType;
                                     changedTreasure.Key = Key;
                                     UnitOfWork.Complete();
+                                    // isChained:True         isChained:False
+                                    //[SELECTED TREASURE]=>[YOUR TREASURE]"
+                                    if(changedTreasure.IsChained && TreasureChain.ID != 0)
+                                    {
+                                        //if we switch which treasure is connected to it
+                                        Chained_Treasures chainedt;
+                                        if((chainedt = UnitOfWork.ChainedTreasures.SingleOrDefault(
+                                            ct => ct.Treasure1_ID == changedTreasure.ID))!=null)
+                                        {
+                                            UnitOfWork.ChainedTreasures.Remove_Quicker(chainedt);
+                                            UnitOfWork.Complete();
+                                            UnitOfWork.ChainedTreasures.Add(new Chained_Treasures(changedTreasure.ID,TreasureChain.ID));
+                                            UnitOfWork.Complete();
+                                        }
+                                    }
+                                    else if(changedTreasure.IsChained && TreasureChain.ID == 0)
+                                    {
+                                        //if it was connected but we want to remove connection
+                                        Chained_Treasures chainedt;
+                                        if((chainedt = UnitOfWork.ChainedTreasures.SingleOrDefault(
+                                            ct => ct.Treasure1_ID == changedTreasure.ID)) != null)
+                                        {
+                                            int? fixId = chainedt.Treasure1_ID;
+                                            UnitOfWork.ChainedTreasures.Remove_Quicker(chainedt);
+                                            UnitOfWork.Complete();
+                                            UnitOfWork.ChainedTreasures.UnchainTreasure((int)fixId);
+                                            UnitOfWork.Complete();
+                                        }
+                                       
+                                    }
+                                    else if(!changedTreasure.IsChained && TreasureChain.ID != 0)
+                                    {
+                                        //if it wasnt connected at all before
+                                        UnitOfWork.ChainedTreasures.Add(
+                                            new Chained_Treasures(TreasureChain.ID, changedTreasure.ID));
+                                        UnitOfWork.Complete();
+                                        var tc = UnitOfWork.Treasures.Get(TreasureChain.ID);
+                                        tc.IsChained = true;
+                                        UnitOfWork.Complete();
+                                    }
+                                    MessengerInstance.Send(new object(), "RefreshUserTreasures");
+                                    MessengerInstance.Send(new object(), "Refresh");
                                     MessageBox.Show("Changes saved");
                                     GoBack.Execute(null);
                                 }
                                 else //if we are hiding the treasure now
                                 {
+                                    Debug.WriteLine(Treasure.ID);
                                     Treasure.Key = Key;
                                     Treasure.Rating = 0;
                                     Treasure.UserId = UserData.CurrentUser.ID;
@@ -410,18 +475,18 @@ namespace Geocache.ViewModel
 
                                     UnitOfWork.Complete();
 
-                                    if (Treasure.IsChained && TreasureChain.ID != 0)
+                                    if (TreasureChain.ID != 0)
                                     {
                                         UnitOfWork.ChainedTreasures.Add(
                                             new Chained_Treasures(TreasureChain.ID, Treasure.ID));
                                         UnitOfWork.Complete();
-                                        TreasureChain.IsChained = true;
+                                        var tc = UnitOfWork.Treasures.Get(TreasureChain.ID);
+                                        tc.IsChained = true;
                                         UnitOfWork.Complete();
                                     }
-                                    // always set the new treasure to ischained=false so you can chain it
-                                    Treasure.IsChained = false;
-                                    UnitOfWork.Complete();
-
+                                    //for treasures screen
+                                    MessengerInstance.Send(new object(), "RefreshUserTreasures");
+                                    MessengerInstance.Send(new object(), "Refresh"); //for leadearboards
                                     MessageBoxResult result = MessageBox.Show("Treasure added succesfully", "Success", MessageBoxButton.OK);
                                     if (result == MessageBoxResult.OK)
                                         MessageBox.Show(string.Format("The key can always be changed."+

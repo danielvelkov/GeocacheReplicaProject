@@ -104,28 +104,30 @@ namespace Geocache.ViewModel
                           if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
                           {
                               User user = unitOfWork.Users.ValidateLogin(Username, Password);
-
-                              if (user.isBanned)
-                              {
-                                  ErrorMsg = "*BANNED USER";
-                                  return;
-                              }
+                              
                               if (user != null)
                               {
+                                  if (user.isBanned)
+                                  {
+                                      ErrorMsg = "*BANNED USER";
+                                      return;
+                                  }
                                   //login the user
                                   if (!SimpleIoc.Default.IsRegistered<UserDataService>())
-                                      SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService(user); });
-                                  else SimpleIoc.Default.GetInstance<UserDataService>().CurrentUser = user;
-                                  //change to homepage (we do this check because when we logout we clear the VM)
-                                  if (!SimpleIoc.Default.IsRegistered<HomePageVM>())
-                                      SimpleIoc.Default.Register<HomePageVM>();
+                                      SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService{ CurrentUser = user }; });
+                                  else
+                                      SimpleIoc.Default.GetInstance<UserDataService>().CurrentUser = user;
+                                  // if we've logged out we need to create the instances again
+                                  if (!SimpleIoc.Default.IsRegistered<UserPageVM>())
+                                      ViewModelLocator.ReRegisterInstances();
+                                  
                                   Password = ""; //clear password so they cant enter :p
-                                  MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage");
+                                  MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage"); //change to homepage 
+                                  //MessengerInstance.Send<object>(new object(), "RefreshUserTreasures");
 
                               }
                               else
                                   ErrorMsg = "*Password is wrong or no such user exists.";
-                              return;
                           }
                           else
                           {

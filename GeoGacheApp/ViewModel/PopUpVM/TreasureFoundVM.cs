@@ -31,7 +31,7 @@ namespace Geocache.ViewModel.PopUpVM
             TreasureLocation = treasureArgs.FoundTreasureLocation;
         }
 
-        public UserDataService Userdata { get; private set; }
+        public UserDataService Userdata { get;  set; }
         public Treasure Treasure { get; private set; }
         public Location TreasureLocation { get; private set; }
 
@@ -47,27 +47,28 @@ namespace Geocache.ViewModel.PopUpVM
                 if (submitKey == null)
                     submitKey = new RelayCommand<string>(x =>
                     {
-                    if (Treasure.Key == x)
-                    {
-                        using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+                        if (Treasure.Key == x)
                         {
-                            // checks if user found the treasure
-                            if (!unitOfWork.FoundTreasures.HasUserFoundTreasure(Userdata.CurrentUser.ID,
-                                Treasure.ID))
+                            using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
                             {
-                                int points = CalculatePoints(Treasure.TreasureSize, Treasure.TreasureType);
-                                unitOfWork.FoundTreasures.Add(new Found_Treasures(
-                                   Userdata.CurrentUser.ID,
-                                   Treasure.ID,
-                                   points,
-                                   DateTime.Now));
-                                unitOfWork.Complete();
-                                MessageBox.Show(String.Format("Congrats! you found the treasure \n Points:{0}", points));
+                                // checks if user found the treasure
+                                if (!unitOfWork.FoundTreasures.HasUserFoundTreasure(Userdata.CurrentUser.ID,
+                                    Treasure.ID))
+                                {
+                                    int points = CalculatePoints(Treasure.TreasureSize, Treasure.TreasureType);
+                                    unitOfWork.FoundTreasures.Add(new Found_Treasures(
+                                        Userdata.CurrentUser.ID,
+                                        Treasure.ID,
+                                        points,
+                                        DateTime.Now));
+                                    unitOfWork.Complete();
+                                    MessageBox.Show(String.Format("Congrats! you found the treasure \n Points:{0}", points));
+                                    MessengerInstance.Send(new object(), "Refresh");
                                     if (Treasure.IsChained)
                                     {
                                         //add distance? and name?
-                                        var result=MessageBox.Show("This treasure is connected to another one! \n" +
-                                            "Would you like to go on another adventure?","New Treasure ", MessageBoxButton.YesNo);
+                                        var result = MessageBox.Show("This treasure is connected to another one! \n" +
+                                            "Would you like to go on another adventure?", "New Treasure ", MessageBoxButton.YesNo);
                                         if (result == MessageBoxResult.Yes)
                                         {
                                             var NextTreasure = unitOfWork.FoundTreasures.GetNextTreasure(Treasure.ID);
@@ -85,26 +86,21 @@ namespace Geocache.ViewModel.PopUpVM
 
                                                 SimpleIoc.Default.GetInstance<FindTreasureVM>().ShowRoute.Execute(null);
                                                 this.CloseWindow.Execute(null);
+                                                return;
                                             }
-                                            else {
+                                            else
+                                            {
                                                 MessageBox.Show("You have already found that one");
-                                                this.CloseWindow.Execute(null);
-                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().GoBack.Execute(null);
+                                                
                                             }
                                         }
-                                        else
-                                        {
-                                            this.CloseWindow.Execute(null);
-                                            SimpleIoc.Default.GetInstance<FindTreasureVM>().GoBack.Execute(null);
-                                        }
+                                        this.CloseWindow.Execute(null);
+                                        SimpleIoc.Default.GetInstance<FindTreasureVM>().GoBack.Execute(null);
                                     }
-                                }
-                                else
-                                {
-                                    MessageBox.Show("wrong key");
                                 }
                             }
                         }
+                        else MessageBox.Show("Provided key is wrong.");
                     });
                 return submitKey;
             }
@@ -131,13 +127,13 @@ namespace Geocache.ViewModel.PopUpVM
                                 unitOfWork.TreasureComments.Add(report);
                                 unitOfWork.Complete();
                                 MessageBox.Show(string.Format("Report for geocache ({0}) filed.\nMods will check it out.", Treasure.Name));
-                                this.CloseWindow.Execute(null);
                             }
                             else
                             {
                                 MessageBox.Show("you have already reported it");
-                                this.CloseWindow.Execute(null);
+                                
                             }
+                            this.CloseWindow.Execute(null);
                         }
                     });
                 return reportWrongKey;

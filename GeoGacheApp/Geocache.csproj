@@ -153,7 +153,6 @@
     <Compile Include="Helper\Extensions.cs" />
     <Compile Include="Helper\PopUpWindowController.cs" />
     <Compile Include="Helper\Location.cs" />
-    <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Helper\UserDataService.cs" />
     <Compile Include="Interfaces\IChainedTreasureRepository.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
@@ -185,8 +184,9 @@
     <Compile Include="ViewModel\LoginPageVM.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PopUpVM\LeaderboardVM.cs" />
+    <Compile Include="ViewModel\PopUpVM\ModerateTreasuresVM.cs" />
     <Compile Include="ViewModel\PopUpVM\TreasureFoundVM.cs" />
-    <Compile Include="ViewModel\PopUpVM\UsersRoleVM.cs" />
+    <Compile Include="ViewModel\PopUpVM\ChangeUserRolesVM.cs" />
     <Compile Include="ViewModel\PopUpVM\UserTreasuresVM.cs" />
     <Compile Include="ViewModel\RegisterPageVM.cs" />
     <Compile Include="ViewModel\UserPageVM.cs" />
@@ -209,6 +209,9 @@
     <Compile Include="Helper\CloseWindowEventArgs.cs" />
     <Compile Include="Views\PopUpViews\LeaderboardView.xaml.cs">
       <DependentUpon>LeaderboardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PopUpViews\ModerateTreasuresView.xaml.cs">
+      <DependentUpon>ModerateTreasuresView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PopUpViews\TreasureFoundView.xaml.cs">
       <DependentUpon>TreasureFoundView.xaml</DependentUpon>
@@ -266,6 +269,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PopUpViews\LeaderboardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PopUpViews\ModerateTreasuresView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -337,10 +344,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="html\map_hiding.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="html\map_route.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="res\Images\icon.png" />
     <Resource Include="sometestData.txt" />

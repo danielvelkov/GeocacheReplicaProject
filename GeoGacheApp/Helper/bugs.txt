@@ -1,2 +1,4 @@
-﻿- sometimes when you click around in mytreasures to go to hidetreasure page the marker doesnt drop for some reason
-- v8 context or webbrowser empty on homepage if you put breakpoints before messengerinstance send OR mainvm change page
+﻿- sometimes when you click around in mytreasures to go to hidetreasure page the marker doesnt drop for some reason (fixed?)
+- v8 context or webbrowser empty on homepage if you put breakpoints before messengerinstance send OR mainvm change page (thats in debug only)
+- map_route still drops the old image when going to search a treasure
+- searchbox of map.html randomly just removes itself

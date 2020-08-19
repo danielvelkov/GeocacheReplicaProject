@@ -29,13 +29,8 @@ namespace Geocache.ViewModel
             UserData = userdata;
             TreasureArgs = args;
             PopUp = popUp;
-            using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
-            {
-                TreasureComments = new ObservableCollection<Treasures_Comments>
-                    (unitOfWork.TreasureComments.Find(tc => tc.TreasureID == TreasureArgs.FoundTreasureId));
-                if (unitOfWork.TreasureComments.HasUserCommented(UserData.CurrentUser.ID, TreasureArgs.FoundTreasureId))
-                    Rating = unitOfWork.TreasureComments.GetUserRating(UserData.CurrentUser.ID, TreasureArgs.FoundTreasureId);
-            }
+            RefreshTreasureComments();
+            MessengerInstance.Register<object>(this, "Refresh", obj => { RefreshTreasureComments(); });
         }
 
         #region properties
@@ -195,6 +190,15 @@ namespace Geocache.ViewModel
             }
         }
         #endregion
-
+        private void RefreshTreasureComments()
+        {
+            using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+            {
+                TreasureComments = new ObservableCollection<Treasures_Comments>
+                    (unitOfWork.TreasureComments.Find(tc => tc.TreasureID == TreasureArgs.FoundTreasureId));
+                if (unitOfWork.TreasureComments.HasUserCommented(UserData.CurrentUser.ID, TreasureArgs.FoundTreasureId))
+                    Rating = unitOfWork.TreasureComments.GetUserRating(UserData.CurrentUser.ID, TreasureArgs.FoundTreasureId);
+            }
+        }
     }
 }

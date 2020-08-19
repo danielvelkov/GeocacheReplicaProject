@@ -70,7 +70,9 @@ namespace Geocache.Database.Repositories
         //this needs 1 :)
         public void Remove_Quicker(TEntity entity)
         {
+            if(entity!=null)
             Context.Entry(entity).State = EntityState.Deleted;
+
         }
 
         public void RemoveRange(IEnumerable<TEntity> entities)

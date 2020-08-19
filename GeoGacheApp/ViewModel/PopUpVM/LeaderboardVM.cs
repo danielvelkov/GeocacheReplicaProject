@@ -19,36 +19,15 @@ namespace Geocache.ViewModel.PopUpVM
     {
         ObservableCollection<UserRanking> leaderboard;
 
-        public UserDataService UserData { get; private set; }
+        public UserDataService UserData { get;  set; }
         public ObservableCollection<UserRanking> Leaderboard { get => leaderboard; set => leaderboard = value; }
 
         public LeaderboardVM(UserDataService userData)
         {
             UserData = userData;
-            Leaderboard = new ObservableCollection<UserRanking>();
-            using(var unitOfWork= new UnitOfWork(new GeocachingContext()))
-            {
-                var users = unitOfWork.Users.GetAll();
-                foreach(User user in users)
-                {
-                    int points=unitOfWork.FoundTreasures.GetUserPoints(user.ID);
-                    int hiddenTreasures = unitOfWork.Treasures.GetUserHiddenTreasuresCount(user.ID);
-                    int foundTreasures = unitOfWork.FoundTreasures.GetUserFoundTreasuresCount(user.ID);
-                    
-                    Leaderboard.Add(new UserRanking { Points = points,
-                        UserName = user.Username,
-                        FoundTreasures=foundTreasures,
-                        HiddenTreasures=hiddenTreasures});
-                }
-                Leaderboard = new ObservableCollection<UserRanking>
-                    (Leaderboard.OrderByDescending<UserRanking,int>(t=>t.Points).AsEnumerable());
-
-                int rank = 1;
-                foreach (UserRanking ur in Leaderboard)
-                {
-                    ur.Rank = rank++;
-                }
-            }
+            RefreshLeaderboard();
+            MessengerInstance.Register<object>(this, "Refresh", obj => { RefreshLeaderboard(); });
+            
         }
 
         private ICommand closeWindow;
@@ -62,6 +41,38 @@ namespace Geocache.ViewModel.PopUpVM
                         Messenger.Default.Send(new CloseWindowEventArgs());
                     });
                 return closeWindow;
+            }
+        }
+
+        private void RefreshLeaderboard()
+        {
+            Leaderboard = new ObservableCollection<UserRanking>();
+            using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+            {
+                var users = unitOfWork.Users.GetAll();
+                foreach (User user in users)
+                {
+                    int points = unitOfWork.FoundTreasures.GetUserPoints(user.ID);
+                    int hiddenTreasures = unitOfWork.Treasures.GetUserHiddenTreasuresCount(user.ID);
+                    int foundTreasures = unitOfWork.FoundTreasures.GetUserFoundTreasuresCount(user.ID);
+
+                    Leaderboard.Add(new UserRanking
+                    {
+                        Points = points,
+                        UserName = user.Username,
+                        FoundTreasures = foundTreasures,
+                        HiddenTreasures = hiddenTreasures,
+                        Joined= ((DateTime.Now)-user.createdAt).Days
+                    });
+                }
+                Leaderboard = new ObservableCollection<UserRanking>
+                    (Leaderboard.OrderByDescending<UserRanking, int>(t => t.Points).AsEnumerable());
+
+                int rank = 1;
+                foreach (UserRanking ur in Leaderboard)
+                {
+                    ur.Rank = rank++;
+                }
             }
         }
     }

@@ -23,10 +23,10 @@ namespace Geocache.Models
         public int Id { get; set; }
 
         [ForeignKey("Treasure_1")]
-        public int Treasure1_ID { get; set; }
+        public int? Treasure1_ID { get; set; }
 
         [ForeignKey("Treasure_2")]
-        public int Treasure2_ID { get; set; }
+        public int? Treasure2_ID { get; set; }
 
         public virtual Treasure Treasure_1 { get; set; }
         public virtual Treasure Treasure_2 { get; set; }

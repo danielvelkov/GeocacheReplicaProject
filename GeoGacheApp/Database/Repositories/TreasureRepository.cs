@@ -55,5 +55,10 @@ namespace Geocache.Database.Repositories
                 count = TreasureContext.Treasures.Where(t => t.UserId == UserId).Count();
             return count;
         }
+        public IEnumerable<Treasure> GetTreasuresAndComments()
+        {
+            return TreasureContext.Treasures.Include(x => x.Treasures_Comments).Include(x=>x.Chained_Treasure1)
+                .Include(x=>x.Chained_Treasure2).Where(x => x.UserId!=0);
+        }
     }
 }

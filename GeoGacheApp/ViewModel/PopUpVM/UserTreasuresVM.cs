@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Messaging;
 using Geocache.Database;
 using Geocache.Helper;
 using Geocache.Models;
@@ -18,22 +19,24 @@ namespace Geocache.ViewModel.PopUpVM
 {
     public class UserTreasuresVM : ViewModelBase
     {
-        ObservableCollection<Treasure> treasures;
+        List<Treasure> treasures;
         public UserTreasuresVM(UserDataService userData)
         {
 
             UserData = userData;
-            Treasures = new ObservableCollection<Treasure>(UserData.GetUserTreasures());
+            MessengerInstance.Register<object>(this, "RefreshUserTreasures", obj => { Treasures = (UserData.GetUserTreasures()); });
+            Treasures = (UserData.GetUserTreasures());
         }
 
-        public UserDataService UserData { get; private set; }
-        public ObservableCollection<Treasure> Treasures { get => treasures; set => treasures = value; }
+        public UserDataService UserData { get;  set; }
+        public List<Treasure> Treasures { get => treasures; set => treasures = value; }
 
         #region Commands
         ICommand deleteTreasure;
         ICommand viewTreasure;
         ICommand changeTreasure;
         ICommand hideTreasure;
+        ICommand closeWindow;
         public ICommand ViewTreasure
         {
             get
@@ -116,6 +119,19 @@ namespace Geocache.ViewModel.PopUpVM
                       MessengerInstance.Send<CloseWindowEventArgs>(new CloseWindowEventArgs());
                       MessengerInstance.Send<Type>(typeof(HideTreasurePageVM), "ChangePage");
                   }));
+            }
+        }
+        public ICommand CloseWindow
+        {
+            get
+            {
+                if (closeWindow == null)
+                    closeWindow = new RelayCommand(() =>
+                    {
+                        Messenger.Default.Unregister(this);
+                        Messenger.Default.Send(new CloseWindowEventArgs());
+                    });
+                return closeWindow;
             }
         }
     }

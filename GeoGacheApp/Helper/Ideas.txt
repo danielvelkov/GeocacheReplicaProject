@@ -1,19 +1,9 @@
 ﻿
 
 
-
-
-
-- add a dialog window poppu for leaderboards and 
-mytreasures button
-https://github.com/imnbwd/FriendEditor/blob/master/FriendEditor/ViewModels/MainViewModel.cs
-
 - filtering the treasures + the cefsharp browser into another control(DONE)
 
-- during the registration add something to tell the user how to input the address
-- maybe add a  browser and a map so the user can check if its the right place or mayne
-incorporate a drag and drop marker that transforms the 
-
-- mvvm memory leaks
-
 - the leaderboard should be static or a resource so we dont initialize  it always
+
+- use the design time(of the mvvm light) and hardcode some data so you shouldnt need database
+http://www.spikie.be/post/2014/06/30/a-practical-guide-to-mvvm-(light).html

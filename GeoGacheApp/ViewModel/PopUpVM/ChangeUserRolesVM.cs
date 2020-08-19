@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Geocache.Database;
 using Geocache.Enums;
@@ -15,23 +16,16 @@ using System.Windows.Input;
 
 namespace Geocache.ViewModel.PopUpVM
 {
-    public class UsersRoleVM
+    public class ChangeUserRolesVM: ViewModelBase
     {
-        public UsersRoleVM(UserDataService userdata)
+        public ChangeUserRolesVM(UserDataService userdata)
         {
             Userdata = userdata;
-            using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
-            {
-                Users = new List<UserChangedRole>();
-                foreach(User user in unitOfWork.Users.Find(u => u.ID != Userdata.CurrentUser.ID).ToList())
-                {
-                    user.Points = unitOfWork.FoundTreasures.GetUserPoints(user.ID);
-                    Users.Add(new UserChangedRole { User = user, UserRole = user.Role });
-                }
-            }
+            RefreshUserList();
+            MessengerInstance.Register<object>(this, "Refresh", obj => { RefreshUserList(); });
         }
 
-        public UserDataService Userdata { get; private set; }
+        public UserDataService Userdata { get;  set; }
         public List<UserChangedRole> Users { get; private set; }
 
         #region Commands
@@ -69,6 +63,17 @@ namespace Geocache.ViewModel.PopUpVM
             }
         }
         #endregion
-
+        private void RefreshUserList()
+        {
+            using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+            {
+                Users = new List<UserChangedRole>();
+                foreach (User user in unitOfWork.Users.Find(u => u.ID != Userdata.CurrentUser.ID).ToList())
+                {
+                    user.Points = unitOfWork.FoundTreasures.GetUserPoints(user.ID);
+                    Users.Add(new UserChangedRole { User = user, UserRole = user.Role });
+                }
+            }
+        }
     }
 }

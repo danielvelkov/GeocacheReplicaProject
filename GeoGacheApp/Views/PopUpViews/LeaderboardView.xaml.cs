@@ -27,7 +27,7 @@ namespace Geocache.Views.PopUpViews
         bool sortedByPoints = false;
         bool sortedByFoundTreasures = false;
         bool sortedByTreasuresHidden= false;
-
+        bool sortedByDateJoined = false;
 
         public LeaderboardView()
         {
@@ -103,5 +103,16 @@ namespace Geocache.Views.PopUpViews
             else leaderboardList.Items.SortDescriptions.Add(
                 new SortDescription("FoundTreasures", ListSortDirection.Ascending));
         }
+        private void SortByDateJoined(object sender, RoutedEventArgs e)
+        {
+            if (leaderboardList.Items.SortDescriptions.Count != 0)
+                leaderboardList.Items.SortDescriptions.Clear();
+            if (sortedByDateJoined = (!sortedByDateJoined))
+                leaderboardList.Items.SortDescriptions.Add(
+                    new SortDescription("Joined", ListSortDirection.Descending));
+            else leaderboardList.Items.SortDescriptions.Add(
+                new SortDescription("Joined", ListSortDirection.Ascending));
+        }
+
     }
 }

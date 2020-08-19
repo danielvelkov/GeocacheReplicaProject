@@ -26,7 +26,7 @@ namespace Geocache.ViewModel
         #region Parameters
         private User currentUser;
         private string errorMsg;
-        public UserDataService UserData { get; }
+        public UserDataService UserData { get; set; }
 
         public const string CurrentUserPropertyName = "CurrentUser";
 

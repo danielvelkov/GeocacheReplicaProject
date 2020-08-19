@@ -18,10 +18,8 @@ namespace Geocache.Helper
         public Location UserLocation { get => userLocation; set => userLocation = value; }
         public User CurrentUser { get => currentUser; set => currentUser = value; }
         
-        public UserDataService(User LoggedUser)
-        {
-            CurrentUser=LoggedUser;
-        }
+        public UserDataService(){}
+
         public string GetUserHomeAddress()
         {
             StringBuilder address = new StringBuilder();

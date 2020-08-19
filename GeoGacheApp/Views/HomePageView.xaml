@@ -55,9 +55,10 @@
                     </Style>
                 </StackPanel.Style>
                 <Label HorizontalAlignment="Center">Mod only</Label>
-                <Button Height="30" Width="150">
+                <Button Command="{Binding ModerateTreasures}" Height="30" Width="150">
                     <TextBlock>Moderate Treasures</TextBlock>
                 </Button>
+                <Button Name="deleteBttn" Height="30" Width="156">Delete accounts and Treasures</Button>
             </StackPanel>
             
             <Label Height="30"></Label>
@@ -80,7 +81,6 @@
                 </StackPanel.Style>
                 <Label HorizontalAlignment="Center">Admin only</Label>
                 <Button Command="{Binding ChangeUserRole}" Name="changeRoleBttn" Height="30" Width="150">Change User Role</Button>
-                <Button Name="deleteBttn" Height="30" Width="156">Delete accounts and Treasures</Button>
             </StackPanel>
         </StackPanel>
         <Grid Grid.Column="1">

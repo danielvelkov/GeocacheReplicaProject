@@ -3,6 +3,7 @@ using Geocache.Enums;
 using Geocache.Helper;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -35,8 +36,8 @@ namespace Geocache.Models
 
         public Treasure()
         {
-            Found_Treasures = new HashSet<Found_Treasures>();
-            Treasures_Comments = new HashSet<Treasures_Comments>();
+            Found_Treasures = new ObservableCollection<Found_Treasures>();
+            Treasures_Comments = new ObservableCollection<Treasures_Comments>();
         }
 
         public string Name { get; set; }
@@ -68,8 +69,8 @@ namespace Geocache.Models
         public virtual User User { get; set; }
 
         public virtual MarkerInfo MarkerInfo { get; set; }
-        public virtual ICollection<Treasures_Comments> Treasures_Comments { get; set; }
-        public virtual ICollection<Found_Treasures> Found_Treasures { get; set; }
+        public virtual ObservableCollection<Treasures_Comments> Treasures_Comments { get; set; }
+        public virtual ObservableCollection<Found_Treasures> Found_Treasures { get; set; }
 
         [InverseProperty("Treasure_1")]
         public virtual ICollection<Chained_Treasures> Chained_Treasure1 { get; set; }

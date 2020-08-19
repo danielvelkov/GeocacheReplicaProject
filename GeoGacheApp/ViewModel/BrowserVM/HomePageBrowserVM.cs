@@ -43,7 +43,7 @@ namespace Geocache.ViewModel.BrowserVM
 
             });
         }
-        public UserDataService UserData { get; }
+        public UserDataService UserData { get; set; }
         private TreasureType selectedTreasureType= TreasureType.ANY;
         private TreasureSizes selectedTreasureSize= Enums.TreasureSizes.ANY;
         private TaskCompletionSource<bool> tcs;

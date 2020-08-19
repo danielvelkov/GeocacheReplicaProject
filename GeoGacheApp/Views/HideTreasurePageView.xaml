@@ -99,11 +99,20 @@
                         Path=Value,Converter={StaticResource diffTxtBlockConverter}}" Grid.Column="2" ></Label>
                 </Grid>
                 <StackPanel Orientation="Horizontal">
-                    <Label ToolTip="Fill the checkbox and select a treasure\n
-                           to create a chain of treasures">Connect to other treasure</Label>
-                    <CheckBox Name="chainedTrsChckBox" IsChecked="{Binding Treasure.IsChained}" VerticalAlignment="Center"></CheckBox>
-                    <ComboBox Name="userTreasureCmbBox" Width="150" ItemsSource="{Binding UserTreasures,Mode=OneWay}"
-                              SelectedItem="{Binding TreasureChain}">
+                    <StackPanel>
+                        <Label >This Treasure comes after:</Label>
+                        <Label Content="{Binding TreasureChain.Name,Mode=OneTime}"></Label>
+                    </StackPanel>
+                    <ComboBox Name="userTreasureCmbBox" Width="150" ItemsSource="{Binding UserTreasures,Mode=TwoWay}"
+                              SelectedItem="{Binding TreasureChain}" ToolTipService.ShowDuration="10000">
+                        <ComboBox.ToolTip>
+                            <TextBlock>
+                                Note that a treasure <LineBreak></LineBreak>
+                                can start only 1 chain,<LineBreak></LineBreak>
+                                but many treasures  <LineBreak></LineBreak> 
+                                could lead to it!!!
+                            </TextBlock>
+                        </ComboBox.ToolTip>
                         <ComboBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type models:Treasure}">
                                 <StackPanel Orientation="Horizontal">

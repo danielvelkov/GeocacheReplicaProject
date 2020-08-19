@@ -39,19 +39,35 @@ namespace Geocache.ViewModel
             SimpleIoc.Default.Register<PopUpWindowController>();
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LoginPageVM>();
-            SimpleIoc.Default.Register <RegisterPageVM>();
+            SimpleIoc.Default.Register<RegisterPageVM>();
+            ReRegisterInstances();
+        }
+        //when we log out
+        public static void Cleanup()
+        {
+            // TODO Clear the ViewModels
+
+            SimpleIoc.Default.Unregister<UserDataService>();
+            SimpleIoc.Default.Unregister<HomePageBrowserVM>();
+            SimpleIoc.Default.Unregister<HomePageVM>();
+            SimpleIoc.Default.Unregister<HideTreasurePageVM>();
+            SimpleIoc.Default.Unregister<UserPageVM>();
+            SimpleIoc.Default.Unregister<LeaderboardVM>();
+            SimpleIoc.Default.Unregister<ChangeUserRolesVM>();
+            SimpleIoc.Default.Unregister<UserTreasuresVM>();
+            SimpleIoc.Default.Unregister<ModerateTreasuresVM>();
+        }
+        // when we log in
+        public static void ReRegisterInstances()
+        {
             SimpleIoc.Default.Register<HomePageBrowserVM>();
             SimpleIoc.Default.Register<HomePageVM>();
             SimpleIoc.Default.Register<HideTreasurePageVM>();
             SimpleIoc.Default.Register<UserPageVM>();
             SimpleIoc.Default.Register<LeaderboardVM>();
+            SimpleIoc.Default.Register<ChangeUserRolesVM>();
             SimpleIoc.Default.Register<UserTreasuresVM>();
-            SimpleIoc.Default.Register<UsersRoleVM>();
-        }
-        
-        public static void Cleanup()
-        {
-            // TODO Clear the ViewModels
+            SimpleIoc.Default.Register<ModerateTreasuresVM>();
         }
 
         static ViewModelLocator()
@@ -63,6 +79,8 @@ namespace Geocache.ViewModel
         public TreasureFoundVM TreasureFoundVM => SimpleIoc.Default.GetInstance<TreasureFoundVM>();
         public LeaderboardVM LeaderboardVM => SimpleIoc.Default.GetInstance<LeaderboardVM>();
         public UserTreasuresVM UserTreasuresVM => SimpleIoc.Default.GetInstance<UserTreasuresVM>();
-        public UsersRoleVM UsersRoleVM => SimpleIoc.Default.GetInstance<UsersRoleVM>();
+        public ChangeUserRolesVM UsersRoleVM => SimpleIoc.Default.GetInstance<ChangeUserRolesVM>();
+
+        public ModerateTreasuresVM ModerateTreasuresVM => SimpleIoc.Default.GetInstance<ModerateTreasuresVM>();
     }
 }

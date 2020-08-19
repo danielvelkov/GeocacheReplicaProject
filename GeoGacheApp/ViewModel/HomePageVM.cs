@@ -30,7 +30,7 @@ namespace Geocache.ViewModel
         #endregion
 
         #region Parameters
-        public UserDataService UserData { get; }
+        public UserDataService UserData { get; set; }
         public PopUpWindowController PopUp { get; private set; }
         //welcome message
         public string Welcome
@@ -77,6 +77,7 @@ namespace Geocache.ViewModel
         private ICommand hideTreasure;
         private ICommand showUserTreasures;
         private ICommand showLeaderBoards;
+        private ICommand moderateTreasures;
         private ICommand changeUserRole;
 
         public ICommand LogOut
@@ -87,10 +88,8 @@ namespace Geocache.ViewModel
                     logOut = new RelayCommand(() =>
                     {
                         //remove the user specific instances of pages
-                        SimpleIoc.Default.Unregister<HomePageVM>();
-                        SimpleIoc.Default.GetInstance<UserDataService>().CurrentUser = null;
+                        ViewModelLocator.Cleanup();
                         
-                        //ViewModelLocator.Cleanup();
                         // change to login page
                         MessengerInstance.Send<Type>(typeof(LoginPageVM), "ChangePage");
                     });
@@ -154,6 +153,20 @@ namespace Geocache.ViewModel
                 return showUserTreasures;
             }
         }
+        public ICommand ModerateTreasures
+        {
+            get
+            {
+                if (moderateTreasures == null)
+                    moderateTreasures = new RelayCommand(() =>
+                    {
+                        if (!SimpleIoc.Default.IsRegistered<ModerateTreasuresVM>())
+                            SimpleIoc.Default.Register<ModerateTreasuresVM>();
+                        PopUp.ShowPopUp(new ModerateTreasuresView());
+                    });
+                return moderateTreasures;
+            }
+        }
         public ICommand ChangeUserRole
         {
             get
@@ -161,8 +174,8 @@ namespace Geocache.ViewModel
                 if (changeUserRole == null)
                     changeUserRole = new RelayCommand(() =>
                     {
-                        if (!SimpleIoc.Default.IsRegistered<UsersRoleVM>())
-                            SimpleIoc.Default.Register<UsersRoleVM>();
+                        if (!SimpleIoc.Default.IsRegistered<ChangeUserRolesVM>())
+                            SimpleIoc.Default.Register<ChangeUserRolesVM>();
                         PopUp.ShowPopUp(new UsersRoleView());
                     });
                 return changeUserRole;
