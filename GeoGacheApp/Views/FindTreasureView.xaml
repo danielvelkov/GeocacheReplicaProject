@@ -55,11 +55,16 @@
             </wpf:ChromiumWebBrowser>
         </GroupBox>
         <StackPanel Grid.Row="1">
+            <GroupBox Header="Treasure">
+                <StackPanel>
+                    <TextBlock Text="{Binding TreasureArgs.Name,Mode=TwoWay}"></TextBlock>
+                    <TextBlock Text="{Binding TreasureArgs.Description,Mode=TwoWay}" Height="40" TextWrapping="Wrap" Width="300"></TextBlock>
+                </StackPanel>
+            </GroupBox>
             <GroupBox Header="Treasure Comments" FontSize="15" MinHeight="100">
-                <ListBox ItemsSource="{Binding TreasureComments}"
+                <ListBox ItemsSource="{Binding TreasureComments,Mode=TwoWay}"
                          ItemTemplate="{StaticResource Treasure_Comments}" 
-                         Style="{StaticResource ListStyle}" MinWidth="350">
-
+                         Style="{StaticResource ListStyle}" MinWidth="350" MaxHeight="300">
                 </ListBox>
             </GroupBox>
             <Grid>

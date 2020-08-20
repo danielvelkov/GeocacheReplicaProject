@@ -289,7 +289,7 @@
                 infoWindow.open(map, marker);
             });
             marker.addListener('dblclick', function(){
-                     startHunt(latitude,longtitude,name,id);
+                     startHunt(latitude,longtitude,name,id,description);
             });
                 map.setZoom(14);
           //remove it everything breaks
@@ -304,11 +304,11 @@
             }
             markers=[];
         }
-        async function startHunt(lat,lng,name,id) {
+        async function startHunt(lat,lng,name,id,description) {
             await CefSharp.BindObjectAsync("homePageVM");
             if(currentLocationMarker!=null ||
                 homeMarker!=null)
-                homePageVM.startHuntCS(lat, lng,name,id);
+                homePageVM.startHuntCS(lat, lng,name,id,description);
             else alert('Enter your location first');
         }
         async function getAllTreasures(address){

@@ -22,7 +22,7 @@
             You found it? Great! Enter the key to get your points.
         </TextBlock>
         <TextBlock Grid.Row="1" VerticalAlignment="Bottom" FontSize="18" HorizontalAlignment="Center">Key:</TextBlock>
-        <TextBox Name="keyTxtBox" Text="{Binding ReportContent}" Grid.Row="2" Height="24" Margin="10"></TextBox>
+        <TextBox Name="keyTxtBox" Grid.Row="2" Height="24" Margin="10"></TextBox>
         <GroupBox  Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
             <Grid>
                 <Grid.RowDefinitions>
@@ -55,7 +55,7 @@
             </Grid>
         </GroupBox>
 
-        <TextBlock Foreground="Red" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+        <TextBlock Foreground="Red" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center">
             *If you found the key <LineBreak></LineBreak>
             in the treasure but its <LineBreak></LineBreak>
             wrong, report it here.

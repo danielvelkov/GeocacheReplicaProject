@@ -30,8 +30,7 @@ namespace Geocache.ViewModel.BrowserVM
             UserData = userData;
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
             CefSharpSettings.WcfEnabled = true;
-            // dont worry about the first parameter, its soft linked
-            
+           
             MessengerInstance.Register<Treasure>(this, "ShowTreasure",treasr =>
             {
 
@@ -46,15 +45,7 @@ namespace Geocache.ViewModel.BrowserVM
         public UserDataService UserData { get; set; }
         private TreasureType selectedTreasureType= TreasureType.ANY;
         private TreasureSizes selectedTreasureSize= Enums.TreasureSizes.ANY;
-        private TaskCompletionSource<bool> tcs;
-        // good idea to bind it 
-        private string address;
-        public string Address
-        {
-            get { return address; }
-            set { Set(ref address, value); }
-        }
-
+        
         private ChromiumWebBrowser webBrowser;
         public const string WebBrowserPropertyName = "WebBrowser";
 
@@ -365,7 +356,7 @@ namespace Geocache.ViewModel.BrowserVM
             CurrentLocation = new Location(Lat, Lng);
         }
 
-        public void startHuntCS(double lat, double lng, string name, int id)
+        public void startHuntCS(double lat, double lng, string name, int id,string description)
         {
             if (MessageBox.Show("are you sure you wanna search for " +
                    "treasure at coordinates:" + lat.ToString().Substring(0,5) +
@@ -377,11 +368,7 @@ namespace Geocache.ViewModel.BrowserVM
                 {
                     SimpleIoc.Default.Register<FoundTreasureArgs>(() =>
                     {
-                        return new FoundTreasureArgs
-                        {
-                            FoundTreasureId = id,
-                            FoundTreasureLocation = new Location(lat, lng)
-                        };
+                        return new FoundTreasureArgs(new Location(lat, lng), id);
                     });
                     SimpleIoc.Default.Register<PopUpWindowController>();
                 }
@@ -389,10 +376,14 @@ namespace Geocache.ViewModel.BrowserVM
                 {
                     SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureId = id;
                     SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureLocation = new Location(lat, lng);
+                    SimpleIoc.Default.GetInstance<FoundTreasureArgs>().Name = name;
+                    SimpleIoc.Default.GetInstance<FoundTreasureArgs>().Description = description;
                 }
                 if(!SimpleIoc.Default.IsRegistered<FindTreasureVM>())
                     SimpleIoc.Default.Register<FindTreasureVM>();
+                
                 MessengerInstance.Send<Type>(typeof(FindTreasureVM), "ChangePage");
+                MessengerInstance.Send<object>(new object(), "Refresh"); //show the comments (if its before it doesnt work)
             }
         }
 

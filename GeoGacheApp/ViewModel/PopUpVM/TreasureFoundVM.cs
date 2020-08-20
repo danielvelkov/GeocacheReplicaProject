@@ -32,8 +32,8 @@ namespace Geocache.ViewModel.PopUpVM
         }
 
         public UserDataService Userdata { get;  set; }
-        public Treasure Treasure { get; private set; }
-        public Location TreasureLocation { get; private set; }
+        public Treasure Treasure { get;  set; }
+        public Location TreasureLocation { get;  set; }
 
         #region Commands
 
@@ -66,7 +66,6 @@ namespace Geocache.ViewModel.PopUpVM
                                     MessengerInstance.Send(new object(), "Refresh");
                                     if (Treasure.IsChained)
                                     {
-                                        //add distance? and name?
                                         var result = MessageBox.Show("This treasure is connected to another one! \n" +
                                             "Would you like to go on another adventure?", "New Treasure ", MessageBoxButton.YesNo);
                                         if (result == MessageBoxResult.Yes)
@@ -77,27 +76,29 @@ namespace Geocache.ViewModel.PopUpVM
                                                 //set the location of the user to the location of the previous treasure
                                                 SimpleIoc.Default.GetInstance<FindTreasureVM>().UserData.UserLocation = TreasureLocation;
 
-                                                SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureId = NextTreasure.ID;
-                                                SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureLocation = NextTreasure.GetLatLng();
-
-                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureComments =
-                                                new ObservableCollection<Treasures_Comments>(
-                                                    unitOfWork.TreasureComments.Find(tc => tc.ID == NextTreasure.ID));
-
+                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureArgs.FoundTreasureId = NextTreasure.ID;
+                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureArgs.FoundTreasureLocation = NextTreasure.GetLatLng();
+                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureArgs.Description = NextTreasure.Description;
+                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureArgs.Name = NextTreasure.Name;
+                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureComments = new ObservableCollection<Treasures_Comments>
+                                                (
+                                                    unitOfWork.TreasureComments.Find(c => c.TreasureID == NextTreasure.ID)
+                                                );
                                                 SimpleIoc.Default.GetInstance<FindTreasureVM>().ShowRoute.Execute(null);
                                                 this.CloseWindow.Execute(null);
                                                 return;
                                             }
                                             else
                                             {
-                                                MessageBox.Show("You have already found that one");
-                                                
+                                                MessageBox.Show("You have already found that one.");
+
                                             }
                                         }
                                         this.CloseWindow.Execute(null);
                                         SimpleIoc.Default.GetInstance<FindTreasureVM>().GoBack.Execute(null);
                                     }
                                 }
+                                else MessageBox.Show("You have already found that one");
                             }
                         }
                         else MessageBox.Show("Provided key is wrong.");

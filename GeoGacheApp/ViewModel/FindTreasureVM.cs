@@ -14,6 +14,7 @@ using Geocache.Views.PopUpViews;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,17 +30,30 @@ namespace Geocache.ViewModel
             UserData = userdata;
             TreasureArgs = args;
             PopUp = popUp;
-            RefreshTreasureComments();
-            MessengerInstance.Register<object>(this, "Refresh", obj => { RefreshTreasureComments(); });
+            MessengerInstance.Register<object>(this, "Refresh", obj => { RefreshTreasureComments(); }); //when mod deletes comments
         }
 
         #region properties
 
         private FoundTreasureArgs treasureArgs;
+        private ObservableCollection<Treasures_Comments> treasure_Comments;
+        
+        public ObservableCollection<Treasures_Comments> TreasureComments
+        {
+            get
+            {
+                return treasure_Comments;
+            }
+            set
+            {
+                treasure_Comments = value;
+                RaisePropertyChanged("TreasureComments");
+            }
+        }
+
         public UserDataService UserData { get; private set; }
-        public FoundTreasureArgs TreasureArgs { get => treasureArgs; set => treasureArgs = value; }
+
         public PopUpWindowController PopUp { get; private set; }
-        public ObservableCollection<Treasures_Comments> TreasureComments { get; set; }
 
         private ChromiumWebBrowser webBrowser;
         public const string WebBrowserPropertyName = "WebBrowser";
@@ -76,6 +90,17 @@ namespace Geocache.ViewModel
                     };
                 }
                 RaisePropertyChanged(WebBrowserPropertyName);
+            }
+        }
+        public FoundTreasureArgs TreasureArgs
+        {
+            get
+            {
+                return treasureArgs;
+            }
+            set
+            {
+                treasureArgs = value;
             }
         }
 
@@ -183,6 +208,7 @@ namespace Geocache.ViewModel
                             {
                                 MessageBox.Show("You have already commented.");
                             }
+                            CommentText = "";
                         }
                     }
 
