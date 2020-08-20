@@ -4,13 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Geocache.Views"
-        mc:Ignorable="d" MinHeight="450" MinWidth="800">
+        mc:Ignorable="d" MinHeight="550" MinWidth="500">
     <Grid>
         <Grid.Resources>
             <Style x:Name="LabelStyle" TargetType="{x:Type Label}">
                 <Setter Property="FontSize" Value="20"></Setter>
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
-                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+
+                <Setter Property="Margin" Value="40,0,0,0"></Setter>
             </Style>
             <Style x:Name="TxtBoxStyle" TargetType="{x:Type TextBox}">
                 <Setter Property="FontSize" Value="25"></Setter>
@@ -18,19 +20,18 @@
                 <Setter Property="Width" Value="200"></Setter>
                 <Setter Property="Background" Value="WhiteSmoke"></Setter>
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
-                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+                <Setter Property="Margin" Value="40,0,0,0"></Setter>
             </Style>
             <Style TargetType="{x:Type Button}">
-                <Setter Property="FontSize" Value="25"></Setter>
+                <Setter Property="FontSize" Value="23"></Setter>
                 <Setter Property="Height" Value="40"></Setter>
                 <Setter Property="Width" Value="200"></Setter>
             </Style>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -43,32 +44,43 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Label>Sign up:</Label>
-        <Label Grid.Row="1">First name</Label>
-        <Label Grid.Column="1" Grid.Row="1">Last name</Label>
-        <TextBox Text="{Binding User.FirstName}" Grid.Row="2"></TextBox>
-        <TextBox Text="{Binding User.LastName}" Grid.Column="1" Grid.Row="2"></TextBox>
-        <Label Grid.Row="3">Username</Label>
-        <TextBox Text="{Binding User.Username}" Grid.Row="4"></TextBox>
+        <Label>Registration:</Label>
+        <Label Grid.Row="3">First name</Label>
+        <Label Grid.Column="1" Grid.Row="3">Last name</Label>
+        <TextBox Text="{Binding User.FirstName}" Grid.Row="4"></TextBox>
+        <TextBox Text="{Binding User.LastName}" Grid.Column="1" Grid.Row="4"></TextBox>
+        <Label Grid.Row="1">Username</Label>
+        <TextBox Text="{Binding User.Username}" Grid.Row="2"></TextBox>
         <Label Content="_Password:" Target="{Binding ElementName=txtPassword}" Grid.Row="5"/>
-        <PasswordBox PasswordChanged="PasswordBox_PasswordChanged" Name="txtPassword" Grid.Row="6" Height="40" Width="200" Background="WhiteSmoke" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25"/>
-        <Label Content="_Confirm password:" Target="{Binding ElementName=txtConfirmPassword}" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="Black"/>
-        <PasswordBox PasswordChanged="PasswordBox_ConfirmPasswordChanged" Name="txtConfirmPassword" Grid.Row="8" Height="40" Width="200" Background="WhiteSmoke" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25"/>
+        <PasswordBox PasswordChanged="PasswordBox_PasswordChanged" Name="txtPassword" Grid.Row="6" Height="40" Width="200" Background="WhiteSmoke" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="40,0,0,0" FontSize="25"/>
+        <Label Content="_Confirm password:" Target="{Binding ElementName=txtConfirmPassword}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="20" Foreground="Black"/>
+        <PasswordBox PasswordChanged="PasswordBox_ConfirmPasswordChanged" Name="txtConfirmPassword" Grid.Row="6" Grid.Column="1" Height="40" Width="200" Background="WhiteSmoke" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="40,0,0,0" FontSize="25"/>
 
         <Button Command="{Binding GoToLoginPage}" Grid.Row="1" Grid.Column="2" >Go back</Button>
-        <Button Command="{Binding Register}" Grid.Row="2" Grid.Column="2" >Register</Button>
+        <Button Command="{Binding Register}" Grid.Row="13" Margin="40,0,0,0" >Register</Button>
 
-        <Label Grid.Row="3" Grid.Column="2">Country</Label>
-        <TextBox Text="{Binding User.Country}"  Grid.Row="4" Grid.Column="2"></TextBox>
+        <Label Grid.Row="7" Grid.Column="0">Country</Label>
+        <TextBox Text="{Binding User.Country}"  Grid.Row="8" Grid.Column="0"></TextBox>
 
-        <Label Grid.Row="5" Grid.Column="2">City</Label>
-        <TextBox Text="{Binding User.City}" Grid.Row="6" Grid.Column="2"></TextBox>
+        <Label Grid.Row="9" Grid.Column="0">City</Label>
+        <TextBox Text="{Binding User.City}" Grid.Row="10" Grid.Column="0"></TextBox>
 
-        <Label Grid.Row="7" Grid.Column="2">Adress</Label>
-        <TextBox Text="{Binding User.Adress}" Grid.Row="8" Grid.Column="2"></TextBox>
+        <Label Grid.Row="11" >Street or building</Label>
+        <TextBox Text="{Binding User.Adress}" Grid.Row="12" ></TextBox>
 
-        <Label Content="{Binding ErrorMsg,Mode=TwoWay}" Grid.Row="5" Grid.Column="1" Height="40" Foreground="Red" ></Label>
+        <Label Content="{Binding ErrorMsg,Mode=TwoWay}" Grid.Row="8" Grid.Column="1" Height="40" Foreground="Red" ></Label>
+        <GroupBox Header="Quick note" Grid.Row="9" Grid.Column="1" Grid.RowSpan="3" FontSize="20" Margin="10,0,0,0">
+            <TextBlock>You can always change <LineBreak></LineBreak>
+            this location once your <LineBreak></LineBreak>
+            registered.</TextBlock>
+        </GroupBox>
     </Grid>
 </UserControl>

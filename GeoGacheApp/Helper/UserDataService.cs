@@ -32,6 +32,10 @@ namespace Geocache.Helper
             else address.Length--;
             return address.ToString();
         }
+        /// <summary>
+        /// This gets all user's treasures and lazyloads entities connected to it
+        /// </summary>
+        /// <returns></returns>
         public List<Treasure> GetUserTreasures()
         {
             userTreasures = new List<Treasure>();

@@ -184,6 +184,7 @@
     <Compile Include="ViewModel\LoginPageVM.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PopUpVM\LeaderboardVM.cs" />
+    <Compile Include="ViewModel\PopUpVM\ModerateAccountsVM.cs" />
     <Compile Include="ViewModel\PopUpVM\ModerateTreasuresVM.cs" />
     <Compile Include="ViewModel\PopUpVM\TreasureFoundVM.cs" />
     <Compile Include="ViewModel\PopUpVM\ChangeUserRolesVM.cs" />
@@ -209,6 +210,9 @@
     <Compile Include="Helper\CloseWindowEventArgs.cs" />
     <Compile Include="Views\PopUpViews\LeaderboardView.xaml.cs">
       <DependentUpon>LeaderboardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PopUpViews\ModerateAccountsView.xaml.cs">
+      <DependentUpon>ModerateAccountsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PopUpViews\ModerateTreasuresView.xaml.cs">
       <DependentUpon>ModerateTreasuresView.xaml</DependentUpon>
@@ -269,6 +273,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PopUpViews\LeaderboardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PopUpViews\ModerateAccountsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

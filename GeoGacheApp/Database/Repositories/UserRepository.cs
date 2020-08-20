@@ -1,4 +1,5 @@
 ﻿using Geocache;
+using Geocache.Enums;
 using Geocache.Helper;
 using Geocache.Interfaces;
 using Geocache.Models;
@@ -31,6 +32,11 @@ namespace Geocache.Database.Repositories
                 return false;
             }
             return true;
+        }
+
+        public IEnumerable<User> GetUsers(int ModId)
+        {
+            return UserContext.Users.Include("Treasures_Comments").Where(u => u.ID != ModId && u.Role == Roles.USER);
         }
 
         public void UpdatePassword(int id, string newPassword)

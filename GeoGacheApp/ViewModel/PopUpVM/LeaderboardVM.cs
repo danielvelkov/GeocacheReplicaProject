@@ -52,7 +52,7 @@ namespace Geocache.ViewModel.PopUpVM
                 var users = unitOfWork.Users.GetAll();
                 foreach (User user in users)
                 {
-                    int points = unitOfWork.FoundTreasures.GetUserPoints(user.ID);
+                    int points = user.GetPoints;
                     int hiddenTreasures = unitOfWork.Treasures.GetUserHiddenTreasuresCount(user.ID);
                     int foundTreasures = unitOfWork.FoundTreasures.GetUserFoundTreasuresCount(user.ID);
 

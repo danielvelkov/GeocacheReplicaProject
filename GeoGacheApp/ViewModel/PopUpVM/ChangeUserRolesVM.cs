@@ -54,9 +54,9 @@ namespace Geocache.ViewModel.PopUpVM
                         using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
                         {
                             var user=unitOfWork.Users.Get(x.User.ID);
-                            user.Role = x.UserRole;
+                            user.Role = (Roles)Convert.ChangeType(x.UserRole, x.UserRole.GetTypeCode());
                             unitOfWork.Complete();
-                            MessageBox.Show(string.Format("user promoted to {0}.", x.UserRole));
+                            MessageBox.Show(string.Format("User promoted to {0}.", x.UserRole));
                         }
                     });
                 return saveChanges;
@@ -71,8 +71,12 @@ namespace Geocache.ViewModel.PopUpVM
                 foreach (User user in unitOfWork.Users.Find(u => u.ID != Userdata.CurrentUser.ID).ToList())
                 {
                     user.Points = unitOfWork.FoundTreasures.GetUserPoints(user.ID);
-                    Users.Add(new UserChangedRole { User = user, UserRole = user.Role });
-                }
+                    Users.Add(new UserChangedRole
+                    {
+                        User = user,
+                        UserRole = (UserRoles)Convert.ChangeType(user.Role, user.Role.GetTypeCode())
+                    });
+                };
             }
         }
     }

@@ -42,13 +42,13 @@
                     <Style>
                         <Style.Triggers>
                             <!--could be done with a converter but im laze-->
-                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.USER}">
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:Roles.USER}">
                                 <Setter Property="StackPanel.Visibility" Value="Hidden"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.MOD}">
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:Roles.MOD}">
                                 <Setter Property="StackPanel.Visibility" Value="Visible"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.ADMIN}">
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:Roles.ADMIN}">
                                 <Setter Property="StackPanel.Visibility" Value="Hidden"></Setter>
                             </DataTrigger>
                         </Style.Triggers>
@@ -56,9 +56,9 @@
                 </StackPanel.Style>
                 <Label HorizontalAlignment="Center">Mod only</Label>
                 <Button Command="{Binding ModerateTreasures}" Height="30" Width="150">
-                    <TextBlock>Moderate Treasures</TextBlock>
+                    <TextBlock>Moderate treasures</TextBlock>
                 </Button>
-                <Button Name="deleteBttn" Height="30" Width="156">Delete accounts and Treasures</Button>
+                <Button Command="{Binding ModerateAccounts}" Height="30" Width="150">Moderate accounts</Button>
             </StackPanel>
             
             <Label Height="30"></Label>
@@ -67,20 +67,20 @@
                     <Style>
                         <Style.Triggers>
                             <!--could be done with a converter but im laze-->
-                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.USER}">
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:Roles.USER}">
                                 <Setter Property="StackPanel.Visibility" Value="Hidden"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.MOD}">
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:Roles.MOD}">
                                 <Setter Property="StackPanel.Visibility" Value="Hidden"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:UserRoles.ADMIN}">
+                            <DataTrigger Binding="{Binding UserRole}" Value="{x:Static enums:Roles.ADMIN}">
                                 <Setter Property="StackPanel.Visibility" Value="Visible"></Setter>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </StackPanel.Style>
                 <Label HorizontalAlignment="Center">Admin only</Label>
-                <Button Command="{Binding ChangeUserRole}" Name="changeRoleBttn" Height="30" Width="150">Change User Role</Button>
+                <Button Command="{Binding ChangeUserRole}" Name="changeRoleBttn" Height="30" Width="150">Change user's role</Button>
             </StackPanel>
         </StackPanel>
         <Grid Grid.Column="1">

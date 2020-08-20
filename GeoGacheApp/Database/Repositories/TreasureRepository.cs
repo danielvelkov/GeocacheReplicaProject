@@ -37,7 +37,8 @@ namespace Geocache.Database.Repositories
         public List<Treasure> GetUserTreasures(int UserID)
         {
             //include ensures we dont make it a lazy loaded proprety which is disposed if its not inside using unitOfWork
-            return TreasureContext.Treasures.Include(x=>x.MarkerInfo).Include(y=>y.Treasures_Comments).Where(t => t.UserId == UserID).ToList();
+            return TreasureContext.Treasures.Include(x=>x.MarkerInfo).Include(y=>y.Treasures_Comments)
+                .Include(y=>y.Chained_Treasure1).Include(y=>y.Chained_Treasure2).Where(t => t.UserId == UserID).ToList();
         }
         public List<Treasure> GetUserTreasuresNotChained(int UserID)
         {

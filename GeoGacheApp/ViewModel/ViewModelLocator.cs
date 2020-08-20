@@ -50,24 +50,30 @@ namespace Geocache.ViewModel
             SimpleIoc.Default.Unregister<UserDataService>();
             SimpleIoc.Default.Unregister<HomePageBrowserVM>();
             SimpleIoc.Default.Unregister<HomePageVM>();
-            SimpleIoc.Default.Unregister<HideTreasurePageVM>();
             SimpleIoc.Default.Unregister<UserPageVM>();
-            SimpleIoc.Default.Unregister<LeaderboardVM>();
-            SimpleIoc.Default.Unregister<ChangeUserRolesVM>();
+            SimpleIoc.Default.Unregister<HideTreasurePageVM>();
             SimpleIoc.Default.Unregister<UserTreasuresVM>();
+            SimpleIoc.Default.Unregister<LeaderboardVM>();
+
             SimpleIoc.Default.Unregister<ModerateTreasuresVM>();
+            SimpleIoc.Default.Unregister<ModerateAccountsVM>();
+
+            SimpleIoc.Default.Unregister<ChangeUserRolesVM>();
         }
         // when we log in
         public static void ReRegisterInstances()
         {
             SimpleIoc.Default.Register<HomePageBrowserVM>();
             SimpleIoc.Default.Register<HomePageVM>();
-            SimpleIoc.Default.Register<HideTreasurePageVM>();
             SimpleIoc.Default.Register<UserPageVM>();
-            SimpleIoc.Default.Register<LeaderboardVM>();
-            SimpleIoc.Default.Register<ChangeUserRolesVM>();
+            SimpleIoc.Default.Register<HideTreasurePageVM>();
             SimpleIoc.Default.Register<UserTreasuresVM>();
+            SimpleIoc.Default.Register<LeaderboardVM>();
+            
             SimpleIoc.Default.Register<ModerateTreasuresVM>();
+            SimpleIoc.Default.Register<ModerateAccountsVM>();
+
+            SimpleIoc.Default.Register<ChangeUserRolesVM>();
         }
 
         static ViewModelLocator()
@@ -82,5 +88,6 @@ namespace Geocache.ViewModel
         public ChangeUserRolesVM UsersRoleVM => SimpleIoc.Default.GetInstance<ChangeUserRolesVM>();
 
         public ModerateTreasuresVM ModerateTreasuresVM => SimpleIoc.Default.GetInstance<ModerateTreasuresVM>();
+        public ModerateAccountsVM ModerateAccountsVM => SimpleIoc.Default.GetInstance<ModerateAccountsVM>();
     }
 }

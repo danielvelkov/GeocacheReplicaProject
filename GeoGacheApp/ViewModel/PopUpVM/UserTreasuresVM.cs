@@ -66,26 +66,52 @@ namespace Geocache.ViewModel.PopUpVM
                               "Confirmation", MessageBoxButton.YesNo);
                           if (result == MessageBoxResult.Yes)
                           {
-                              Treasures.Remove(x);
-                              if (x.IsChained)
+                              //delete all records of people finding the treasure
+                              unitOfWork.FoundTreasures.RemoveRange(unitOfWork.FoundTreasures.Find(ft => ft.TreasureID == x.ID));
+                              //delete all user comments on said treasure
+                              foreach (Treasures_Comments tc in unitOfWork.TreasureComments.Find(tc=>tc.TreasureID==x.ID).ToList())
                               {
-                                  var temp= unitOfWork.ChainedTreasures.Find(
-                                      ct => ct.Treasure1_ID == x.ID || ct.Treasure2_ID == x.ID).ToList();
-                                  if (temp.Count == 2)
+                                  var comment = unitOfWork.TreasureComments.Get(tc.ID);
+                                  unitOfWork.TreasureComments.Remove_Quicker(comment); //dont get it but EF demands it
+                                  unitOfWork.Complete();
+
+                              }
+                              //delete all treasure_chains connected to it
+                              if (x.Chained_Treasure1.Count > 0)
+                              {
+                                  Chained_Treasures ct1 = x.Chained_Treasure1.First();
+                                  if ((ct1 = unitOfWork.ChainedTreasures.SingleOrDefault(ct => ct.Treasure1_ID == x.ID)) != null)
                                   {
-                                      //temp[0].Treasure_1 set the first to false and second too
-                                      //unitOfWork.ChainedTreasures
-                                  }
-                                  else
-                                  {
-                                      //just first one
+                                      unitOfWork.ChainedTreasures.Remove_Quicker(ct1);
+
+                                      unitOfWork.Complete();
                                   }
                               }
-                                  
+                              if (x.Chained_Treasure2.Count > 0)
+                              {
+                                  foreach (var tc in x.Chained_Treasure2)
+                                  {
+                                      Chained_Treasures ct2;
+                                      if ((ct2 = unitOfWork.ChainedTreasures.SingleOrDefault(ct => ct.Id == tc.Id)) != null)
+                                      {
+                                          int fixId = (int)ct2.Treasure1_ID;
+                                          unitOfWork.ChainedTreasures.Remove_Quicker(ct2);
+                                          unitOfWork.ChainedTreasures.UnchainTreasure(fixId); //unchain the connected treasure
+                                          unitOfWork.Complete();
+                                      }
+                                  }
+                              }
+                              //remove the marker info
                               unitOfWork.Markers.Remove_Quicker(x.MarkerInfo);
-                              unitOfWork.Treasures.Remove_Quicker(x);
                               unitOfWork.Complete();
-                              
+
+                              var tres = unitOfWork.Treasures.Get(x.ID);
+                              unitOfWork.Treasures.Remove_Quicker(tres);
+                              unitOfWork.Complete();
+                              Treasures.Remove(x);
+                              RaisePropertyChanged("Treasures");
+                              MessageBox.Show(string.Format("Treasure [{0}] has been removed.", x.Name));
+                              MessengerInstance.Send<object>(new object(), "Refresh"); //update leaderboard
                           }
                       }
                   })

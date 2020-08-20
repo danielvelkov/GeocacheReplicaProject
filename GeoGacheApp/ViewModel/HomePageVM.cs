@@ -42,13 +42,13 @@ namespace Geocache.ViewModel
         }
         public const string UserRolePropertyName = "UserRole";
 
-        private UserRoles userRole;
+        private Roles userRole;
 
         /// <summary>
         /// Sets and gets the UserRole property.
         /// Changes to that property's value raise the PropertyChanged event. 
         /// </summary>
-        public UserRoles UserRole
+        public Roles UserRole
         {
             get
             {
@@ -78,6 +78,7 @@ namespace Geocache.ViewModel
         private ICommand showUserTreasures;
         private ICommand showLeaderBoards;
         private ICommand moderateTreasures;
+        private ICommand moderateAccounts;
         private ICommand changeUserRole;
 
         public ICommand LogOut
@@ -165,6 +166,20 @@ namespace Geocache.ViewModel
                         PopUp.ShowPopUp(new ModerateTreasuresView());
                     });
                 return moderateTreasures;
+            }
+        }
+        public ICommand ModerateAccounts
+        {
+            get
+            {
+                if (moderateAccounts == null)
+                    moderateAccounts = new RelayCommand(() =>
+                    {
+                        if (!SimpleIoc.Default.IsRegistered<ModerateAccountsVM>())
+                            SimpleIoc.Default.Register<ModerateAccountsVM>();
+                        PopUp.ShowPopUp(new ModerateAccountsView());
+                    });
+                return moderateAccounts;
             }
         }
         public ICommand ChangeUserRole

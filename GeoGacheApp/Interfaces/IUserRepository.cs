@@ -14,5 +14,6 @@ namespace Geocache.Interfaces
         bool DoesUserExist(string Username);
         User ValidateLogin(string Username, string Password);
         void UpdatePassword(int id, string Password);
+        IEnumerable<User> GetUsers(int ModId);
     }
 }

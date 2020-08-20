@@ -118,7 +118,7 @@ namespace Geocache.ViewModel
                                 User.createdAt = DateTime.Now;
                                 User.isBanned = false;
                                 User.Points = 0;
-                                User.Role = Enums.UserRoles.USER;
+                                User.Role = Enums.Roles.USER;
 
                                 unitOfWork.Users.Add(User);
                                 MessageBox.Show("Registration complete. Congratulations!"

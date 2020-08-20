@@ -1,14 +1,15 @@
-﻿<Window x:Class="Geocache.Views.PopUpViews.ModerateTreasuresView"
+﻿<Window x:Class="Geocache.Views.PopUpViews.ModerateAccountsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Geocache.Views.PopUpViews"
         mc:Ignorable="d"
+        
         xmlns:converters="clr-namespace:Geocache.Converters"
         xmlns:models="clr-namespace:Geocache.Models"
-        Title="Moderate Treasures" Height="450" Width="540"
-        DataContext="{Binding ModerateTreasuresVM, Source={StaticResource Locator}}">
+        DataContext="{Binding ModerateAccountsVM,Source={StaticResource Locator}}"
+        Title="Moderate Accounts" Height="450" Width="490">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -24,7 +25,7 @@
                                 <ControlTemplate>
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock HorizontalAlignment="Center" FontSize="30">
-                                        No one has hidden a treasure yet.
+                                        No users...
                                         </TextBlock>
                                     </StackPanel>
                                 </ControlTemplate>
@@ -34,9 +35,9 @@
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
-        <ListBox ItemsSource="{Binding Treasures,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ListStyle}">
+        <ListBox ItemsSource="{Binding Users,Mode=TwoWay,NotifyOnTargetUpdated=True}" Style="{StaticResource ListStyle}">
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type  models:Treasure }">
+                <DataTemplate DataType="{x:Type  models:User }">
                     <DataTemplate.Resources>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="FontSize" Value="12"></Setter>
@@ -59,24 +60,40 @@
                                     <ColumnDefinition Width="100"></ColumnDefinition>
                                     <ColumnDefinition Width="100"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Name}" Grid.ColumnSpan="2"></TextBlock>
-                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="2"></TextBlock>
-                                <TextBlock HorizontalAlignment="Center" Grid.Column="2">Difficulty:</TextBlock>
-                                <TextBlock Text="{Binding Difficulty,Converter={StaticResource diffconverter}}" Grid.Row="1" HorizontalAlignment="Center" Grid.Column="2"></TextBlock>
-                                <TextBlock HorizontalAlignment="Center" Grid.Column="3">Treasure Type:</TextBlock>
-                                <TextBlock Text="{Binding TreasureType}" HorizontalAlignment="Center" Grid.Column="3" Grid.Row="1"></TextBlock>
-                                <TextBlock HorizontalAlignment="Center" Grid.Column="4">Treasure Size:</TextBlock>
-                                <TextBlock Text="{Binding TreasureSize}" HorizontalAlignment="Center" Grid.Column="4" Grid.Row="1"></TextBlock>
-                                <TextBlock HorizontalAlignment="Right" Grid.Column="3" Grid.Row="2">Key:</TextBlock>
-                                <TextBlock Text="{Binding Key}" Grid.Column="4" Grid.Row="2"></TextBlock>
+                                <TextBlock Text="{Binding Username}" Grid.ColumnSpan="2"></TextBlock>
+                                <TextBlock Text="{Binding }" TextWrapping="Wrap" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="2"></TextBlock>
+                                <TextBlock HorizontalAlignment="Center" Grid.Column="2">Role:</TextBlock>
+                                <TextBlock Text="{Binding Role}" Grid.Row="1" HorizontalAlignment="Center" Grid.Column="2"></TextBlock>
+                                <TextBlock HorizontalAlignment="Center" Grid.Column="3">Points:</TextBlock>
+                                <TextBlock Text="{Binding GetPoints}" HorizontalAlignment="Center" Grid.Column="3" Grid.Row="1"></TextBlock>
+                                <TextBlock HorizontalAlignment="Center" Grid.Column="4">Created at:</TextBlock>
+                                <TextBlock Text="{Binding createdAt,StringFormat='{}{0:dd/MM/yyyy}'}" HorizontalAlignment="Center" Grid.Column="4" Grid.Row="1"></TextBlock>
                                 
-                                <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ModerateTreasuresView}
-                                        },Path=DataContext.DeleteTreasure}" 
+                                <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ModerateAccountsView}
+                                        },Path=DataContext.DeleteUser}" 
                                 CommandParameter="{Binding}" Grid.Row="3">Delete</Button>
+                                <Button Grid.Row="3" Grid.Column="1">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Setters>
+                                                <Setter Property="Button.CommandParameter" Value="{Binding}"></Setter>
+                                                <EventSetter Event="Click" Handler="ChangeButton"></EventSetter>
+                                                </Style.Setters>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding isBanned,Mode=TwoWay}" Value="true">
+                                                    <Setter Property="Button.Content" Value="Unban"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding isBanned,Mode=TwoWay}" Value="false">
+                                                    <Setter Property="Button.Content" Value="Ban"></Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </Grid>
-                            <Expander Visibility="Visible" Header="View comments and reports">
+                            <Expander Visibility="Visible" Header="View comments made by user">
                                 <ListBox ItemsSource="{Binding Treasures_Comments,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                         ItemTemplate="{StaticResource Treasure_Comments_Moderate}" BorderThickness="0" >
+                                         ItemTemplate="{StaticResource Treasure_Comments}" BorderThickness="0" >
                                 </ListBox>
                             </Expander>
                         </StackPanel>

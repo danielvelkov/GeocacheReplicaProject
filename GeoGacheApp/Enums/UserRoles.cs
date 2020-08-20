@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace Geocache.Enums
 {
-    public enum UserRoles
+    public enum Roles
     {
         ADMIN = 1,
         MOD = 2,
         USER = 3
+    }
+    public enum UserRoles
+    {
+        MOD=2,
+        USER=3
     }
 }

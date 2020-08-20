@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Geocache.Database;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Geocache.Models
 {
@@ -14,12 +16,13 @@ namespace Geocache.Models
     {
         public string Username { get; set; }
         public string Password { get; set; }
-        public UserRoles Role { get; set; }
+        public Roles Role { get; set; }
             
         public bool isBanned { get; set; }
+        //maybe this field is useless
         public int Points { get; set; }
         public DateTime createdAt { get; set; }
-        // non-required data
+        // not important data
         public string FirstName { get; set; }
         public string LastName { get; set; }
         
@@ -41,7 +44,10 @@ namespace Geocache.Models
             Found_Treasures = new ObservableCollection<Found_Treasures>();
         }
 
-        public User(string username, string password, UserRoles role, bool isBanned, int points, DateTime createdAt, string firstName, string lastName, string country, string city, string adress)
+        public User(string username, string password, Roles role, 
+            bool isBanned, int points, DateTime createdAt, 
+            string firstName, string lastName, string country,
+            string city, string adress)
         {
             Username = username;
             Password = password;
@@ -54,6 +60,24 @@ namespace Geocache.Models
             Country = country;
             City = city;
             Adress = adress;
+        }
+
+        public override string ToString()
+        {
+            return this.FirstName + " " + this.LastName + " from " + this.City + " " + this.Country;
+        }
+        [NotMapped]
+        public int GetPoints
+        {
+            get
+            {
+                int points;
+                using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+                {
+                    points = unitOfWork.FoundTreasures.GetUserPoints(this.ID);
+                }
+                return points;
+            }
         }
     }
 }
