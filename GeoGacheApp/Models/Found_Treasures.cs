@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeoGacheApp.Models
+namespace Geocache.Models
 {
     public class Found_Treasures
     {

@@ -1,10 +1,8 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
-    <title>Travel Modes in Directions</title>
     <style>
         /* Always set the map height explicitly to define the size of the div
         * element that contains the map. */
@@ -32,50 +30,37 @@
             padding-left: 10px;
         }
     </style>
-        <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPcLmG95S4gidIK7ixsqzIqf0oIcNDFFs&callback=initMap&libraries=&v=weekly"
-      defer></Script>-->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPcLmG95S4gidIK7ixsqzIqf0oIcNDFFs&libraries=places"></script>
     <script type="text/javascript">
 
         var map;
         var origin;
         var destination;
-
-        function setOrigin(adress) {
-            var geocoder= new google.maps.Geocoder();
-            geocoder.geocode({'address': adress }, function (results, status) {
-                if (status == 'OK') {
-                    origin = results[0].geometry.location;
-                    alert('fuck you');
-                }
-                else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-            });
-        }
-
-        function setDestination(lat,lng) {
-            destination = new google.maps.LatLng(lat,lang);
-        }
-
+        var StartMarker;
+        var EndMarker;
+        var rendererOptions;
+        var dirRendr;
+        var dirService;
         function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 8,
+                center: { lat: -34.397, lng: 150.644 }
+            });
+            rendererOptions = {
+                map: map,
+                suppressMarkers: true
+            }
+        }
+        function setOrigin(lat, lng) {
+            origin = new google.maps.LatLng(lat, lng);
+        }
 
-
-        var directionsDisplay = new google.maps.DirectionsRenderer;
-        var directionsService = new google.maps.DirectionsService;
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 14,
-          center: origin
-        });
-        directionsDisplay.setMap(map);
-
-        calculateAndDisplayRoute(directionsService, directionsDisplay);
-        document.getElementById('mode').addEventListener('change', function() {
-          calculateAndDisplayRoute(directionsService, directionsDisplay);
-        });
-      }
+        function setDestination(lat, lng) {
+            destination = new google.maps.LatLng(lat,lng);
+        }
 
       function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-        var selectedMode = document.getElementById('mode').value;
+          var selectedMode = document.getElementById('mode').value;
         directionsService.route({
           origin: origin,
           destination: destination,
@@ -85,34 +70,47 @@
           travelMode: google.maps.TravelMode[selectedMode]
         }, function(response, status) {
           if (status == 'OK') {
-            directionsDisplay.setDirections(response);
+              directionsDisplay.setDirections(response);
           } else {
             window.alert('Directions request failed due to ' + status);
           }
         });
       }
-      function initMap1() {
-
-
-
-          var directionsDisplay = new google.maps.DirectionsRenderer;
-          var directionsService = new google.maps.DirectionsService;
-          map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 14,
-              center: origin
+      function showRouteMarkers(error) {
+          
+          if (dirRendr != null)
+              dirRendr.setMap(null);
+          dirRendr = new google.maps.DirectionsRenderer(rendererOptions);
+          dirService = new google.maps.DirectionsService;
+          //showing the markers for start and finish
+          if(StartMarker!=null){
+              StartMarker.setMap(null);
+              StartMarker = null;
+          }
+          StartMarker = new google.maps.Marker({
+              map: map,
+              position: origin,
+              title: "<==YOU"
           });
-          directionsDisplay.setMap(map);
-
-          calculateAndDisplayRoute(directionsService, directionsDisplay);
+          if(EndMarker!=null){
+              EndMarker.setMap(null);
+              EndMarker = null;
+          }
+          EndMarker = new google.maps.Marker({
+                  map: map,
+                  position: destination,
+                  title: "the treasure!"
+              });
+          
+          //show the route to the treasure
+          calculateAndDisplayRoute(dirService, dirRendr);
           document.getElementById('mode').addEventListener('change', function () {
-              calculateAndDisplayRoute(directionsService, directionsDisplay);
+              calculateAndDisplayRoute(dirService, dirRendr);
           });
       }
-
-
     </script>
 </head>
-<body onload="initMap()" >
+    <body onload="initMap()"> 
     <div id="floating-panel">
         <b>Mode of Travel: </b>
         <select id="mode">
@@ -122,7 +120,6 @@
         </select>
     </div>
     <div id="map"></div>
-    
     
 </body>
 </html>

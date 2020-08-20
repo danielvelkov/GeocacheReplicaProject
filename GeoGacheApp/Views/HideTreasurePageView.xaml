@@ -1,0 +1,211 @@
+﻿<UserControl x:Class="Geocache.Views.HideTreasurePageView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Geocache.Views"
+      xmlns:models="clr-namespace:Geocache.Models"    
+            xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        xmlns:converter="clr-namespace:Geocache.Converters"
+        xmlns:validate="clr-namespace:Geocache.Validation"
+        mc:Ignorable="d"
+     MinHeight="600" MinWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MaxWidth="400"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.Resources>
+                <converter:DiffTxtBlockConverter x:Key="diffTxtBlockConverter"></converter:DiffTxtBlockConverter>
+                <converter:IsNullOrWhiteSpaceConverter x:Key="IsNullOrWhiteSpaceConverter"></converter:IsNullOrWhiteSpaceConverter>
+                <Style x:Name="LabelStyle" TargetType="{x:Type Label}">
+                    <Setter Property="FontSize" Value="14"></Setter>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                </Style>
+                <Style x:Name="TxtBoxStyle" TargetType="{x:Type TextBox}">
+                    <Setter Property="FontSize" Value="14"></Setter>
+                    <Setter Property="Height" Value="24"></Setter>
+                    <Setter Property="Background" Value="WhiteSmoke"></Setter>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                    <Setter Property="Margin" Value="10,0,10,0"></Setter>
+                </Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="FontSize" Value="16"></Setter>
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Vertical">
+                <Label>Name of the treasure:</Label>
+                <TextBox Name="nameTxtBox" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+                    <TextBox.Text>
+                        <Binding Path="Treasure.Name">
+                            <Binding.ValidationRules>
+                                <validate:TextValidation Type="Header"></validate:TextValidation>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <Label>Description:</Label>
+                <TextBox Name="descriptionTxtBox" TextWrapping="Wrap" Height="60" VerticalScrollBarVisibility="Auto">
+                    <TextBox.Text>
+                        <Binding Path="Treasure.Description">
+                            <Binding.ValidationRules>
+                                <validate:TextValidation Type="Content"></validate:TextValidation>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <Grid Margin="0,20,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label>Type of treasure:</Label>
+                    <ComboBox ItemsSource="{Binding TreasureTypes}" Name="typeCmboBox" Margin="10,0,10,0" 
+                     SelectedItem="{Binding SelectedTreasureType}" Width="70" HorizontalAlignment="Left" Grid.Column="1" ></ComboBox>
+
+                    <Label Grid.Row="1">Size of treasure :</Label>
+                    <ComboBox ItemsSource="{Binding TreasureSizes}" Name="sizeCmboBox" HorizontalAlignment="Left" Margin="10,0,10,0" 
+                     SelectedItem="{Binding SelectedTreasureSize}" Width="70" Grid.Row="1" Grid.Column="1"></ComboBox>
+
+                    <Label Content="{Binding ElementName=scrollBar, Path=Value}" 
+                           FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" ></Label>
+                    <ScrollBar Grid.Column="2" Name="scrollBar" Minimum="1" Value="{Binding Treasure.Difficulty}"
+                               SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
+                        <ScrollBar.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="180"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ScrollBar.RenderTransform>
+                    </ScrollBar>
+                    <Label Grid.Column="2" Grid.Row="1">Diff.</Label>
+                    <Label Content="{Binding ElementName=scrollBar,
+                        Path=Value,Converter={StaticResource diffTxtBlockConverter}}" HorizontalAlignment="Left" Grid.Column="3" Grid.Row="1" ></Label>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                   
+                </Grid>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <Label >This Treasure comes after:</Label>
+                        <Label Content="{Binding TreasureChain.Name,Mode=OneTime}"></Label>
+                    </StackPanel>
+                    <ComboBox Name="userTreasureCmbBox" Width="170" ItemsSource="{Binding UserTreasures,Mode=TwoWay}"
+                              SelectedItem="{Binding TreasureChain}" ToolTipService.ShowDuration="10000">
+                        <ComboBox.ToolTip>
+                            <TextBlock>
+                                Note that a treasure <LineBreak></LineBreak>
+                                can start only 1 chain,<LineBreak></LineBreak>
+                                but many treasures  <LineBreak></LineBreak> 
+                                could lead to it!!!
+                            </TextBlock>
+                        </ComboBox.ToolTip>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:Treasure}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding ID}" FontSize="20"></TextBlock>
+                                    <TextBlock Text=". " FontSize="20"></TextBlock>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" FontSize="20"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label>Key</Label>
+                    <TextBox Name="keyTxtBox" Text="{Binding Key}" Width="150"></TextBox>
+                    <Button Margin="5" Command="{Binding GenerateKey}">Generate key</Button>
+                </StackPanel>
+            </StackPanel>
+            
+            <StackPanel Name="markerInfo" Orientation="Vertical" Grid.Row="1">
+                <Label>Country:</Label>
+                <TextBox Text="{Binding Country}" Name="countryTxtBox"></TextBox>
+                <Label>City:</Label>
+                <TextBox Text="{Binding City}" Name="cityTxtBox"></TextBox>
+                <Label>Address(approximately):</Label>
+                <TextBox Text="{Binding Address}" Name="addressTxtBox"></TextBox>
+                <Button Command="{Binding DropMarker}" Content="Drop marker">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource IsNullOrWhiteSpaceConverter }"
+                                      ConverterParameter="AtLeastOneNecessary">
+                            <Binding Path="Text" ElementName="countryTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="cityTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="addressTxtBox"></Binding>
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+                <GroupBox FontSize="16" Header="Coordinates:">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0">Latitude:</Label>
+                        <TextBlock Text="{Binding Latitude}" Grid.Row="0" Grid.Column="1"></TextBlock>
+                        <Label Grid.Row="1" Grid.Column="0">Longtitude:</Label>
+                        <TextBlock Text="{Binding Longtitude}" Grid.Row="1" Grid.Column="1"></TextBlock>
+                    </Grid>
+                </GroupBox>
+                <Button Command="{Binding SaveTreasure}" Content="Save Treasure" ToolTip="drag the marker">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource IsNullOrWhiteSpaceConverter }" 
+                                      ConverterParameter="AllNecessary">
+                            <Binding Path="Text" ElementName="countryTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="cityTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="addressTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="nameTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="descriptionTxtBox"></Binding>
+                            <Binding Path="Text" ElementName="keyTxtBox"></Binding>
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+                <Button Command="{Binding GoBack}">Go Back</Button>
+            </StackPanel>
+        </Grid>
+
+
+        <GroupBox Header="Treasure Location" FontSize="16" Margin="5" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <ProgressBar  IsIndeterminate="{Binding WebBrowser.IsLoading,Mode=OneTime}"
+                                 HorizontalAlignment="Right"
+                                Width="100"
+                                 Height="16"/>
+                <!--unloaded event is disposing it cuz it memory leaks otherwise-->
+                <wpf:ChromiumWebBrowser WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}" Grid.Row="1" 
+                                        Unloaded="ChromiumWebBrowser_Unloaded">
+                </wpf:ChromiumWebBrowser>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

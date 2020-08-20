@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="GeocacheV2.Views.BrowserViews.HomePageBrowserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GeocacheV2.Views.BrowserViews"
+             xmlns:convert="clr-namespace:GeocacheV2.Converters"
+             xmlns:Mynamespace="clr-namespace:GeocacheV2"
+             
+             xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+             
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <convert:RngTxtBlockConverter x:Key="DifficultyConverter"></convert:RngTxtBlockConverter>
+    </UserControl.Resources>
+    <Grid Name="mainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="0.4*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center" FontSize="14">Current location:</TextBlock>
+            <!--display your current starting location here?-->
+            <TextBlock VerticalAlignment="Center" Text="{Binding CurrentLocation}" Width="250" FontSize="16">
+            </TextBlock>
+            <!--make it a popup window with a little address search map that saves your adress-->
+            <Button Width="120" Height="30" >Set starting location</Button>
+            <Button Margin="10" MaxHeight="30" Command="{Binding GoToHomeLocation}">
+                <Image Source="/res/Icons/home_icon.png"></Image>
+            </Button>
+
+        </StackPanel>
+        <StackPanel VerticalAlignment="Top" Grid.Row="1">
+            <GroupBox Header="Filter Treasures">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Type of treasure:</Label>
+                    <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right">Size:</Label>
+                    <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">Difficulty:</Label>
+
+
+                    <ComboBox ItemsSource="{Binding TreasureTypes}" SelectedItem="{Binding SelectedTreasureType}" Grid.Column="1" Grid.Row="0"></ComboBox>
+                    <ComboBox ItemsSource="{Binding TreasureSizes}" SelectedItem="{Binding SelectedTreasureSize}" Grid.Column="1" Grid.Row="1"></ComboBox>
+                    <Grid Grid.Column="1" Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding ElementName=scrollBar, Path=Value,Converter={StaticResource DifficultyConverter}}" 
+                                   FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        </TextBlock>
+                        <ScrollBar Grid.Column="1" Name="scrollBar" Minimum="0" Value="{Binding Difficulty}"  SmallChange="0.5" Maximum="5" RenderTransformOrigin="0.5,0.5">
+                            <ScrollBar.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="180"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </ScrollBar.RenderTransform>
+                        </ScrollBar>
+                    </Grid>
+
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="3" >
+                        <Label Grid.Column="0" Grid.Row="3">Found by me</Label>
+                        <CheckBox VerticalAlignment="Center"></CheckBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="3" >
+                        <Label Grid.Column="0" Grid.Row="3">Chained to others</Label>
+                        <CheckBox VerticalAlignment="Center"></CheckBox>
+                    </StackPanel>
+                    <Mynamespace:RatingCell x:Name="rating" Grid.Column="2" Grid.Row="1" ></Mynamespace:RatingCell>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="2" >
+                        <Label >Radius</Label>
+                        <Slider Name="slider" Orientation="Horizontal" IsSnapToTickEnabled="True" Value="{Binding Radius}"
+                                Ticks="" Minimum="0" Maximum="10" TickPlacement="BottomRight" VerticalAlignment="Center" Width="100"></Slider>
+                        <TextBlock Grid.Column="0" Text="{Binding ElementName=slider, Path=Value}" 
+                                   FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        </TextBlock>
+                        <TextBlock VerticalAlignment="Center">km.</TextBlock>
+                        <TextBlock ></TextBlock>
+                    </StackPanel>
+                    <Label Grid.Column="2" Grid.Row="0">Rating:</Label>
+                    <Button Command="{Binding FilterTreasures}" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,0" >Filter</Button>
+
+                </Grid>
+            </GroupBox>
+
+            <ProgressBar  IsIndeterminate="{Binding WebBrowser.IsLoading}"
+                             HorizontalAlignment="Right"
+                            Width="100"
+                             Height="16"/>
+        </StackPanel>
+        <GroupBox Grid.Row="2" Margin="8" Header="Map">
+            <wpf:ChromiumWebBrowser WebBrowser="{Binding WebBrowser,Mode=OneWayToSource}"  ></wpf:ChromiumWebBrowser>
+        </GroupBox>
+
+    </Grid>
+</UserControl>

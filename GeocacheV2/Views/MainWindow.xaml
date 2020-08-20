@@ -1,0 +1,31 @@
+﻿<Window x:Class="GeocacheV2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GeocacheV2.Views"
+        xmlns:vm="clr-namespace:GeocacheV2.ViewModel"
+        mc:Ignorable="d" SizeToContent="WidthAndHeight"
+        Title="Geocaching" Height="450" Width="800"
+        DataContext="{Binding MainViewModel, Source={StaticResource Locator} }">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:LoginPageVM}">
+            <local:LoginPageView></local:LoginPageView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HomePageVM}">
+            <local:HomePageView></local:HomePageView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UserPageVM}">
+            <local:UserPageView></local:UserPageView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RegisterPageVM}">
+            <local:RegisterPageView></local:RegisterPageView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HideTreasurePageVM}">
+            <local:HideTreasurePageView></local:HideTreasurePageView>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <ContentControl Name="content" Content="{Binding CurrentContent}" ></ContentControl>
+    </Grid>
+</Window>

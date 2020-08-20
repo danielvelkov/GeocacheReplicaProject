@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Geocache.Database;
+using Geocache.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,10 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeoGacheApp.Models
+namespace Geocache.Models
 {
-    public enum CommentType { COMMENT=1, REPORT=2}
-
     public class Treasures_Comments
     {
         public Treasures_Comments(
@@ -46,6 +46,15 @@ namespace GeoGacheApp.Models
         public CommentType Type { get; set; }
         public double Rated { get; set; }
 
+        [NotMapped]
+        public string Username
+        {
+            get
+            {
+                using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+                    return unitOfWork.Users.Get(UserID).Username;
+            }
 
+        }
     }
 }
