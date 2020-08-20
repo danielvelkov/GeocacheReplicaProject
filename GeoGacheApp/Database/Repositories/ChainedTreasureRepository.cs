@@ -23,7 +23,8 @@ namespace Geocache.Database.Repositories
         {
             Treasure treasure;
             if(ChainedTreasureContext.Chained_Treasures.Include("Treasure_2").Where
-                (tc => tc.Treasure1_ID == TreasureId).Count()!= 0){
+                (tc => tc.Treasure1_ID == TreasureId).Count() != 0)
+            {
                 return treasure = ChainedTreasureContext.Chained_Treasures.Include("Treasure_2").First
                 (tc => tc.Treasure1_ID == TreasureId).Treasure_2;
             }

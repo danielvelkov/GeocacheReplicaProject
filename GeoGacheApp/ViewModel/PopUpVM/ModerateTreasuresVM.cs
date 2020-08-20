@@ -62,21 +62,20 @@ namespace Geocache.ViewModel.PopUpVM
                         if ((ct1=unitOfWork.ChainedTreasures.SingleOrDefault(ct=>ct.Treasure1_ID==x.ID))!=null)
                         {
                             unitOfWork.ChainedTreasures.Remove_Quicker(ct1);
-
                             unitOfWork.Complete();
                         }
                         Chained_Treasures ct2;
                         if ((ct2 = unitOfWork.ChainedTreasures.SingleOrDefault(ct => ct.Treasure2_ID == x.ID)) != null)
                         {
-                            int fixId = (int)ct2.Treasure1_ID;
+                            int chainedTreasureId = (int)ct2.Treasure1_ID;
                             unitOfWork.ChainedTreasures.Remove_Quicker(ct2);
-                            unitOfWork.ChainedTreasures.UnchainTreasure(fixId);
+                            unitOfWork.ChainedTreasures.UnchainTreasure(chainedTreasureId);
                             unitOfWork.Complete();
                         }
                         foreach (Treasures_Comments tc in x.Treasures_Comments.Where(c => c.ID != 0).ToList())
                         {
-                            if (!x.Treasures_Comments.Any(c => c.ID == tc.ID))
-                                unitOfWork.TreasureComments.Remove_Quicker(new Treasures_Comments { ID=tc.ID }); //dont get it but EF demands it
+                            if (!x.Treasures_Comments.Any(c => c.ID == tc.ID))  //dont get it but EF demands it
+                                unitOfWork.TreasureComments.Remove_Quicker(new Treasures_Comments { ID=tc.ID });
                         }
                         unitOfWork.Complete();
                         unitOfWork.Treasures.Remove_Quicker(new Treasure {ID=x.ID });

@@ -38,7 +38,8 @@ namespace Geocache.Database.Repositories
         public int GetUserPoints(int UserId)
         {
             int userPoints = 0;
-            foreach(Found_Treasures treas in FoundTreasuresContext.Found_Treasures.Where(x => x.UserID == UserId)){
+            foreach(Found_Treasures treas in FoundTreasuresContext.Found_Treasures.Where(x => x.UserID == UserId))
+            {
                 userPoints += treas.Points;
             }
             return userPoints;

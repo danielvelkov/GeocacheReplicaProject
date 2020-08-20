@@ -51,7 +51,7 @@ namespace Geocache.Helper
             userTreasures = new List<Treasure>();
             using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
             {
-                userTreasures = UnitofWork.Treasures.GetUserTreasuresNotChained(CurrentUser.ID);
+                userTreasures = UnitofWork.Treasures.GetUserTreasuresNotChained(CurrentUser.ID).ToList();
             }
             return userTreasures;
         }
@@ -65,7 +65,7 @@ namespace Geocache.Helper
             userTreasures = new List<Treasure>();
             using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
             {
-                userTreasures = UnitofWork.Treasures.GetUserTreasuresNotChained(CurrentUser.ID);
+                userTreasures = UnitofWork.Treasures.GetUserTreasuresNotChained(CurrentUser.ID).ToList();
 
             }
             return userTreasures.Where(t=>t.ID!=TreasureId).ToList();

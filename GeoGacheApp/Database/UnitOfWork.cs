@@ -41,9 +41,6 @@ namespace Geocache.Database
         {
             try
             {
-                // Your code...
-                // Could also be before try if you know the exception occurs in SaveChanges
-
                 return _context.SaveChanges();
             }
             catch (DbEntityValidationException e)

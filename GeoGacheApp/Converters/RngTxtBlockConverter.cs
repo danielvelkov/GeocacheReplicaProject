@@ -13,7 +13,6 @@ namespace Geocache.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            //nothing wrong here hehe
             decimal range = System.Convert.ToDecimal(value);
             Math.Round(range, 2);
             if (range == 0)

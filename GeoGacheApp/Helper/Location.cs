@@ -30,14 +30,13 @@ namespace Geocache.Helper
             Address = address;
             string latitude;
             string longtitude;
-            string url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyAPcLmG95S4gidIK7ixsqzIqf0oIcNDFFs";
+            string url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key="+Globals.API_KEY;
             WebRequest request = WebRequest.Create(url);
 
             using (WebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
-
                     using (var jsonTextReader = new JsonTextReader(reader))
                     {
                         var serialize = new JsonSerializer();
@@ -61,8 +60,6 @@ namespace Geocache.Helper
                 }
             }
 
-           
-           
             Lat = double.Parse(latitude);
             Lon = double.Parse(longtitude);
         }
@@ -70,7 +67,6 @@ namespace Geocache.Helper
         {
             Lat = lat;
             Lon = lon;
-            //make address from lat and lon
         }
 
         void FixJobjectString(ref string inputString)

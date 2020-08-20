@@ -45,7 +45,7 @@ namespace Geocache.ViewModel
         //when we log out
         public static void Cleanup()
         {
-            // TODO Clear the ViewModels
+            // Clear the ViewModels
 
             SimpleIoc.Default.Unregister<UserDataService>();
             SimpleIoc.Default.Unregister<HomePageBrowserVM>();
@@ -85,9 +85,11 @@ namespace Geocache.ViewModel
         public TreasureFoundVM TreasureFoundVM => SimpleIoc.Default.GetInstance<TreasureFoundVM>();
         public LeaderboardVM LeaderboardVM => SimpleIoc.Default.GetInstance<LeaderboardVM>();
         public UserTreasuresVM UserTreasuresVM => SimpleIoc.Default.GetInstance<UserTreasuresVM>();
-        public ChangeUserRolesVM UsersRoleVM => SimpleIoc.Default.GetInstance<ChangeUserRolesVM>();
-
+        
         public ModerateTreasuresVM ModerateTreasuresVM => SimpleIoc.Default.GetInstance<ModerateTreasuresVM>();
         public ModerateAccountsVM ModerateAccountsVM => SimpleIoc.Default.GetInstance<ModerateAccountsVM>();
+
+        public ChangeUserRolesVM UsersRoleVM => SimpleIoc.Default.GetInstance<ChangeUserRolesVM>();
+
     }
 }

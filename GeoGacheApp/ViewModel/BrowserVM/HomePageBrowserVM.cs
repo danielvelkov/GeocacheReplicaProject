@@ -23,7 +23,6 @@ namespace Geocache.ViewModel.BrowserVM
 {
     public class HomePageBrowserVM : ViewModelBase
     {
-
         public HomePageBrowserVM(UserDataService userData)
         {
             Markers = new List<MarkerInfo>();
@@ -148,7 +147,7 @@ namespace Geocache.ViewModel.BrowserVM
 
         public const string RatingPropertyName = "Rating";
 
-        private int rating;
+        private int rating=3;
         
         public int Rating
         {
@@ -383,7 +382,7 @@ namespace Geocache.ViewModel.BrowserVM
                     SimpleIoc.Default.Register<FindTreasureVM>();
                 
                 MessengerInstance.Send<Type>(typeof(FindTreasureVM), "ChangePage");
-                MessengerInstance.Send<object>(new object(), "Refresh"); //show the comments (if its before it doesnt work)
+                MessengerInstance.Send<object>(new object(), "Refresh"); //show the comments
             }
         }
 
@@ -408,7 +407,7 @@ namespace Geocache.ViewModel.BrowserVM
                         if ((SelectedTreasureSize == Enums.TreasureSizes.ANY || treas.TreasureSize == SelectedTreasureSize) &&
                         (SelectedTreasureType == TreasureType.ANY || treas.TreasureType == SelectedTreasureType) &&
                         (Difficulty == 0 || treas.Difficulty <= Difficulty) && treas.IsChained == FindChainedTreasures &&
-                        (Rating == 0 || Rating >= Math.Round(rating))
+                        (Rating == 0 || Rating <= Math.Round(rating))
                         ) 
                         {
                             if (treas.MarkerInfo.Country.Contains(country, StringComparison.OrdinalIgnoreCase) &&

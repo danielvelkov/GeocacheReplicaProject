@@ -24,7 +24,6 @@ namespace Geocache.Database.Repositories
         public List<Treasure> GetTreasuresNotFoundByUser(int UserID)
         {
             //this gets treasures that the user hasnt found and that arent his
-            // add a way to get the first one in the chained treasure
             return TreasureContext.Treasures.Where(
                 t => t.UserId != UserID &&
                 !TreasureContext.Found_Treasures.Any(ft=>(ft.TreasureID==t.ID) && ft.UserID==UserID )).ToList();
@@ -36,13 +35,13 @@ namespace Geocache.Database.Repositories
         }
         public List<Treasure> GetUserTreasures(int UserID)
         {
-            //include ensures we dont make it a lazy loaded proprety which is disposed if its not inside using unitOfWork
+            //include ensures we dont dispose lazyloaded property after entity leaves "using" scope 
             return TreasureContext.Treasures.Include(x=>x.MarkerInfo).Include(y=>y.Treasures_Comments)
                 .Include(y=>y.Chained_Treasure1).Include(y=>y.Chained_Treasure2).Where(t => t.UserId == UserID).ToList();
         }
-        public List<Treasure> GetUserTreasuresNotChained(int UserID)
+        public IEnumerable<Treasure> GetUserTreasuresNotChained(int UserID)
         {
-            return TreasureContext.Treasures.Where(t => (t.UserId == UserID) && t.IsChained == false).ToList();
+            return TreasureContext.Treasures.Where(t => (t.UserId == UserID) && t.IsChained == false);
         }
         public MarkerInfo GetTreasureInfo(int TreasureId)
         {
@@ -52,8 +51,9 @@ namespace Geocache.Database.Repositories
         public int GetUserHiddenTreasuresCount(int UserId)
         {
             int count = 0;
-            if (TreasureContext.Treasures.Where(t => t.UserId == UserId) != null)
-                count = TreasureContext.Treasures.Where(t => t.UserId == UserId).Count();
+            IQueryable<Treasure> treasures;
+            if ((treasures=TreasureContext.Treasures.Where(t => t.UserId == UserId)) != null)
+                count = treasures.Count();
             return count;
         }
         public IEnumerable<Treasure> GetTreasuresAndComments()

@@ -80,9 +80,8 @@ namespace Geocache.ViewModel.PopUpVM
                         //delete all user comments
                         foreach (Treasures_Comments tc in x.Treasures_Comments.ToList())
                         {
-                           
                             var comment = unitOfWork.TreasureComments.Get(tc.ID);
-                            unitOfWork.TreasureComments.Remove_Quicker(comment); //dont get it but EF demands it
+                            unitOfWork.TreasureComments.Remove_Quicker(comment); 
                             unitOfWork.Complete();
                             
                         }
@@ -95,7 +94,6 @@ namespace Geocache.ViewModel.PopUpVM
                                 if ((ct1 = unitOfWork.ChainedTreasures.SingleOrDefault(ct => ct.Treasure1_ID == treasure.ID)) != null)
                                 {
                                     unitOfWork.ChainedTreasures.Remove_Quicker(ct1);
-
                                     unitOfWork.Complete();
                                 }
                             }
@@ -113,12 +111,13 @@ namespace Geocache.ViewModel.PopUpVM
                                     }
                                 }
                             }
+                            //remove marker info of treasure
                             unitOfWork.Markers.Remove_Quicker(treasure.MarkerInfo);
                             unitOfWork.Complete();
                             unitOfWork.Treasures.Remove_Quicker(treasure);
                             unitOfWork.Complete();
                         }
-
+                        //remove user
                         var user = unitOfWork.Users.Get(x.ID);
                         unitOfWork.Users.Remove_Quicker(user);
                         unitOfWork.Complete();

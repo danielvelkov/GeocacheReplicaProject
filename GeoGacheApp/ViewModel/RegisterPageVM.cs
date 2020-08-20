@@ -110,7 +110,7 @@ namespace Geocache.ViewModel
                             {
                                 if (unitOfWork.Users.DoesUserExist(User.Username))
                                 {
-                                    SetErrorMsg("user already exists");
+                                    SetErrorMsg("User already exists");
                                     return;
                                 }
 

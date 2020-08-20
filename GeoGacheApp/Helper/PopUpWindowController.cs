@@ -15,7 +15,7 @@ namespace Geocache.Helper
     public class PopUpWindowController 
     {
         /// <summary>
-        /// Show FoundTreasureWindow
+        /// Show the window as a pop-up on top of the current window.
         /// </summary>
         public bool? ShowPopUp(Window popUpWindow)
         {

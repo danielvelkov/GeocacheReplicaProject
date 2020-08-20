@@ -25,7 +25,6 @@
             line-height: 30px;
             padding-left: 10px;
         }
-        /* Optional: Makes the sample page fill the window. */
         html, body {
             height: 100%;
             margin: 0;
@@ -145,12 +144,6 @@
                   return;
               }
 
-              // Clear out the old markers.
-              markers.forEach(function (marker) {
-                  marker.setMap(null);
-              });
-              markers = [];
-
               // For each place, get the icon, name and location.
               var bounds = new google.maps.LatLngBounds();
               places.forEach(function (place) {
@@ -158,22 +151,6 @@
                       console.log("Returned place contains no geometry");
                       return;
                   }
-                  //var icon = {
-                  //    url: place.icon,
-                  //    size: new google.maps.Size(71, 71),
-                  //    origin: new google.maps.Point(0, 0),
-                  //    anchor: new google.maps.Point(17, 34),
-                  //    scaledSize: new google.maps.Size(25, 25)
-                  //};
-
-                  // Create a marker for each place.
-                  //markers.push(new google.maps.Marker({
-                  //    map: map,
-                  //    icon: icon,
-                  //    title: place.name,
-                  //    position: place.geometry.location
-                  //}));
-
                   if (place.geometry.viewport) {
                       // Only geocodes have viewport.
                       bounds.union(place.geometry.viewport);
@@ -197,7 +174,7 @@
                       animation: google.maps.Animation.BOUNCE,
                       position: results[0].geometry.location,
                       draggable: true,
-                      title: "drag & drop\n to change location"
+                      title: "drag & drop to change location"
                   });
                   endDragMarker(currentLocationMarker.getPosition());
                   google.maps.event.addListener(currentLocationMarker, 'dragend', function(){
@@ -205,7 +182,7 @@
               })
               }
               else if(status=="INVALID_REQUEST")
-                  alert("enter an address");
+                  alert("Enter an address.");
               else alert(status);
           });
       }
@@ -220,7 +197,6 @@
           geocoder.geocode({'location': pos}, function(results, status) {
               if (status === 'OK') {
                   if (results[0]) {
-                      
                       homePageVM.endDragMarkerCS(pos.lat(), pos.lng());
                   } 
                   else {
@@ -277,7 +253,7 @@
                 '<h1>'+name+'</h1>'+
             '<p>Treasure id: ' + id + '</p>' +
                 '<p>' + description + '</p>' +
-                '<p>Rating: ' + rating + '</p>' +
+                '<p>Rating: ' + rating + '/5</p>' +
                 '<p>Type: ' + type + '</p>' +
                 '<p>Size: ' + size + '</p>' +
                     '<p>Connected to other treasures:' + isChained + '</p>'
