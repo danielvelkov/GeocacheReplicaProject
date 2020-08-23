@@ -1,9 +1,0 @@
-﻿
-
-
-- filtering the treasures + the cefsharp browser into another control(DONE)
-
-- the leaderboard should be static or a resource so we dont initialize  it always
-
-- use the design time(of the mvvm light) and hardcode some data so you shouldnt need database
-http://www.spikie.be/post/2014/06/30/a-practical-guide-to-mvvm-(light).html
