@@ -25,7 +25,7 @@ namespace Geocache.ViewModel
 {
     public class FindTreasureVM:ViewModelBase
     {
-        public FindTreasureVM(UserDataService userdata,PopUpWindowController popUp,FoundTreasureArgs args)
+        public FindTreasureVM(UserDataService userdata,PopUpWindowController popUp,SearchedTreasureArgs args)
         {
             UserData = userdata;
             TreasureArgs = args;
@@ -35,7 +35,7 @@ namespace Geocache.ViewModel
 
         #region properties
 
-        private FoundTreasureArgs treasureArgs;
+        private SearchedTreasureArgs treasureArgs;
         private ObservableCollection<Treasures_Comments> treasure_Comments;
         
         public ObservableCollection<Treasures_Comments> TreasureComments
@@ -92,7 +92,7 @@ namespace Geocache.ViewModel
                 RaisePropertyChanged(WebBrowserPropertyName);
             }
         }
-        public FoundTreasureArgs TreasureArgs
+        public SearchedTreasureArgs TreasureArgs
         {
             get
             {
@@ -152,8 +152,8 @@ namespace Geocache.ViewModel
                     WebBrowser.ExecuteScriptAsync("setOrigin",
                    UserData.UserLocation.Lat, UserData.UserLocation.Lon);
                     WebBrowser.ExecuteScriptAsync("setDestination",
-                        TreasureArgs.FoundTreasureLocation.Lat,
-                        TreasureArgs.FoundTreasureLocation.Lon);
+                        TreasureArgs.SearchedTreasureLocation.Lat,
+                        TreasureArgs.SearchedTreasureLocation.Lon);
                     WebBrowser.ExecuteScriptAsync("showRouteMarkers", "OK");
                 }));
             }
@@ -191,10 +191,10 @@ namespace Geocache.ViewModel
                     {
                         using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
                         {
-                            if (!unitOfWork.TreasureComments.HasUserCommented(UserData.CurrentUser.ID, TreasureArgs.FoundTreasureId))
+                            if (!unitOfWork.TreasureComments.HasUserCommented(UserData.CurrentUser.ID, TreasureArgs.SearchedTreasureID))
                             {
                                 Treasures_Comments tc = new Treasures_Comments(
-                                    TreasureArgs.FoundTreasureId,
+                                    TreasureArgs.SearchedTreasureID,
                                     UserData.CurrentUser.ID,
                                     CommentText,
                                     DateTime.Now,
@@ -202,7 +202,8 @@ namespace Geocache.ViewModel
                                     Rating);
                                 unitOfWork.TreasureComments.Add(tc);
                                 unitOfWork.Complete();
-                                TreasureComments.Add(tc);
+                                //TreasureComments.Add(tc);
+                                MessengerInstance.Send<object>(new object(), "Refresh");
                             }
                             else
                             {
@@ -221,9 +222,9 @@ namespace Geocache.ViewModel
             using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
             {
                 TreasureComments = new ObservableCollection<Treasures_Comments>
-                    (unitOfWork.TreasureComments.Find(tc => tc.TreasureID == TreasureArgs.FoundTreasureId));
-                if (unitOfWork.TreasureComments.HasUserCommented(UserData.CurrentUser.ID, TreasureArgs.FoundTreasureId))
-                    Rating = unitOfWork.TreasureComments.GetUserRating(UserData.CurrentUser.ID, TreasureArgs.FoundTreasureId);
+                    (unitOfWork.TreasureComments.Find(tc => tc.TreasureID == TreasureArgs.SearchedTreasureID));
+                if (unitOfWork.TreasureComments.HasUserCommented(UserData.CurrentUser.ID, TreasureArgs.SearchedTreasureID))
+                    Rating = unitOfWork.TreasureComments.GetUserRating(UserData.CurrentUser.ID, TreasureArgs.SearchedTreasureID);
             }
         }
     }

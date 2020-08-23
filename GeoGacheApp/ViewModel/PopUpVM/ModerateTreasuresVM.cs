@@ -27,7 +27,18 @@ namespace Geocache.ViewModel.PopUpVM
 
         public UserDataService UserData { get;  set; }
         private ObservableCollection<Treasure> treasures;
-        public ObservableCollection<Treasure> Treasures { get => treasures; set => treasures = value; }
+        public ObservableCollection<Treasure> Treasures
+        {
+            get
+            {
+                return treasures;
+            }
+            set
+            {
+                treasures = value;
+                RaisePropertyChanged("Treasures");
+            }
+        }
 
         #region Commands
         private ICommand deleteComment;

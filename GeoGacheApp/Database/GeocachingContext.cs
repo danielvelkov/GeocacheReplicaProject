@@ -1,4 +1,5 @@
-﻿using Geocache.Models;
+﻿using Geocache.Database;
+using Geocache.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -17,16 +18,20 @@ namespace Geocache
         public DbSet<Treasures_Comments> Treasures_comments { get; set; }
         public DbSet<Chained_Treasures> Chained_Treasures { get; set; }
         public DbSet<MarkerInfo> MarkerInfos { get; set; }
-
-        // DbTest1 is the connection string
-        public GeocachingContext() : base(Properties.Settings.Default.DbTest1)
+        
+        //for testing (creates a db in localDB)
+        public GeocachingContext():base()
         {
+            System.Data.Entity.Database.SetInitializer<GeocachingContext>(new DbInitializer());
         }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Treasure>().
+                HasOptional(p => p.MarkerInfo).
+                WithRequired(s=>s.Treasure).
+                WillCascadeOnDelete(true);
+
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>(); //is this really that bad
         }
     }
 }

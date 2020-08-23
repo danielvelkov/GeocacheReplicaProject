@@ -138,6 +138,7 @@
     <Compile Include="Converters\IsNullOrWhiteSpaceConverter.cs" />
     <Compile Include="Converters\NameHighlight.cs" />
     <Compile Include="Converters\RngTxtBlockConverter.cs" />
+    <Compile Include="Database\DbInitializer.cs" />
     <Compile Include="Database\Repositories\ChainedTreasureRepository.cs" />
     <Compile Include="Database\Repositories\FoundTreasuresRepostitory.cs" />
     <Compile Include="Database\Repositories\MarkersRepository.cs" />
@@ -359,7 +360,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="res\Images\icon.png" />
-    <Resource Include="sometestData.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

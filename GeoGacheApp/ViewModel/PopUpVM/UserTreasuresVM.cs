@@ -19,17 +19,31 @@ namespace Geocache.ViewModel.PopUpVM
 {
     public class UserTreasuresVM : ViewModelBase
     {
-        List<Treasure> treasures;
+        ObservableCollection<Treasure> treasures;
         public UserTreasuresVM(UserDataService userData)
         {
-
             UserData = userData;
-            MessengerInstance.Register<object>(this, "RefreshUserTreasures", obj => { Treasures = (UserData.GetUserTreasures()); });
-            Treasures = (UserData.GetUserTreasures());
+            Treasures = new ObservableCollection<Treasure>(UserData.GetUserTreasures());
+            MessengerInstance.Register<object>(this, "RefreshUserTreasures", obj => 
+            {
+                Treasures = new ObservableCollection<Treasure>(UserData.GetUserTreasures());
+            });
+            
         }
 
         public UserDataService UserData { get;  set; }
-        public List<Treasure> Treasures { get => treasures; set => treasures = value; }
+        public ObservableCollection<Treasure> Treasures
+        {
+            get
+            {
+                return treasures;
+            }
+            set
+            {
+                treasures = value;
+                RaisePropertyChanged("Treasures");
+            }
+        }
 
         #region Commands
         ICommand deleteTreasure;
@@ -71,10 +85,10 @@ namespace Geocache.ViewModel.PopUpVM
                               //delete all user comments on said treasure
                               foreach (Treasures_Comments tc in unitOfWork.TreasureComments.Find(tc=>tc.TreasureID==x.ID).ToList())
                               {
-                                  var comment = unitOfWork.TreasureComments.Get(tc.ID);
-                                  unitOfWork.TreasureComments.Remove_Quicker(comment); //dont get it but EF demands it
-                                  unitOfWork.Complete();
-
+                                  //var comment = unitOfWork.TreasureComments.Get(tc.ID);
+                                  //unitOfWork.TreasureComments.Remove(comment); 
+                                  //unitOfWork.Complete();
+                                  unitOfWork.TreasureComments.Remove(tc);
                               }
                               //delete all treasure_chains connected to it
                               if (x.Chained_Treasure1.Count > 0)
@@ -82,7 +96,7 @@ namespace Geocache.ViewModel.PopUpVM
                                   Chained_Treasures ct1 = x.Chained_Treasure1.First();
                                   if ((ct1 = unitOfWork.ChainedTreasures.SingleOrDefault(ct => ct.Treasure1_ID == x.ID)) != null)
                                   {
-                                      unitOfWork.ChainedTreasures.Remove_Quicker(ct1);
+                                      unitOfWork.ChainedTreasures.Remove(ct1);
 
                                       unitOfWork.Complete();
                                   }
@@ -95,18 +109,18 @@ namespace Geocache.ViewModel.PopUpVM
                                       if ((ct2 = unitOfWork.ChainedTreasures.SingleOrDefault(ct => ct.Id == tc.Id)) != null)
                                       {
                                           int fixId = (int)ct2.Treasure1_ID;
-                                          unitOfWork.ChainedTreasures.Remove_Quicker(ct2);
+                                          unitOfWork.ChainedTreasures.Remove(ct2);
                                           unitOfWork.ChainedTreasures.UnchainTreasure(fixId); //unchain the connected treasure
                                           unitOfWork.Complete();
                                       }
                                   }
                               }
                               //remove the marker info
-                              unitOfWork.Markers.Remove_Quicker(x.MarkerInfo);
-                              unitOfWork.Complete();
+                              //unitOfWork.Markers.Remove_Quicker(x.MarkerInfo);
+                              //unitOfWork.Complete();
 
                               var tres = unitOfWork.Treasures.Get(x.ID);
-                              unitOfWork.Treasures.Remove_Quicker(tres);
+                              unitOfWork.Treasures.Remove(tres);
                               unitOfWork.Complete();
                               Treasures.Remove(x);
                               RaisePropertyChanged("Treasures");

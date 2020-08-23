@@ -15,9 +15,9 @@ namespace Geocache.Models
 
 
         [ForeignKey("User"), Column(Order = 1)]
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
         [ForeignKey("Treasure"), Column(Order = 2)]
-        public int TreasureID { get; set; }
+        public int? TreasureID { get; set; }
 
 
         public int Points { get; set; }

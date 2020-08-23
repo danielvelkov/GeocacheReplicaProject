@@ -21,14 +21,14 @@ namespace Geocache.ViewModel.PopUpVM
 {
     public class TreasureFoundVM: ViewModelBase
     {
-        public TreasureFoundVM(UserDataService userdata,FoundTreasureArgs treasureArgs)
+        public TreasureFoundVM(UserDataService userdata,SearchedTreasureArgs treasureArgs)
         {
             Userdata = userdata;
             using(var unitOfWork= new UnitOfWork(new GeocachingContext()))
             {
-                Treasure = unitOfWork.Treasures.Get(treasureArgs.FoundTreasureId);
+                Treasure = unitOfWork.Treasures.Get(treasureArgs.SearchedTreasureID);
             }
-            TreasureLocation = treasureArgs.FoundTreasureLocation;
+            TreasureLocation = treasureArgs.SearchedTreasureLocation;
         }
 
         public UserDataService Userdata { get;  set; }
@@ -76,14 +76,16 @@ namespace Geocache.ViewModel.PopUpVM
                                                 //set the location of the user to the location of the previous treasure
                                                 SimpleIoc.Default.GetInstance<FindTreasureVM>().UserData.UserLocation = TreasureLocation;
 
-                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureArgs.FoundTreasureId = NextTreasure.ID;
-                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureArgs.FoundTreasureLocation = NextTreasure.GetLatLng();
+                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureArgs.SearchedTreasureID = NextTreasure.ID;
+                                                SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureArgs.SearchedTreasureLocation = NextTreasure.GetLatLng();
                                                 SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureArgs.Description = NextTreasure.Description;
                                                 SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureArgs.Name = NextTreasure.Name;
                                                 SimpleIoc.Default.GetInstance<FindTreasureVM>().TreasureComments = new ObservableCollection<Treasures_Comments>
                                                 (
                                                     unitOfWork.TreasureComments.Find(c => c.TreasureID == NextTreasure.ID)
                                                 );
+                                                //set the treasure to this one
+                                                Treasure = NextTreasure;
                                                 SimpleIoc.Default.GetInstance<FindTreasureVM>().ShowRoute.Execute(null);
                                                 this.CloseWindow.Execute(null);
                                                 return;

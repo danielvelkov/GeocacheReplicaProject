@@ -37,7 +37,7 @@ namespace Geocache.Database.Repositories
         public int GetUserRating(int UserId, int TreasureId)
         {
             return (int)TreasureCommentsContext.Treasures_comments.SingleOrDefault
-                (t => t.UserID == UserId && t.TreasureID == TreasureId).Rated;
+                (t => t.UserID == UserId && t.TreasureID == TreasureId && t.Type==CommentType.COMMENT).Rated;
         }
 
         public bool HasUserCommented(int UserId, int TreasureId)

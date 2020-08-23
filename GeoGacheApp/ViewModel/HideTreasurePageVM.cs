@@ -470,8 +470,10 @@ namespace Geocache.ViewModel
                                     MarkerInfo.Latitude = Latitude;
                                     MarkerInfo.Longtitude = Longtitude;
 
-                                    UnitOfWork.Treasures.Add(Treasure);
-                                    Treasure.MarkerInfo = MarkerInfo;
+                                    //this is when u use localdb
+                                    MarkerInfo.Treasure = Treasure;
+                                    UnitOfWork.Markers.Add(MarkerInfo);
+                                    
 
                                     UnitOfWork.Complete();
 

@@ -52,6 +52,8 @@ namespace Geocache.ViewModel
             SimpleIoc.Default.Unregister<HomePageVM>();
             SimpleIoc.Default.Unregister<UserPageVM>();
             SimpleIoc.Default.Unregister<HideTreasurePageVM>();
+            SimpleIoc.Default.Unregister<FindTreasureVM>();
+            SimpleIoc.Default.Unregister<TreasureFoundVM>();
             SimpleIoc.Default.Unregister<UserTreasuresVM>();
             SimpleIoc.Default.Unregister<LeaderboardVM>();
 
@@ -69,7 +71,9 @@ namespace Geocache.ViewModel
             SimpleIoc.Default.Register<HideTreasurePageVM>();
             SimpleIoc.Default.Register<UserTreasuresVM>();
             SimpleIoc.Default.Register<LeaderboardVM>();
-            
+            SimpleIoc.Default.Register<FindTreasureVM>();
+            SimpleIoc.Default.Register<TreasureFoundVM>();
+
             SimpleIoc.Default.Register<ModerateTreasuresVM>();
             SimpleIoc.Default.Register<ModerateAccountsVM>();
 

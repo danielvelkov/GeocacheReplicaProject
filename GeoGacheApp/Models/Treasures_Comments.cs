@@ -37,9 +37,9 @@ namespace Geocache.Models
         public virtual User User { get; set; }
 
         [ForeignKey("Treasure"), Column(Order=1)]
-        public int TreasureID { get; set; }
+        public int? TreasureID { get; set; }
         [ForeignKey("User"), Column(Order =2)]
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
         
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -52,7 +52,7 @@ namespace Geocache.Models
             get
             {
                 using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
-                    return unitOfWork.Users.Get(UserID).Username;
+                    return unitOfWork.Users.Get((int)UserID).Username;
             }
 
         }

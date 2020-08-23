@@ -363,20 +363,20 @@ namespace Geocache.ViewModel.BrowserVM
                    MessageBoxResult.Yes)
             {
                 SimpleIoc.Default.GetInstance<UserDataService>().UserLocation = CurrentLocation;
-                if (!SimpleIoc.Default.IsRegistered<FoundTreasureArgs>())
+                if (!SimpleIoc.Default.IsRegistered<SearchedTreasureArgs>())
                 {
-                    SimpleIoc.Default.Register<FoundTreasureArgs>(() =>
+                    SimpleIoc.Default.Register<SearchedTreasureArgs>(() =>
                     {
-                        return new FoundTreasureArgs(new Location(lat, lng), id);
+                        return new SearchedTreasureArgs(new Location(lat, lng), id);
                     });
                     SimpleIoc.Default.Register<PopUpWindowController>();
                 }
                 else
                 {
-                    SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureId = id;
-                    SimpleIoc.Default.GetInstance<FoundTreasureArgs>().FoundTreasureLocation = new Location(lat, lng);
-                    SimpleIoc.Default.GetInstance<FoundTreasureArgs>().Name = name;
-                    SimpleIoc.Default.GetInstance<FoundTreasureArgs>().Description = description;
+                    SimpleIoc.Default.GetInstance<SearchedTreasureArgs>().SearchedTreasureID = id;
+                    SimpleIoc.Default.GetInstance<SearchedTreasureArgs>().SearchedTreasureLocation = new Location(lat, lng);
+                    SimpleIoc.Default.GetInstance<SearchedTreasureArgs>().Name = name;
+                    SimpleIoc.Default.GetInstance<SearchedTreasureArgs>().Description = description;
                 }
                 if(!SimpleIoc.Default.IsRegistered<FindTreasureVM>())
                     SimpleIoc.Default.Register<FindTreasureVM>();
