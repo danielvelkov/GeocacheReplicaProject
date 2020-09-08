@@ -250,13 +250,14 @@
                 animation: google.maps.Animation.DROP,
                 position:markerPosition});
             var contentString='<div id="content">'+
+                '<h>Double click the marker to start the hunt!</h>'+
                 '<h1>'+name+'</h1>'+
             '<p>Treasure id: ' + id + '</p>' +
                 '<p>' + description + '</p>' +
                 '<p>Rating: ' + rating + '/5</p>' +
                 '<p>Type: ' + type + '</p>' +
                 '<p>Size: ' + size + '</p>' +
-                    '<p>Connected to other treasures:' + isChained + '</p>'
+                    '<p>Connected to other treasures:' + isChained + '</p>' +
                 '</div>';
             var infoWindow = new google.maps.InfoWindow({
                 content: contentString

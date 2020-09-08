@@ -51,6 +51,12 @@ namespace Geocache.ViewModel.PopUpVM
                         {
                             using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
                             {
+                                if(Userdata.CurrentUser.ID==Treasure.UserId)
+                                {
+                                    MessageBox.Show(String.Format("Congrats! you found the treasure \n Points:9999"));
+                                    MessageBox.Show(String.Format("just kidding. you hid this treasure :)"));
+                                    return;
+                                }
                                 // checks if user found the treasure
                                 if (!unitOfWork.FoundTreasures.HasUserFoundTreasure(Userdata.CurrentUser.ID,
                                     Treasure.ID))
@@ -96,9 +102,8 @@ namespace Geocache.ViewModel.PopUpVM
 
                                             }
                                         }
-                                        this.CloseWindow.Execute(null);
-                                        SimpleIoc.Default.GetInstance<FindTreasureVM>().GoBack.Execute(null);
                                     }
+                                    this.CloseWindow.Execute(null);
                                 }
                                 else MessageBox.Show("You have already found that one");
                             }
