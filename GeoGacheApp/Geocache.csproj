@@ -364,8 +364,6 @@
     <Resource Include="res\Icons\sortArrowUp.png" />
     <Resource Include="res\Icons\warning_sign.png" />
     <Resource Include="res\Icons\home_icon.png" />
-    <Resource Include="Helper\Ideas.txt" />
-    <Resource Include="Helper\bugs.txt" />
     <Content Include="html\map.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
