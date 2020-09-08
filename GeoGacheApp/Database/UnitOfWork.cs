@@ -15,9 +15,7 @@ namespace Geocache.Database
     public class UnitOfWork : IUnitOfWork
     {
         private readonly GeocachingContext _context;
-
-        // TODO: could be made for specific repositories so its not that bulky
-        // for example most of the cases i use are entities add then X type model with that entity ID 
+        
         public UnitOfWork(GeocachingContext context)
         {
             _context = context;

@@ -11,11 +11,10 @@ namespace Geocache.Interfaces
     public interface ITreasureRepository:IRepository<Treasure>
     {
         //methods concerning treasures
-
-        //get all treasures that user hasnt found
+        
         List<Treasure> GetUserTreasures(int UserID);
         List<Treasure> GetTreasuresNotFoundByUser(int UserID);
-        List<Treasure> GetTreasuresAndFoundByUser(int UserID);
+        List<Treasure> GetTreasuresAndThoseFoundByUser(int UserID);
         IEnumerable<Treasure> GetUserTreasuresNotChained(int UserID);
         IEnumerable<Treasure> GetTreasuresAndComments();
         MarkerInfo GetTreasureInfo(int TreasureId);

@@ -28,7 +28,7 @@ namespace Geocache.Database.Repositories
                 t => t.UserId != UserID &&
                 !TreasureContext.Found_Treasures.Any(ft=>(ft.TreasureID==t.ID) && ft.UserID==UserID )).ToList();
         }
-        public List<Treasure> GetTreasuresAndFoundByUser(int UserID)
+        public List<Treasure> GetTreasuresAndThoseFoundByUser(int UserID)
         {
             return TreasureContext.Treasures.Where(
                 t => t.UserId != UserID ).ToList();

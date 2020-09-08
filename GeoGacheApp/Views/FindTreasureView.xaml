@@ -8,13 +8,11 @@
              xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              xmlns:ns="clr-namespace:Geocache"
              mc:Ignorable="d" >
-
     <Grid>
         <Grid.Resources>
             <Style TargetType="{x:Type Button}">
                 <Setter Property="Margin" Value="10"></Setter>
-                <Setter Property="MaxWidth" Value="130">
-                </Setter>
+                <Setter Property="MaxWidth" Value="130"></Setter>
                 <Setter Property="FontSize" Value="14"></Setter>
             </Style>
             <Style TargetType="ListBox" x:Key="ListStyle" BasedOn="{StaticResource {x:Type ListBox}}">
@@ -88,8 +86,9 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
+                
                 <Button Command="{Binding Comment}" Grid.Row="1" HorizontalAlignment="Left"
-                        Margin="10,0,0,0" Height="25">Share experiences</Button>
+                        Margin="10,20,0,0" Height="25">Share experiences</Button>
                 <TextBlock Grid.Column="1" HorizontalAlignment="Right" FontSize="15" VerticalAlignment="Center">Rate it:</TextBlock>
                 <ns:RatingCell Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" 
                                RatingValue="{Binding Rating,Mode=TwoWay}"></ns:RatingCell>

@@ -4,10 +4,12 @@ using GalaSoft.MvvmLight.Ioc;
 using Geocache;
 using Geocache.Database;
 using Geocache.Helper;
+using Geocache.Interfaces;
 using Geocache.Models;
 using Geocache.ViewModel.BrowserVM;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,14 +26,45 @@ namespace Geocache.ViewModel
         }
 
         #region fields
+        private bool isLoading = false;
+        private bool isButtonEnabled = true;
+        public const string UsernamePropertyName = "Username";
+
+        private string username = "";
+
+        public const string ErrorMsgPropertyName = "ErrorMsg";
+
+        private string errorMsg = "";
         #endregion
 
         #region Parameters
 
-        
-        public const string UsernamePropertyName = "Username";
 
-        private string username = "";
+        public bool IsLoading
+        {
+            get
+            {
+                return isLoading;
+            }
+            set
+            {
+                isLoading = value;
+                RaisePropertyChanged("IsLoading");
+            }
+        }
+
+        public bool IsButtonEnabled
+        {
+            get
+            {
+                return isButtonEnabled;
+            }
+            set
+            {
+                isButtonEnabled = value;
+                RaisePropertyChanged("IsButtonEnabled");
+            }
+        }
 
         /// <summary>
         /// Sets and gets the Username property.
@@ -55,10 +88,6 @@ namespace Geocache.ViewModel
                 RaisePropertyChanged(UsernamePropertyName);
             }
         }
-       
-        public const string ErrorMsgPropertyName = "ErrorMsg";
-
-        private string errorMsg = "";
 
         /// <summary>
         /// Sets and gets the ErrorMsg property.
@@ -89,54 +118,21 @@ namespace Geocache.ViewModel
 
         #region commands
 
-        ICommand loginCommand;
+        IAsyncCommand loginCommand;
         ICommand registerCommand;
 
-        public ICommand Login
+        public IAsyncCommand Login
         {
             get
             {
                 return loginCommand ?? (loginCommand =
-                  new RelayCommand<Object>((x =>
-                  {
-                      using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
-                      {
-                          if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
-                          {
-                              User user = unitOfWork.Users.ValidateLogin(Username, Password);
-                              
-                              if (user != null)
-                              {
-                                  if (user.isBanned)
-                                  {
-                                      ErrorMsg = "*BANNED USER";
-                                      return;
-                                  }
-                                  //login the user
-                                  if (!SimpleIoc.Default.IsRegistered<UserDataService>())
-                                      SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService{ CurrentUser = user }; });
-                                  else
-                                      SimpleIoc.Default.GetInstance<UserDataService>().CurrentUser = user;
-                                  // if we've logged out we need to create the instances again
-                                  if (!SimpleIoc.Default.IsRegistered<UserPageVM>())
-                                      ViewModelLocator.ReRegisterInstances();
-                                  
-                                  Password = ""; //clear password so they cant enter :p
-                                  MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage"); //change to homepage 
-                                  //MessengerInstance.Send<object>(new object(), "RefreshUserTreasures");
-
-                              }
-                              else
-                                  ErrorMsg = "*Password is wrong or no such user exists.";
-                          }
-                          else
-                          {
-                              ErrorMsg = "*Password or Username is empty.";
-                          }
-                      }
-                  })
-                ));
+                  new AsyncCommand(LoginAsync, CanExecuteLogin));
             }
+        }
+
+        private bool CanExecuteLogin()
+        {
+            return !IsLoading;
         }
 
         public ICommand Register
@@ -152,6 +148,56 @@ namespace Geocache.ViewModel
 
                 ));
             }
+        }
+
+        private async Task LoginAsync()
+        {
+            IsButtonEnabled = false;
+            IsLoading = true;
+            await Task.Run(() => 
+            {
+                
+                using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+                {
+                    if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+                    {
+                        
+                        User user = unitOfWork.Users.ValidateLogin(Username, Password);
+                        
+                        if (user != null)
+                        {
+                            if (user.isBanned)
+                            {
+                                ErrorMsg = "*BANNED USER";
+                                
+                            }
+                            //login the user
+                            if (!SimpleIoc.Default.IsRegistered<UserDataService>())
+                                SimpleIoc.Default.Register<UserDataService>(() => { return new UserDataService { CurrentUser = user }; });
+                            else
+                                SimpleIoc.Default.GetInstance<UserDataService>().CurrentUser = user;
+                            // if we've logged out we need to create the instances again
+                            
+                            if (!SimpleIoc.Default.IsRegistered<UserPageVM>())
+                                ViewModelLocator.ReRegisterInstances();
+                            Password = ""; //clear password so they cant enter :p
+                            MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage"); //change to homepage 
+                            //MessengerInstance.Send<object>(new object(), "RefreshUserTreasures");
+                        }
+                        else
+                            ErrorMsg = "*Password is wrong or no such user exists.";
+                      
+                    }
+                    else
+                    {
+                        ErrorMsg = "*Password or Username is empty.";
+
+                    }
+                }
+                IsLoading = false;
+                IsButtonEnabled = true;
+            });
+            
         }
 
         #endregion

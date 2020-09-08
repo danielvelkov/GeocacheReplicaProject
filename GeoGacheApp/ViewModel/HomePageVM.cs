@@ -19,15 +19,11 @@ namespace Geocache.ViewModel
 {
     public class HomePageVM : ViewModelBase
     {
-        public HomePageVM(UserDataService userData,PopUpWindowController popUp)
+        public HomePageVM(UserDataService userData, PopUpWindowController popUp)
         {
             PopUp = popUp;
             UserData = userData;
         }
-        
-        #region fields
-
-        #endregion
 
         #region Parameters
         public UserDataService UserData { get; set; }
@@ -53,7 +49,7 @@ namespace Geocache.ViewModel
             get
             {
                 if (userRole == 0)
-                    userRole=UserData.CurrentUser.Role;
+                    userRole = UserData.CurrentUser.Role;
                 return userRole;
             }
 
@@ -90,7 +86,7 @@ namespace Geocache.ViewModel
                     {
                         //remove the user specific instances of pages
                         ViewModelLocator.Cleanup();
-                        
+
                         // change to login page
                         MessengerInstance.Send<Type>(typeof(LoginPageVM), "ChangePage");
                     });
@@ -118,8 +114,8 @@ namespace Geocache.ViewModel
                 if (hideTreasure == null)
                     hideTreasure = new RelayCommand(() =>
                     {
-                        if(!SimpleIoc.Default.IsRegistered<HideTreasurePageVM>())
-                        SimpleIoc.Default.Register<HideTreasurePageVM>();
+                        if (!SimpleIoc.Default.IsRegistered<HideTreasurePageVM>())
+                            SimpleIoc.Default.Register<HideTreasurePageVM>();
                         MessengerInstance.Send<Type>(typeof(HideTreasurePageVM), "ChangePage");
                     });
                 return hideTreasure;

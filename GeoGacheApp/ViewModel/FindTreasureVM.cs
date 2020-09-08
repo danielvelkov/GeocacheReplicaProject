@@ -224,7 +224,7 @@ namespace Geocache.ViewModel
                 TreasureComments = new ObservableCollection<Treasures_Comments>
                     (unitOfWork.TreasureComments.Find(tc => tc.TreasureID == TreasureArgs.SearchedTreasureID));
                 if (unitOfWork.TreasureComments.HasUserCommented(UserData.CurrentUser.ID, TreasureArgs.SearchedTreasureID))
-                    Rating = unitOfWork.TreasureComments.GetUserRating(UserData.CurrentUser.ID, TreasureArgs.SearchedTreasureID);
+                    Rating = unitOfWork.TreasureComments.GetRatingOfTreasureByUser(UserData.CurrentUser.ID, TreasureArgs.SearchedTreasureID);
             }
         }
     }

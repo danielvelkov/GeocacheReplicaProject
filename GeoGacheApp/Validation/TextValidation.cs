@@ -10,10 +10,7 @@ namespace Geocache.Validation
     class TextValidation : ValidationRule
     {
         public string Type { get; set; }
-
-        // TODO validation things
-        // -if another article with the name exists
-        // ...
+        
 
         public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
         {

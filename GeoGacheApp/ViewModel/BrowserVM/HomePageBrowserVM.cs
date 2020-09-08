@@ -29,10 +29,9 @@ namespace Geocache.ViewModel.BrowserVM
             UserData = userData;
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
             CefSharpSettings.WcfEnabled = true;
-           
+            // when the user wants to check out his own treasure
             MessengerInstance.Register<Treasure>(this, "ShowTreasure",treasr =>
             {
-
                 WebBrowser.ExecuteScriptAsync("removeMarkers", "removed");
                 WebBrowser.ExecuteScriptAsync("showTreasures", treasr.MarkerInfo.Latitude, treasr.MarkerInfo.Longtitude,
                             treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
@@ -201,7 +200,7 @@ namespace Geocache.ViewModel.BrowserVM
 
         /// <summary>
         /// Sets and gets the findChainedTreasures property.
-        /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property is set when the user wants to find chained treasures.
         /// </summary>
         public bool FindChainedTreasures
         {
@@ -228,7 +227,7 @@ namespace Geocache.ViewModel.BrowserVM
 
         /// <summary>
         /// Sets and gets the foundByUser property.
-        /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property is when the user wants to see treasures he's found.
         /// </summary>
         public bool FoundByUser
         {
@@ -259,7 +258,6 @@ namespace Geocache.ViewModel.BrowserVM
 
         /// <summary>
         /// Sets and gets the CurrentLocation property.
-        /// Changes to that property's value raise the PropertyChanged event. 
         /// </summary>
         public Location CurrentLocation
         {
@@ -299,35 +297,37 @@ namespace Geocache.ViewModel.BrowserVM
                         {
                             List<Treasure> mapTreasures;
                             if (FoundByUser == true)
-                                mapTreasures = UnitofWork.Treasures.GetTreasuresAndFoundByUser(UserData.CurrentUser.ID);
+                                mapTreasures = UnitofWork.Treasures.GetTreasuresAndThoseFoundByUser(UserData.CurrentUser.ID);
                             else mapTreasures= UnitofWork.Treasures.GetTreasuresNotFoundByUser(UserData.CurrentUser.ID);
 
                             foreach (var treas in mapTreasures)
                             {
-                                // Genius idea (that way i wouldnt need to update it anywhre else)
                                 double rating = UnitofWork.TreasureComments.GetTreasureRating(treas.ID);
                                 treas.Rating = rating;
                                 UnitofWork.Complete();
-                                if((SelectedTreasureSize==Enums.TreasureSizes.ANY || treas.TreasureSize==SelectedTreasureSize) &&
-                                (SelectedTreasureType==TreasureType.ANY || treas.TreasureType==SelectedTreasureType) &&
-                                (Difficulty==0 || treas.Difficulty<=Difficulty) && treas.IsChained==FindChainedTreasures &&
-                                (Rating==0 || Rating>=Math.Round(rating) )
-                                )
+
+                                if(( SelectedTreasureSize == Enums.TreasureSizes.ANY || treas.TreasureSize==SelectedTreasureSize) &&
+                                ( SelectedTreasureType == TreasureType.ANY || treas.TreasureType == SelectedTreasureType) &&
+                                ( Difficulty==0 || Difficulty>= treas.Difficulty) && treas.IsChained==FindChainedTreasures &&
+                                ( Rating==0 || Rating>=Math.Round(rating) ))
                                 {
-                                    if(treas.MarkerInfo.IsInRadius(CurrentLocation.Lat, CurrentLocation.Lon,Radius))
-                                        Markers.Add(treas.MarkerInfo);
+                                    if(treas.MarkerInfo.IsInRadius(CurrentLocation.Lat, CurrentLocation.Lon, Radius))
+                                    {
+                                        var marker = treas.MarkerInfo;
+                                        WebBrowser.ExecuteScriptAsync("showTreasures", marker.Latitude, marker.Longtitude,
+                                            treas.ID, treas.Name, treas.TreasureType.ToString(),
+                                            treas.TreasureSize.ToString(), treas.Description,
+                                            treas.Rating, treas.IsChained.ToString());
+                                    }
                                 }
                             }
-                            if (Markers.Count != 0)
-                            foreach (MarkerInfo marker in Markers)
-                            {
-                                Treasure treasr = UnitofWork.Treasures.Get(marker.TreasureId);
-                                WebBrowser.ExecuteScriptAsync("showTreasures", marker.Latitude, marker.Longtitude,
-                                treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
-                                treasr.TreasureSize.ToString(), treasr.Description,
-                                treasr.Rating, treasr.IsChained.ToString());
-                            }
-                            Markers.Clear();
+                            //if (Markers.Count != 0)
+                            //foreach (MarkerInfo marker in Markers)
+                            //{
+                            //    Treasure treasr = UnitofWork.Treasures.Get(marker.TreasureId);
+                                
+                            //}
+                            //Markers.Clear();
                         }
                     });
                 return filterTreasures;
@@ -369,7 +369,7 @@ namespace Geocache.ViewModel.BrowserVM
                     {
                         return new SearchedTreasureArgs(new Location(lat, lng), id);
                     });
-                    SimpleIoc.Default.Register<PopUpWindowController>();
+                    //SimpleIoc.Default.Register<PopUpWindowController>();
                 }
                 else
                 {
@@ -398,7 +398,7 @@ namespace Geocache.ViewModel.BrowserVM
                 {
                     List<Treasure> mapTreasures;
                     if (FoundByUser == true)
-                        mapTreasures = UnitofWork.Treasures.GetTreasuresAndFoundByUser(UserData.CurrentUser.ID);
+                        mapTreasures = UnitofWork.Treasures.GetTreasuresAndThoseFoundByUser(UserData.CurrentUser.ID);
                     else mapTreasures = UnitofWork.Treasures.GetTreasuresNotFoundByUser(UserData.CurrentUser.ID);
 
                     foreach (var treas in mapTreasures)

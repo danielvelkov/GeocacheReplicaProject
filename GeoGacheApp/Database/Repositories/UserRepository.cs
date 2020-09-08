@@ -48,7 +48,9 @@ namespace Geocache.Database.Repositories
 
         public User ValidateLogin(string Username, string Password)
         {
-            Password = Regex.Replace(Password, @"\s+", "");
+            Password= new string(Password.ToCharArray()
+               .Where(c => !Char.IsWhiteSpace(c))
+               .ToArray());
             User user = UserContext.Users.FirstOrDefault(a => a.Username == Username && a.Password==Password);
             return user;
         }

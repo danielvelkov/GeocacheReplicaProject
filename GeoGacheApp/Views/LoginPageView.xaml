@@ -42,11 +42,12 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Command="{Binding Login}" FontSize="16" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Height="30" />
+            <Button Command="{Binding Login}" IsEnabled="{Binding IsButtonEnabled}" FontSize="16" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Height="30" />
             <TextBlock VerticalAlignment="top" HorizontalAlignment="Center"  Grid.Column="1" FontSize="18">
-                <Hyperlink Command="{Binding Register}">New to the app?</Hyperlink>
+                <Hyperlink Command="{Binding Register}" IsEnabled="{Binding IsButtonEnabled}">New to the app?</Hyperlink>
             </TextBlock>
         </Grid>
         <TextBlock Grid.Row="3" HorizontalAlignment="Center" FontSize="16">USER: geochacher2 meatballs <LineBreak></LineBreak> MOD: geochacher3 baloni12 <LineBreak></LineBreak> ADMIN: adminadmin password</TextBlock>
+        <ProgressBar Grid.Row="3" Height="20" Width="60" IsIndeterminate="{Binding IsLoading}" HorizontalAlignment="Right"></ProgressBar>
     </Grid>
 </UserControl>
