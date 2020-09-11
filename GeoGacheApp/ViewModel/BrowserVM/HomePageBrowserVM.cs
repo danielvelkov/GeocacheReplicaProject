@@ -32,11 +32,18 @@ namespace Geocache.ViewModel.BrowserVM
             // when the user wants to check out his own treasure
             MessengerInstance.Register<Treasure>(this, "ShowTreasure",treasr =>
             {
-                WebBrowser.ExecuteScriptAsync("removeMarkers", "removed");
-                WebBrowser.ExecuteScriptAsync("showTreasures", treasr.MarkerInfo.Latitude, treasr.MarkerInfo.Longtitude,
-                            treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
-                            treasr.TreasureSize.ToString(), treasr.Description,
-                            treasr.Rating, treasr.IsChained.ToString(), true);
+                try
+                {
+                    WebBrowser.ExecuteScriptAsync("removeMarkers", "removed");
+                    WebBrowser.ExecuteScriptAsync("showTreasures", treasr.MarkerInfo.Latitude, treasr.MarkerInfo.Longtitude,
+                                treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
+                                treasr.TreasureSize.ToString(), treasr.Description,
+                                treasr.Rating, treasr.IsChained.ToString(), true);
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show("Wait for the browser to finish loading");
+                }
 
             });
         }
@@ -317,7 +324,7 @@ namespace Geocache.ViewModel.BrowserVM
                                         WebBrowser.ExecuteScriptAsync("showTreasures", marker.Latitude, marker.Longtitude,
                                             treas.ID, treas.Name, treas.TreasureType.ToString(),
                                             treas.TreasureSize.ToString(), treas.Description,
-                                            treas.Rating, treas.IsChained.ToString());
+                                            treas.Rating, treas.IsChained.ToString(),false);
                                     }
                                 }
                             }
@@ -423,7 +430,7 @@ namespace Geocache.ViewModel.BrowserVM
                             WebBrowser.ExecuteScriptAsync("showTreasures", marker.Latitude, marker.Longtitude,
                             treasr.ID, treasr.Name, treasr.TreasureType.ToString(),
                             treasr.TreasureSize.ToString(), treasr.Description,
-                            treasr.Rating, treasr.IsChained.ToString());
+                            treasr.Rating, treasr.IsChained.ToString(),false);
                         }
                     Markers.Clear();
                 }

@@ -15,6 +15,7 @@
 using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Messaging;
 using Geocache.Helper;
 using Geocache.ViewModel;
 using Geocache.ViewModel.BrowserVM;
@@ -47,6 +48,7 @@ namespace Geocache.ViewModel
         {
             // Clear the ViewModels
 
+            Messenger.Default.Unregister(SimpleIoc.Default.GetInstance<HomePageBrowserVM>());
             SimpleIoc.Default.Unregister<UserDataService>();
             SimpleIoc.Default.Unregister<HomePageBrowserVM>();
             SimpleIoc.Default.Unregister<HomePageVM>();
@@ -61,6 +63,7 @@ namespace Geocache.ViewModel
             SimpleIoc.Default.Unregister<ModerateAccountsVM>();
 
             SimpleIoc.Default.Unregister<ChangeUserRolesVM>();
+            
         }
         // when we log in
         public static void ReRegisterInstances()
