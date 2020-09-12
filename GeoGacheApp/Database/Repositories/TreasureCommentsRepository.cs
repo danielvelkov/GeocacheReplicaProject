@@ -57,5 +57,16 @@ namespace Geocache.Database.Repositories
                 return true;
             return false;
         }
+
+        public int GetTreasureReportsCount(int TreasureId)
+        {
+            int count=0;
+            foreach (var tc in TreasureCommentsContext.Treasures_comments.Where(tc => tc.TreasureID == TreasureId && 
+            tc.Type==CommentType.REPORT))
+            {
+                count++;
+            }
+            return count;
+        }
     }
 }

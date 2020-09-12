@@ -1,4 +1,5 @@
 ﻿
+using Geocache.Database;
 using Geocache.Enums;
 using Geocache.Helper;
 using System;
@@ -82,5 +83,17 @@ namespace Geocache.Models
             return new Location(MarkerInfo.Latitude, MarkerInfo.Longtitude);
         }
 
+        public int ReportsCount
+        {
+            get
+            {
+                int count=0;
+                using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
+                {
+                    count = unitOfWork.TreasureComments.GetTreasureReportsCount(this.ID);
+                }
+                return count;
+            }
+        }
     }
 }

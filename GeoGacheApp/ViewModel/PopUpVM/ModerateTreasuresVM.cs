@@ -43,6 +43,9 @@ namespace Geocache.ViewModel.PopUpVM
         #region Commands
         private ICommand deleteComment;
         private ICommand deleteTreasure;
+        private ICommand filterTreasuresByUsername;
+        private ICommand filterTreasuresByReports;
+        private ICommand clearFilters;
         private ICommand closeWindow;
         public ICommand DeleteComment
         {
@@ -54,7 +57,9 @@ namespace Geocache.ViewModel.PopUpVM
                      {
                          unitOfWork.TreasureComments.Remove_Quicker(x);
                          unitOfWork.Complete();
+                               
                      }
+                     RefreshTreasures();
                  }));
             }
         }
@@ -97,6 +102,45 @@ namespace Geocache.ViewModel.PopUpVM
                         MessengerInstance.Send<object>(new object(),"Refresh"); //update leaderboard and user treasures
                     }
                 }));
+            }
+        }
+
+        public ICommand FilterTreasuresByUsername
+        {
+            get
+            {
+                if (filterTreasuresByUsername == null)
+                    filterTreasuresByUsername = new RelayCommand<string>(username =>
+                    {
+                        RefreshTreasures();
+                        Treasures = new ObservableCollection<Treasure>(Treasures.Where
+                            (i => i.User.Username.Contains(username,StringComparison.OrdinalIgnoreCase)==true));
+                    });
+                return filterTreasuresByUsername;
+            }
+        }
+
+        public ICommand FilterTreasuresByReports
+        {
+            get
+            {
+                if (filterTreasuresByReports == null)
+                    filterTreasuresByReports = new RelayCommand(() =>
+                    {
+                        RefreshTreasures();
+                        Treasures = new ObservableCollection<Treasure>(Treasures.OrderByDescending(i=>i.ReportsCount));
+                    });
+                return filterTreasuresByReports;
+            }
+        }
+
+        public ICommand ClearFilters
+        {
+            get
+            {
+                if (clearFilters == null)
+                    clearFilters = new RelayCommand(RefreshTreasures);
+                return clearFilters;
             }
         }
 

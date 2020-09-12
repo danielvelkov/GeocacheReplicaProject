@@ -14,6 +14,7 @@
         Title="Users" Height="450" Width="500">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
@@ -26,7 +27,7 @@
                                 <ControlTemplate>
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock HorizontalAlignment="Center" FontSize="30">
-                                        No users registered...
+                                        --NO SUCH USER--
                                         </TextBlock>
                                     </StackPanel>
                                 </ControlTemplate>
@@ -42,7 +43,14 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
         </Grid.Resources>
-        <ListBox ItemsSource="{Binding Users}" Style="{StaticResource ListStyle}">
+
+        <StackPanel Orientation="Horizontal">
+            <TextBox Name="usernameTxtBox" Width="100" Height="20" Margin="10,0,0,0"></TextBox>
+            <Button Command="{Binding FindUser}" CommandParameter="{Binding ElementName=usernameTxtBox,Path=Text}" Height="20">Find user</Button>
+            <Button Command="{Binding GetUsers}" Height="20">See all users</Button>
+        </StackPanel>
+
+        <ListBox ItemsSource="{Binding Users}" Style="{StaticResource ListStyle}" Grid.Row="1">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type  wrapModels:UserChangedRole }">
                     <DataTemplate.Resources>
@@ -86,6 +94,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Command="{Binding CloseWindow}" Grid.Row="1" Height="24" Width="100" FontSize="15">Close</Button>
+        <Button Command="{Binding CloseWindow}" Grid.Row="2" Height="24" Width="100" FontSize="15">Close</Button>
     </Grid>
 </Window>

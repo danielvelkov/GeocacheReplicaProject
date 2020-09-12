@@ -134,6 +134,7 @@ namespace Geocache.ViewModel.PopUpVM
                                     0);
                                 unitOfWork.TreasureComments.Add(report);
                                 unitOfWork.Complete();
+                                MessengerInstance.Send<object>(new object(), "Refresh");
                                 MessageBox.Show(string.Format("Report for geocache ({0}) filed.\nMods will check it out.", Treasure.Name));
                             }
                             else

@@ -58,7 +58,7 @@ namespace Geocache.Database.Repositories
         }
         public IEnumerable<Treasure> GetTreasuresAndComments()
         {
-            return TreasureContext.Treasures.Include(x => x.Treasures_Comments).Include(x=>x.Chained_Treasure1)
+            return TreasureContext.Treasures.Include(x=>x.User).Include(x => x.Treasures_Comments).Include(x=>x.Chained_Treasure1)
                 .Include(x=>x.Chained_Treasure2).Where(x => x.UserId!=0);
         }
     }

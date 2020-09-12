@@ -8,6 +8,7 @@ using Geocache.Models;
 using Geocache.Models.WrappedModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,12 +27,52 @@ namespace Geocache.ViewModel.PopUpVM
         }
 
         public UserDataService Userdata { get;  set; }
-        public List<UserChangedRole> Users { get; private set; }
+        private ObservableCollection<UserChangedRole> users;
+        public ObservableCollection<UserChangedRole> Users
+        {
+            get
+            {
+                return users;
+            }
+            set
+            {
+                users = value;
+                RaisePropertyChanged("Users");
+            }
+        }
 
         #region Commands
 
         private ICommand closeWindow;
         private ICommand saveChanges;
+        private ICommand findUser;
+        private ICommand getUsers;
+
+        public ICommand FindUser
+        {
+            get
+            {
+                if (findUser == null)
+                    findUser = new RelayCommand<string>(username =>
+                    {
+                        RefreshUserList();
+                        Users = new ObservableCollection<UserChangedRole>(Users.Where
+                             (i => i.User.Username.Contains(username, StringComparison.OrdinalIgnoreCase) == true));
+                    });
+                return findUser;
+            }
+        }
+
+        public ICommand GetUsers
+        {
+            get
+            {
+                if (getUsers == null)
+                    getUsers = new RelayCommand(RefreshUserList);
+                return getUsers;
+            }
+        }
+
         public ICommand CloseWindow
         {
             get
@@ -44,6 +85,7 @@ namespace Geocache.ViewModel.PopUpVM
                 return closeWindow;
             }
         }
+
         public ICommand SaveChanges
         {
             get
@@ -67,7 +109,7 @@ namespace Geocache.ViewModel.PopUpVM
         {
             using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
             {
-                Users = new List<UserChangedRole>();
+                Users = new ObservableCollection<UserChangedRole>();
                 foreach (User user in unitOfWork.Users.Find(u => u.ID != Userdata.CurrentUser.ID).ToList())
                 {
                     user.Points = unitOfWork.FoundTreasures.GetUserPoints(user.ID);

@@ -398,8 +398,8 @@ namespace Geocache.ViewModel.BrowserVM
             string[] names = address.Split(',');
             if (names.Length >= 2)
             {
-                string country = names[names.Length-1];
-                string city = names[names.Length - 2];
+                string country = names[names.Length - 1].Trim();
+                string city = names[names.Length - 2].Trim();
                 WebBrowser.ExecuteScriptAsync("removeMarkers", "removed");
                 using (var UnitofWork = new UnitOfWork(new GeocachingContext()))
                 {
@@ -410,17 +410,11 @@ namespace Geocache.ViewModel.BrowserVM
 
                     foreach (var treas in mapTreasures)
                     {
-                        double rating = UnitofWork.TreasureComments.GetTreasureRating(treas.ID);
-                        if ((SelectedTreasureSize == Enums.TreasureSizes.ANY || treas.TreasureSize == SelectedTreasureSize) &&
-                        (SelectedTreasureType == TreasureType.ANY || treas.TreasureType == SelectedTreasureType) &&
-                        (Difficulty == 0 || treas.Difficulty <= Difficulty) && treas.IsChained == FindChainedTreasures &&
-                        (Rating == 0 || Rating <= Math.Round(rating))
-                        ) 
-                        {
-                            if (treas.MarkerInfo.Country.Contains(country, StringComparison.OrdinalIgnoreCase) &&
-                                treas.MarkerInfo.City.Contains(city, StringComparison.OrdinalIgnoreCase))
-                                Markers.Add(treas.MarkerInfo);
-                        }
+                        
+                        if (treas.MarkerInfo.Country.Contains(country, StringComparison.OrdinalIgnoreCase) &&
+                            treas.MarkerInfo.City.Contains(city, StringComparison.OrdinalIgnoreCase))
+                            Markers.Add(treas.MarkerInfo);
+                        
                     }
 
                     if (Markers.Count != 0)

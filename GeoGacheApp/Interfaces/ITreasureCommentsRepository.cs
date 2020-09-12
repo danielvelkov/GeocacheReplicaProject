@@ -13,5 +13,6 @@ namespace Geocache.Interfaces
         double GetTreasureRating(int TreasureId);
         bool HasUserCommented(int UserId, int TreasureId);
         int GetRatingOfTreasureByUser(int UserId, int TreasureId);
+        int GetTreasureReportsCount(int TreasureId);
     }
 }
