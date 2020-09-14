@@ -51,17 +51,6 @@ namespace Geocache.Models
         public string Key { get; set; }
         public bool IsChained { get; set; }
 
-        /* a way to get a random key with a defined lenght */
-        // this case its 8 
-        public static string GenerateKey()
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, 8)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-        private static Random random = new Random();
-
-
         [Key]
         public int ID { get; set; }
 
@@ -77,6 +66,16 @@ namespace Geocache.Models
         public virtual ICollection<Chained_Treasures> Chained_Treasure1 { get; set; }
         [InverseProperty("Treasure_2")]
         public virtual ICollection<Chained_Treasures> Chained_Treasure2 { get; set; }
+
+        /* a way to get a random key with a defined lenght */
+        // this case its 8 
+        public static string GenerateKey()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, 8)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        private static Random random = new Random();
 
         public Location GetLatLng()
         {

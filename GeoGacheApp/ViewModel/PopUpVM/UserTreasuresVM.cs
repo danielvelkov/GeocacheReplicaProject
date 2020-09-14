@@ -63,7 +63,6 @@ namespace Geocache.ViewModel.PopUpVM
                       MessengerInstance.Send<CloseWindowEventArgs>(new CloseWindowEventArgs());
                   })
                 ));
-
             }
         }
         public ICommand DeleteTreasure
@@ -85,9 +84,6 @@ namespace Geocache.ViewModel.PopUpVM
                               //delete all user comments on said treasure
                               foreach (Treasures_Comments tc in unitOfWork.TreasureComments.Find(tc=>tc.TreasureID==x.ID).ToList())
                               {
-                                  //var comment = unitOfWork.TreasureComments.Get(tc.ID);
-                                  //unitOfWork.TreasureComments.Remove(comment); 
-                                  //unitOfWork.Complete();
                                   unitOfWork.TreasureComments.Remove(tc);
                               }
                               //delete all treasure_chains connected to it
@@ -115,9 +111,6 @@ namespace Geocache.ViewModel.PopUpVM
                                       }
                                   }
                               }
-                              //remove the marker info
-                              //unitOfWork.Markers.Remove_Quicker(x.MarkerInfo);
-                              //unitOfWork.Complete();
 
                               var tres = unitOfWork.Treasures.Get(x.ID);
                               unitOfWork.Treasures.Remove(tres);
@@ -146,7 +139,6 @@ namespace Geocache.ViewModel.PopUpVM
                       MessengerInstance.Send<Type>(typeof(HideTreasurePageVM), "ChangePage");
                       MessengerInstance.Send<Treasure>(x, "ChangeTreasure");
                   }));
-                #endregion
             }
         }
         public ICommand HideTreasure
@@ -174,5 +166,7 @@ namespace Geocache.ViewModel.PopUpVM
                 return closeWindow;
             }
         }
+
+        #endregion
     }
 } 

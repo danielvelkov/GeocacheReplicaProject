@@ -328,13 +328,6 @@ namespace Geocache.ViewModel.BrowserVM
                                     }
                                 }
                             }
-                            //if (Markers.Count != 0)
-                            //foreach (MarkerInfo marker in Markers)
-                            //{
-                            //    Treasure treasr = UnitofWork.Treasures.Get(marker.TreasureId);
-                                
-                            //}
-                            //Markers.Clear();
                         }
                     });
                 return filterTreasures;
@@ -376,7 +369,6 @@ namespace Geocache.ViewModel.BrowserVM
                     {
                         return new SearchedTreasureArgs(new Location(lat, lng), id);
                     });
-                    //SimpleIoc.Default.Register<PopUpWindowController>();
                 }
                 else
                 {

@@ -58,7 +58,38 @@
         function setDestination(lat, lng) {
             destination = new google.maps.LatLng(lat,lng);
         }
+        function showRouteMarkers(error) {
 
+            if (dirRendr != null)
+                dirRendr.setMap(null);
+            dirRendr = new google.maps.DirectionsRenderer(rendererOptions);
+            dirService = new google.maps.DirectionsService;
+            //showing the markers for start and finish
+            if (StartMarker != null) {
+                StartMarker.setMap(null);
+                StartMarker = null;
+            } //reset the marker if not null
+            StartMarker = new google.maps.Marker({
+                map: map,
+                position: origin,
+                title: "<==YOU"
+            });
+            if (EndMarker != null) {
+                EndMarker.setMap(null);
+                EndMarker = null;
+            } //reset the marker if not null
+            EndMarker = new google.maps.Marker({
+                map: map,
+                position: destination,
+                title: "the treasure!"
+            });
+
+            //show the route to the treasure
+            calculateAndDisplayRoute(dirService, dirRendr);
+            document.getElementById('mode').addEventListener('change', function () {
+                calculateAndDisplayRoute(dirService, dirRendr);
+            });
+        }
       function calculateAndDisplayRoute(directionsService, directionsDisplay) {
           var selectedMode = document.getElementById('mode').value;
         directionsService.route({
@@ -76,38 +107,7 @@
           }
         });
       }
-      function showRouteMarkers(error) {
-          
-          if (dirRendr != null)
-              dirRendr.setMap(null);
-          dirRendr = new google.maps.DirectionsRenderer(rendererOptions);
-          dirService = new google.maps.DirectionsService;
-          //showing the markers for start and finish
-          if(StartMarker!=null){
-              StartMarker.setMap(null);
-              StartMarker = null;
-          }
-          StartMarker = new google.maps.Marker({
-              map: map,
-              position: origin,
-              title: "<==YOU"
-          });
-          if(EndMarker!=null){
-              EndMarker.setMap(null);
-              EndMarker = null;
-          }
-          EndMarker = new google.maps.Marker({
-                  map: map,
-                  position: destination,
-                  title: "the treasure!"
-              });
-          
-          //show the route to the treasure
-          calculateAndDisplayRoute(dirService, dirRendr);
-          document.getElementById('mode').addEventListener('change', function () {
-              calculateAndDisplayRoute(dirService, dirRendr);
-          });
-      }
+     
     </script>
 </head>
     <body onload="initMap()"> 

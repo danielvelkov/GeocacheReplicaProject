@@ -90,7 +90,7 @@ namespace Geocache.ViewModel.PopUpVM
                         }
                         foreach (Treasures_Comments tc in x.Treasures_Comments.Where(c => c.ID != 0).ToList())
                         {
-                            if (!x.Treasures_Comments.Any(c => c.ID == tc.ID))  //dont get it but EF demands it
+                            if (x.Treasures_Comments.Any(c => c.ID == tc.ID))  //dont get it but EF demands it
                                 unitOfWork.TreasureComments.Remove_Quicker(new Treasures_Comments { ID=tc.ID });
                         }
                         unitOfWork.Complete();

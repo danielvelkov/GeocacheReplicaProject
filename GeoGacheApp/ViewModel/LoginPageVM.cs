@@ -156,7 +156,6 @@ namespace Geocache.ViewModel
             IsLoading = true;
             await Task.Run(() => 
             {
-                
                 using (var unitOfWork = new UnitOfWork(new GeocachingContext()))
                 {
                     if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
@@ -169,7 +168,6 @@ namespace Geocache.ViewModel
                             if (user.isBanned)
                             {
                                 ErrorMsg = "*BANNED USER";
-                                
                             }
                             //login the user
                             if (!SimpleIoc.Default.IsRegistered<UserDataService>())
@@ -182,16 +180,13 @@ namespace Geocache.ViewModel
                                 ViewModelLocator.ReRegisterInstances();
                             Password = ""; //clear password so they cant enter :p
                             MessengerInstance.Send<Type>(typeof(HomePageVM), "ChangePage"); //change to homepage 
-                            //MessengerInstance.Send<object>(new object(), "RefreshUserTreasures");
                         }
                         else
-                            ErrorMsg = "*Password is wrong or no such user exists.";
-                      
+                            ErrorMsg = "*Password is wrong or no such user exists.";       
                     }
                     else
                     {
                         ErrorMsg = "*Password or Username is empty.";
-
                     }
                 }
                 IsLoading = false;
