@@ -22,6 +22,7 @@ namespace Geocache
         //for testing (creates a db in localDB)
         public GeocachingContext():base()
         {
+            
             System.Data.Entity.Database.SetInitializer<GeocachingContext>(new DbInitializer());
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
